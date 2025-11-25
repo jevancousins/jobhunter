@@ -1,0 +1,202 @@
+{
+  "personal": {
+    "name": "Jevan Cousins",
+    "email": "jevan.cousins@gmail.com",
+    "phone": "+44 7860 606 662",
+    "linkedin": "linkedin.com/in/jevancousins"
+  },
+  "profiles": {
+    "default": "Solution Architect with 3+ years of experience at Allianz Global Investors, specialising in financial systems implementation, data analytics, and process automation. Led the successful deployment of MSCI BarraOne for global Fixed Income teams, engineered custom performance attribution models, and pioneered AI adoption across operations. Strong technical skills in Python, SQL, and Power BI combined with deep domain expertise in fixed income and investment operations.",
+    "analyst": "Quantitative professional with a strong foundation in physics and mathematics from UCL, combined with 3+ years of hands-on experience in financial analytics at Allianz Global Investors. Expertise in performance attribution, fixed income analysis, and building data-driven solutions using Python, SQL, and Power BI. Track record of delivering analytical tools that generate significant cost savings and business insights.",
+    "technical": "Technical architect and developer with expertise in financial systems integration, data engineering, and enterprise automation. Proficient in Python, SQL, Azure, and Databricks with experience leading cross-functional implementations. Proven ability to translate complex business requirements into scalable technical solutions, with a focus on investment management and performance analytics.",
+    "product": "Product-oriented technologist with experience bridging business and technology at a global asset manager. Led end-to-end implementation of enterprise systems, managed cross-functional teams, and drove AI adoption initiatives. Strong understanding of investment operations, performance attribution, and regulatory requirements combined with technical fluency in modern data platforms."
+  },
+  "experience": [
+    {
+      "company": "Allianz Global Investors",
+      "title": "Solution Architect",
+      "location": "London, UK",
+      "start_date": "Aug 2022",
+      "end_date": "Present",
+      "bullets": [
+        {
+          "text": "Led the technical implementation of the MSCI BarraOne system for all global Fixed Income teams and decommissioning of 3 legacy systems, successfully completing a project previously attempted 2 times in the 7 years prior",
+          "tags": ["leadership", "project-management", "fixed-income", "systems-implementation"],
+          "metrics": "Completed project attempted 2 times in 7 years"
+        },
+        {
+          "text": "Engineered custom performance attribution models, workflows and 20+ reports using Python, SQL and Power BI with data from BarraOne and Databricks, saving £25,000 per report for development and £15,000 in annual maintenance",
+          "tags": ["python", "sql", "power-bi", "performance-attribution", "databricks", "analytics"],
+          "metrics": "£25K saved per report, £15K annual maintenance savings"
+        },
+        {
+          "text": "Managed a cross-functional team of 9 analysts and external SMEs to deliver the BarraOne performance attribution migration, ensuring seamless integration with investment systems and alignment with business objectives",
+          "tags": ["leadership", "team-management", "stakeholder-management"],
+          "metrics": "Managed team of 9"
+        },
+        {
+          "text": "Collaborated with senior portfolio managers and cross-departmental stakeholders to translate investment and risk requirements into scalable technical solutions and architecture decisions",
+          "tags": ["stakeholder-management", "solution-architecture", "risk-management"],
+          "metrics": null
+        },
+        {
+          "text": "Designed and implemented low-code/no-code applications on Microsoft Power Platform, consulting with business units to identify automation opportunities and define optimal solution architectures",
+          "tags": ["power-platform", "automation", "low-code", "solution-architecture"],
+          "metrics": null
+        },
+        {
+          "text": "Developed a Power BI dashboard for quarterly UK Board reporting on retail client activity in line with the consumer duty regulation, providing senior executives with the latest performance insights and data-driven decision support",
+          "tags": ["power-bi", "reporting", "regulatory", "data-visualization"],
+          "metrics": "Quarterly Board reporting"
+        },
+        {
+          "text": "Reviewed vendor proposals worth over £3 million for the implementation of AI agents and Generative AI use cases, assessing architecture quality, delivery approach, and ROI potential to advise senior leadership",
+          "tags": ["ai", "vendor-management", "due-diligence", "leadership"],
+          "metrics": "£3M+ vendor proposals reviewed"
+        },
+        {
+          "text": "Directed the training and education workstream for the AI in Operations initiative, hosting sessions with industry experts and consultants to upskill ~200 senior managers and operations professionals on AI strategy and applications",
+          "tags": ["ai", "training", "leadership", "change-management"],
+          "metrics": "Trained ~200 professionals"
+        },
+        {
+          "text": "Pioneered the adoption of generative/agentic AI in Operations by identifying 50+ use cases across different teams",
+          "tags": ["ai", "innovation", "strategy"],
+          "metrics": "50+ AI use cases identified"
+        }
+      ]
+    },
+    {
+      "company": "Allianz Global Investors",
+      "title": "Investment Infrastructure Intern",
+      "location": "London, UK",
+      "start_date": "Jun 2022",
+      "end_date": "Aug 2022",
+      "bullets": [
+        {
+          "text": "Automated 4/4 data reconciliation processes for an internal portfolio management application vs custodian data using SQL and VBA, enabling a reduction of over £200,000 pa in external spend",
+          "tags": ["automation", "sql", "vba", "data-reconciliation", "cost-savings"],
+          "metrics": "£200K+ annual savings"
+        }
+      ]
+    },
+    {
+      "company": "NF Capital",
+      "title": "Head of Fixed Income",
+      "location": "London, UK",
+      "start_date": "Oct 2020",
+      "end_date": "May 2022",
+      "bullets": [
+        {
+          "text": "Collaborated with a team of 3 analysts to produce research reports in Rates, Credit and FX, influencing fixed income investment decisions presented to the investment committee",
+          "tags": ["fixed-income", "research", "credit", "rates", "fx", "team-collaboration"],
+          "metrics": "Led team of 3 analysts"
+        }
+      ]
+    },
+    {
+      "company": "University College London",
+      "title": "Innovation Lab Intern",
+      "location": "London, UK",
+      "start_date": "Jun 2021",
+      "end_date": "Aug 2021",
+      "bullets": [
+        {
+          "text": "Developed machine learning-focused Python exercises, applying ML concepts to interdisciplinary science use cases",
+          "tags": ["python", "machine-learning", "education", "research"],
+          "metrics": null
+        },
+        {
+          "text": "Presented my work, alongside my partner, to 200+ professors and peers with an explanation tailored to the audience",
+          "tags": ["presentation", "communication"],
+          "metrics": "Presented to 200+ audience"
+        }
+      ]
+    },
+    {
+      "company": "Amplify Trading",
+      "title": "Summer Intern",
+      "location": "London, UK",
+      "start_date": "Aug 2020",
+      "end_date": "Aug 2020",
+      "bullets": [
+        {
+          "text": "Ranked 2nd out of 70+ interns with +23.4% annual return in the equity portfolio management simulation",
+          "tags": ["trading", "portfolio-management", "competition"],
+          "metrics": "Ranked 2nd of 70+, +23.4% return"
+        },
+        {
+          "text": "Developed an algorithmic trading strategy in Python using a combination of SMAs that outperformed the S&P 500 buy and hold strategy by 67% (Jun 2019 - Jun 2020)",
+          "tags": ["python", "algorithmic-trading", "quantitative", "backtesting"],
+          "metrics": "Outperformed S&P 500 by 67%"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University College London",
+      "degree": "BSc Natural Sciences (Physics and Mathematics & Statistics)",
+      "grade": "2.1",
+      "location": "London, UK",
+      "start_date": "Sep 2019",
+      "end_date": "Jun 2022"
+    },
+    {
+      "institution": "Brighton, Hove & Sussex Sixth Form College",
+      "degree": "A-Levels: Mathematics (A*), Further Mathematics (A), Physics (B), Chemistry (A)",
+      "location": "Hove, UK",
+      "start_date": "Sep 2017",
+      "end_date": "Jun 2019"
+    }
+  ],
+  "skills": {
+    "programming": ["Python", "SQL", "R", "DAX", "MATLAB", "Wolfram", "VBA", "JavaScript", "TypeScript", "HTML", "CSS", "LaTeX", "Swift"],
+    "platforms": ["Microsoft Power Platform (BI, Automate, Apps)", "Microsoft Office", "Azure", "JIRA", "Databricks", "GitHub", "Jupyter Notebook"],
+    "domain": ["Fixed Income", "Performance Attribution", "MSCI BarraOne", "Portfolio Management", "Risk Analysis", "Financial Modeling", "Investment Operations"],
+    "soft_skills": ["Leadership", "Stakeholder Management", "Cross-functional Collaboration", "Technical Communication", "Project Management"]
+  },
+  "certifications": [
+    {
+      "name": "DataCamp Data Science Professional",
+      "issuer": "DataCamp"
+    },
+    {
+      "name": "L6 Diploma in Trading and Financial Market Analysis",
+      "issuer": "LIBF",
+      "grade": "Distinction"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "level": "Native"
+    },
+    {
+      "language": "French",
+      "level": "Proficient"
+    }
+  ],
+  "interests": [
+    "Football (former semi-pro and UCL 1st XI Captain)",
+    "Chess (Top 1% globally)",
+    "Travelling (20+ countries)",
+    "Mentoring"
+  ],
+  "extra_curricular": [
+    {
+      "activity": "Personal Tutor",
+      "description": "A-Level and GCSE Mathematics and Science (100% A* success rate)",
+      "dates": "Sep 2017 - Present"
+    },
+    {
+      "activity": "UCL Sports Representative and Football Club President",
+      "dates": "Sep 2021 - Jun 2022"
+    },
+    {
+      "activity": "Action Medical Research Hackathon Volunteer",
+      "description": "Improved donor detail retention from 25% to 90%",
+      "dates": "Jul 2021"
+    }
+  ]
+}
