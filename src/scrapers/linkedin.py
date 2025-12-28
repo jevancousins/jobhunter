@@ -321,9 +321,11 @@ class LinkedInScraper(BaseScraper):
 
         except Exception as e:
             logger.warning(
-                "Failed to fetch LinkedIn job details",
+                "Failed to fetch LinkedIn job details, using listing data only",
                 url=job.url,
                 error=str(e),
             )
+            # Job will still be returned with listing data (title, company, location)
+            # Description will be empty but job can still be reviewed
 
         return job

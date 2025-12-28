@@ -66,8 +66,9 @@ class NotionSync:
                 skipped += 1
                 continue
 
-            # Skip if below score threshold
-            if job.score < settings.min_score_threshold:
+            # Skip if below score threshold (unless marked as needing scoring)
+            needs_scoring = job.ai_analysis and "Needs Scoring" in job.ai_analysis
+            if job.score < settings.min_score_threshold and not needs_scoring:
                 logger.debug(
                     "Skipping low-score job",
                     title=job.title,
