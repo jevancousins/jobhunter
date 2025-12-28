@@ -15,6 +15,12 @@ from src.models import Job, ScoreBreakdown
 logger = structlog.get_logger()
 
 
+class APIUnavailableError(Exception):
+    """Raised when the Anthropic API is unavailable due to credits or auth issues."""
+
+    pass
+
+
 class AIScorer:
     """Score jobs using Claude AI."""
 
@@ -188,6 +194,30 @@ Languages: English (Native), French (Proficient)
                     "Failed to parse scoring response",
                     title=job.title,
                 )
+
+        except anthropic.BadRequestError as e:
+            error_msg = str(e)
+            # Check for credit/billing related errors
+            if "credit balance" in error_msg.lower() or "billing" in error_msg.lower():
+                logger.error(
+                    "API unavailable - insufficient credits",
+                    title=job.title,
+                    error=error_msg,
+                )
+                raise APIUnavailableError(f"Anthropic API credits exhausted: {error_msg}")
+            else:
+                logger.error(
+                    "AI scoring failed",
+                    title=job.title,
+                    error=error_msg,
+                )
+
+        except anthropic.AuthenticationError as e:
+            logger.error(
+                "API unavailable - authentication failed",
+                error=str(e),
+            )
+            raise APIUnavailableError(f"Anthropic API authentication failed: {e}")
 
         except Exception as e:
             logger.error(

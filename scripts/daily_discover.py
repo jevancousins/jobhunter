@@ -25,8 +25,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config.settings import settings, TARGET_ROLE_KEYWORDS, TARGET_LOCATIONS
 from src.scrapers import IndeedScraper, LinkedInScraper, WelcomeToTheJungleScraper
 from src.scoring import AIScorer
+from src.scoring.ai_scorer import APIUnavailableError
 from src.notion import NotionClient, NotionSync
-from src.models import Job
+from src.models import Job, JobStatus
 
 # Configure logging
 structlog.configure(
@@ -195,6 +196,7 @@ async def main():
     jobs = deduplicate_jobs(jobs)
 
     # Score jobs with AI
+    api_available = True
     if settings.anthropic_api_key:
         logger.info("Scoring jobs with AI")
         scorer = AIScorer()
@@ -209,6 +211,22 @@ async def main():
                     title=job.title,
                     score=scored_job.score,
                 )
+            except APIUnavailableError as e:
+                logger.warning(
+                    "API unavailable, marking remaining jobs as 'Needs Scoring'",
+                    error=str(e),
+                )
+                api_available = False
+                # Mark this job and all remaining jobs as needing scoring
+                job.status = JobStatus.NEW
+                job.ai_analysis = "Needs Scoring - API unavailable"
+                scored_jobs.append(job)
+                # Mark remaining jobs
+                for remaining_job in jobs[i+1:]:
+                    remaining_job.status = JobStatus.NEW
+                    remaining_job.ai_analysis = "Needs Scoring - API unavailable"
+                    scored_jobs.append(remaining_job)
+                break
             except Exception as e:
                 logger.error(f"Failed to score job: {e}")
                 # Still include the job with score 0
@@ -216,16 +234,24 @@ async def main():
 
         jobs = scored_jobs
 
-        # Filter by score
-        qualified_jobs = scorer.filter_by_score(jobs)
-        strong_matches = scorer.get_strong_matches(jobs)
+        if api_available:
+            # Filter by score only if API was available
+            qualified_jobs = scorer.filter_by_score(jobs)
+            strong_matches = scorer.get_strong_matches(jobs)
 
-        logger.info(
-            "Scoring complete",
-            total_scored=len(jobs),
-            qualified=len(qualified_jobs),
-            strong_matches=len(strong_matches),
-        )
+            logger.info(
+                "Scoring complete",
+                total_scored=len(jobs),
+                qualified=len(qualified_jobs),
+                strong_matches=len(strong_matches),
+            )
+        else:
+            # API unavailable - push all jobs without filtering
+            qualified_jobs = jobs
+            logger.warning(
+                "API unavailable - pushing all jobs without score filtering",
+                total_jobs=len(jobs),
+            )
     else:
         logger.warning("No Anthropic API key, skipping AI scoring")
         qualified_jobs = jobs
