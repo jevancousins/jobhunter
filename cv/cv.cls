@@ -23,7 +23,7 @@
 \RequirePackage{xcolor}
 \RequirePackage{etoolbox}
 
-% Hyperlink settings (black, no boxes)
+% Hyperlink settings (black, no boxes, clickable)
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -38,7 +38,7 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
 
-% Section formatting - black underline, tight spacing
+% Section formatting - black underline, consistent spacing
 \titleformat{\section}
     {\normalsize\bfseries\uppercase}
     {}
@@ -46,31 +46,35 @@
     {}
     [\titlerule]
 
+% Consistent spacing: 6pt before section, 3pt after
 \titlespacing*{\section}{0pt}{6pt}{3pt}
 
-% Subsection formatting (for job titles) - minimal spacing
+% Subsection formatting (for job titles)
 \titleformat{\subsection}
     {\normalsize\bfseries}
     {}
     {0pt}
     {}
 
-\titlespacing*{\subsection}{0pt}{4pt}{0pt}
+% Subsection spacing (role headers): 2pt before to differentiate from section gaps
+\titlespacing*{\subsection}{0pt}{2pt}{0pt}
 
-% List settings - very compact bullets
+% List settings - compact bullets with balanced spacing
+% topsep=2pt before list, after=4pt after list to balance with 4pt before next header
 \setlist[itemize]{
     leftmargin=1.2em,
     itemsep=0pt,
     parsep=0pt,
-    topsep=1pt,
-    partopsep=0pt
+    topsep=2pt,
+    partopsep=0pt,
+    after=\vspace{4pt}
 }
 
 % ============================================
 % Custom Commands
 % ============================================
 
-% Header command - Name centered, links below (compact)
+% Header command - Name centered, clickable links below
 \newcommand{\cvheader}[4]{%
     \begin{center}
         {\Large\bfseries #1}\\[2pt]
@@ -85,12 +89,13 @@
     {\small #1}
 }
 
-% Experience entry command (compact)
+% Experience entry command - balanced spacing
 % #1 = Company, #2 = Title, #3 = Dates, #4 = Location
 \newcommand{\cventry}[4]{%
     \subsection{#1 \hfill \normalfont\small #3}
-    \vspace{-2pt}
-    {\small\textit{#2} \hfill #4}\\[-6pt]
+    \vspace{0pt}
+    {\small\textit{#2} \hfill #4}
+    \vspace{2pt}
 }
 
 % Education entry command (compact)
@@ -100,9 +105,14 @@
     #2 \hfill #4}\\[2pt]
 }
 
-% Skills category command (compact, inline)
+% Skills category command (compact, inline) - with line break for middle entries
 \newcommand{\cvskillcat}[2]{%
     {\small\textbf{#1:} #2}\\[1pt]
+}
+
+% Skills category command - NO trailing line break for last entry
+\newcommand{\cvskillcatlast}[2]{%
+    {\small\textbf{#1:} #2}
 }
 
 % Extra/Activity entry command (compact)
@@ -114,6 +124,16 @@
 
 % Simple bullet for experience items
 \newcommand{\cvbullet}[1]{\item {\small #1}}
+
+% Coursework command - consistent small text
+\newcommand{\cvcoursework}[1]{%
+    {\small Relevant coursework: #1}
+}
+
+% Projects section text - consistent small text
+\newcommand{\cvproject}[2]{%
+    {\small\textbf{#1} -- #2}
+}
 
 % Boolean flags for section ordering
 \newif\ifskillsbeforeexp
