@@ -71,3 +71,21 @@ test-results/
 
 # Local config overrides
 .claude/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb

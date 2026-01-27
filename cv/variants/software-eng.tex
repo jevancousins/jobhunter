@@ -1,0 +1,56 @@
+% Software Engineering Variant
+% Skills Position: After Experience
+% Single page optimized - MAXIMIZE page fill
+
+\documentclass{cv}
+
+\begin{document}
+
+\input{sections/header}
+
+\cvprofile{Software engineer with Physics and Mathematics background from UCL. Building two full-stack applications: Lineup (iOS concert tracking with Python data pipeline aggregating 6 APIs) and NutriPlan (AI meal planning with FastAPI backend, RAG pipeline, and SwiftUI frontend). At Allianz Global Investors, I engineered automated workflows and 20+ production reports using Python, SQL and Power BI, saving £500,000+ in costs.}
+
+\section{Experience}
+
+\cventry{Allianz Global Investors}{Solution Architect}{Jun 2022 -- Present}{London, UK}
+\begin{itemize}
+    \cvbullet{Engineered custom performance attribution models, workflows and 20+ production reports using Python, SQL and Power BI with data from MSCI BarraOne and Databricks, saving £25,000 per report in development and £15,000 annually in maintenance}
+    \cvbullet{Led MSCI BarraOne implementation for all global Fixed Income teams and decommissioning of 3 legacy systems, completing project attempted twice over 7 years with seamless data migration}
+    \cvbullet{Managed cross-functional team of 9 analysts and external SMEs to deliver BarraOne performance attribution migration, coordinating technical requirements across investment systems}
+    \cvbullet{Pioneered AI tool adoption including chatbot trained on company data using RAG architecture and computer vision modules for document automation}
+    \cvbullet{Designed and implemented low-code applications on Microsoft Power Platform, consulting with business units to identify automation opportunities and define solution architectures}
+    \cvbullet{Automated 4/4 data reconciliation processes for portfolio management vs custodian data using SQL and VBA, reducing external spend by £200,000+ pa}
+    \cvbullet{Developed Power BI dashboard for quarterly UK Board reporting integrating data from multiple sources including BarraOne, Databricks, and internal systems}
+    \cvbullet{Reviewed vendor proposals worth £3M+ for AI implementations, assessing architecture quality and integration requirements}
+\end{itemize}
+
+\cventry{NF Capital}{Head of Fixed Income}{Oct 2020 -- May 2022}{London, UK}
+\begin{itemize}
+    \cvbullet{Led team of 3 analysts producing research reports in Rates, Credit and FX for investment committee decisions}
+\end{itemize}
+
+\cventry{UCL Innovation Lab}{Machine Learning Intern}{Jun 2021 -- Aug 2021}{London, UK}
+\begin{itemize}
+    \cvbullet{Developed ML-focused Python exercises applying supervised and unsupervised learning to interdisciplinary science use cases}
+    \cvbullet{Presented research findings to 200+ professors and peers with explanations tailored to diverse technical backgrounds}
+\end{itemize}
+
+\cventry{Amplify Trading}{Summer Intern}{Aug 2020}{London, UK}
+\begin{itemize}
+    \cvbullet{Built algorithmic trading strategy in Python using SMAs that outperformed S\&P 500 buy-and-hold by 67\%}
+    \cvbullet{Ranked 2nd of 70+ interns with +23.4\% annual return in equity portfolio management simulation}
+\end{itemize}
+
+\section{Skills}
+\cvskillcat{Languages}{Python, TypeScript, Swift, SQL, JavaScript, VBA, C++, HTML/CSS}
+\cvskillcat{Frameworks}{FastAPI, SwiftUI, React, Node.js, Pandas, NumPy, Supabase SDK, LiteLLM}
+\cvskillcat{Tools}{Git, Docker, Azure, Supabase, PostgreSQL, Railway, Render, JIRA, Jupyter, Power BI}
+
+\input{sections/education}
+
+\section{Projects \& Interests}
+\textbf{Lineup} -- iOS concert tracking app with Python data pipeline aggregating 6 APIs (Ticketmaster, Spotify, Skiddle, Resident Advisor, MusicBrainz), cross-source artist deduplication, MVVM architecture with direct Supabase SDK integration (Swift, SwiftUI, PostgreSQL) \\
+\textbf{NutriPlan} -- AI meal planning: FastAPI backend with GPT-4o generation, RAG pipeline using pgvector for semantic meal retrieval, UK-standard nutrition calculations (Henry/Oxford equations), household meal coordination (Python, SwiftUI, PostgreSQL) \\
+Football (UCL 1st XI Captain), Chess (Top 1\% globally)
+
+\end{document}

@@ -7,9 +7,64 @@
   },
   "profiles": {
     "default": "Solution Architect with 3+ years of experience at Allianz Global Investors, specialising in financial systems implementation, data analytics, and process automation. Led the successful deployment of MSCI BarraOne for global Fixed Income teams, engineered custom performance attribution models, and pioneered AI adoption across operations. Strong technical skills in Python, SQL, and Power BI combined with deep domain expertise in fixed income and investment operations.",
-    "analyst": "Quantitative professional with a strong foundation in physics and mathematics from UCL, combined with 3+ years of hands-on experience in financial analytics at Allianz Global Investors. Expertise in performance attribution, fixed income analysis, and building data-driven solutions using Python, SQL, and Power BI. Track record of delivering analytical tools that generate significant cost savings and business insights.",
-    "technical": "Technical architect and developer with expertise in financial systems integration, data engineering, and enterprise automation. Proficient in Python, SQL, Azure, and Databricks with experience leading cross-functional implementations. Proven ability to translate complex business requirements into scalable technical solutions, with a focus on investment management and performance analytics.",
-    "product": "Product-oriented technologist with experience bridging business and technology at a global asset manager. Led end-to-end implementation of enterprise systems, managed cross-functional teams, and drove AI adoption initiatives. Strong understanding of investment operations, performance attribution, and regulatory requirements combined with technical fluency in modern data platforms."
+    "portfolio-risk": "Quantitative professional with a Physics and Mathematics background from UCL, combining analytical rigour with practical implementation experience. Led the technical implementation of MSCI BarraOne across global Fixed Income teams at Allianz Global Investors, delivering a multi-year system transformation that saved over £500,000 in development and maintenance costs. Seeking a Portfolio Analytics or Risk role where I can apply my expertise in performance attribution, risk modelling, and data-driven decision making.",
+    "client-solutions": "Technical implementation specialist with a strong analytical foundation from UCL (Physics and Mathematics). At Allianz Global Investors, I led the successful delivery of MSCI BarraOne across global Fixed Income teams—completing a transformation that had failed twice previously over seven years. I thrive at the intersection of technology and client needs, translating complex requirements into scalable solutions. Seeking a Client Solutions or Implementation role where I can drive successful system deployments and deliver measurable value to clients.",
+    "ai-ml": "Machine learning practitioner with a Physics and Mathematics background from UCL, experienced in deploying AI solutions that deliver business impact. At Allianz Global Investors, I pioneered AI adoption by building a chatbot trained on company data and computer vision modules for document automation, while identifying 50+ use cases for agentic AI. Currently developing NutriPlan, an AI-powered nutrition app using GPT-4o, RAG pipelines, and vector embeddings for personalised meal planning. Seeking an AI/ML Engineering role where I can design, build, and scale intelligent systems.",
+    "data-science": "Data scientist with a quantitative foundation in Physics and Mathematics from UCL, skilled at extracting insights from complex datasets and building data-driven solutions. At Allianz Global Investors, I engineered performance attribution models and 20+ automated reports using Python, SQL and Power BI, delivering £25,000 savings per report and £15,000 annually in reduced maintenance. Passionate about applying statistical methods and machine learning to solve business problems. Seeking a Data Science role where I can turn data into actionable insights and measurable impact.",
+    "quant-dev": "Quantitative developer with a Physics and Mathematics background from UCL, combining strong mathematical foundations with production-grade programming skills. Developed algorithmic trading strategies in Python that outperformed the S&P 500 by 67%, and engineered performance attribution systems processing multi-billion pound portfolios at Allianz Global Investors. Experienced in stochastic methods, statistical modelling, and building robust analytical pipelines. Seeking a Quant Development role where I can apply mathematical and computational skills to trading systems and quantitative finance.",
+    "research": "Research-focused analyst with a Physics and Mathematics background from UCL, combining rigorous analytical training with practical financial markets experience. As Head of Fixed Income at NF Capital, I led a team producing research reports in Rates, Credit and FX that directly influenced investment committee decisions. At Allianz Global Investors, I developed performance attribution models and analytical frameworks for global Fixed Income teams. Seeking a Research or Analysis role where I can apply deep analytical skills to generate actionable insights.",
+    "software-eng": "Software engineer with a Physics and Mathematics background from UCL, experienced in building full-stack applications and data systems. Developing two iOS apps: Lineup (concert tracking with multi-source data pipeline) and NutriPlan (AI-powered meal planning with FastAPI backend). At Allianz Global Investors, I engineered automated workflows and 20+ production reports using Python, SQL and Power BI, saving £500,000+ in costs. Seeking a Software Engineering role where I can design and build systems that deliver real user value."
+  },
+  "job_categories": {
+    "portfolio-risk": {
+      "name": "Portfolio & Risk Analytics",
+      "skills_position": "after_profile",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["Python", "SQL", "VBA", "R", "MSCI BarraOne", "Bloomberg", "Power BI", "Azure", "Databricks"],
+      "experience_focus": ["MSCI BarraOne implementation", "Performance attribution", "Data reconciliation", "Fixed income research"]
+    },
+    "client-solutions": {
+      "name": "Client Solutions / Implementation",
+      "skills_position": "after_profile",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["Python", "SQL", "VBA", "Power BI", "MSCI BarraOne", "Azure", "JIRA", "Stakeholder Management"],
+      "experience_focus": ["System implementations", "Stakeholder collaboration", "Training and documentation", "Cross-functional delivery"]
+    },
+    "ai-ml": {
+      "name": "AI/ML Engineering",
+      "skills_position": "before_experience",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["Python", "SQL", "R", "C++", "TensorFlow", "PyTorch", "Scikit-learn", "LLMs", "Computer Vision", "Azure", "Docker"],
+      "experience_focus": ["AI/agentic AI adoption", "ML development", "Automation projects", "NutriPlan"]
+    },
+    "data-science": {
+      "name": "Data Science",
+      "skills_position": "before_experience",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["Python", "SQL", "R", "MATLAB", "Pandas", "NumPy", "Scikit-learn", "Jupyter", "Power BI"],
+      "experience_focus": ["Performance attribution models", "Data reconciliation", "Quantitative analysis", "ML exercises"]
+    },
+    "quant-dev": {
+      "name": "Quant Development",
+      "skills_position": "before_experience",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["Python", "C++", "SQL", "R", "MATLAB", "Bloomberg", "Stochastic Calculus", "Statistical Modelling"],
+      "experience_focus": ["Algorithmic trading", "Performance attribution", "Quantitative analysis", "Trading simulation"]
+    },
+    "research": {
+      "name": "Research & Analysis",
+      "skills_position": "after_experience",
+      "section_order": ["profile", "experience", "skills", "education", "extra"],
+      "key_skills": ["Python", "R", "SQL", "MATLAB", "Bloomberg", "Power BI", "LaTeX", "Statistical Modelling"],
+      "experience_focus": ["Fixed Income research", "Performance analysis", "Macroeconomic research", "Academic research"]
+    },
+    "software-eng": {
+      "name": "Software Engineering",
+      "skills_position": "after_experience",
+      "section_order": ["profile", "experience", "skills", "education", "extra"],
+      "key_skills": ["Python", "TypeScript", "Swift", "SQL", "JavaScript", "FastAPI", "SwiftUI", "Git", "Docker", "Azure"],
+      "experience_focus": ["NutriPlan development", "System architecture", "Automation and tooling", "Full-stack development"]
+    }
   },
   "experience": [
     {
@@ -198,5 +253,94 @@
       "description": "Improved donor detail retention from 25% to 90%",
       "dates": "Jul 2021"
     }
-  ]
+  ],
+  "projects": {
+    "lineup": {
+      "name": "Lineup",
+      "type": "Personal Project",
+      "status": "Beta",
+      "start_date": "2024",
+      "description": "Concert and event tracking iOS app with multi-source data pipeline",
+      "summary_short": "Full-stack iOS app for tracking concerts with automated data pipeline aggregating 6+ event sources",
+      "summary_medium": "Native iOS concert tracking app with Python data pipeline. Aggregates events from Ticketmaster, Spotify, Skiddle, and Resident Advisor with cross-source artist deduplication using MusicBrainz IDs",
+      "tech_stack": {
+        "frontend": ["Swift", "SwiftUI", "iOS 26", "Liquid Glass design system"],
+        "backend": ["Supabase (PostgreSQL)", "Row Level Security", "Edge Functions"],
+        "data_pipeline": ["Python", "Ticketmaster API", "Spotify API", "Skiddle API", "Resident Advisor", "MusicBrainz"],
+        "deployment": ["Railway.app", "Supabase Cloud"],
+        "architecture": "Supabase-first (direct SDK, no custom API layer)"
+      },
+      "key_features": [
+        "Multi-source event aggregation from 6 APIs (Ticketmaster, Spotify, Skiddle, Resident Advisor, Concert Archives, MusicBrainz)",
+        "Cross-source artist deduplication using MusicBrainz IDs as canonical identifiers",
+        "Automated data pipeline with scheduled syncs deployed on Railway.app",
+        "Direct Supabase architecture eliminating custom API layer",
+        "ISO-standard location handling (ISO 3166-1/3166-2) with timezone inference",
+        "Event tracking (watchlist, going, attended) with user statistics"
+      ],
+      "technical_highlights": [
+        "Sophisticated deduplication algorithm matching artists across 6+ different APIs with different ID schemes",
+        "Supabase-first architecture using Row Level Security for data isolation",
+        "Automated venue geocoding and timezone inference from coordinates",
+        "Image quality optimization prioritizing high-resolution Spotify images (640x640px)",
+        "MVVM architecture with SwiftUI and direct Supabase SDK integration"
+      ],
+      "tags": ["ios", "swift", "swiftui", "python", "supabase", "postgresql", "data-pipeline", "api-integration", "full-stack"],
+      "relevance": {
+        "software-eng": "high",
+        "data-science": "medium",
+        "ai-ml": "low",
+        "quant-dev": "low",
+        "portfolio-risk": "low",
+        "client-solutions": "low",
+        "research": "low"
+      },
+      "github": "github.com/jevancousins/lineup"
+    },
+    "nutriplan": {
+      "name": "NutriPlan",
+      "type": "Personal Project",
+      "status": "MVP Development",
+      "start_date": "2024",
+      "description": "AI-powered meal planning iOS app with personalised nutrition",
+      "summary_short": "AI-powered meal planning app using GPT-4o and vector embeddings for personalised weekly meal plans",
+      "summary_medium": "Full-stack nutrition app with FastAPI backend and SwiftUI frontend. Uses GPT-4o for meal plan generation with RAG pipeline, pgvector embeddings for preference learning, and UK-standard nutrition calculations",
+      "tech_stack": {
+        "frontend": ["Swift", "SwiftUI", "iOS 26", "Liquid Glass design system"],
+        "backend": ["Python", "FastAPI", "LiteLLM", "Async/await"],
+        "database": ["Supabase (PostgreSQL)", "pgvector", "Row Level Security"],
+        "ai_ml": ["GPT-4o (meal generation)", "GPT-4o-mini (feedback analysis)", "text-embedding-3-small (1536 dim)", "RAG pipeline"],
+        "external_apis": ["OpenAI API", "FatSecret API", "Open Food Facts"],
+        "deployment": ["Render.com", "Supabase Cloud"]
+      },
+      "key_features": [
+        "AI meal plan generation using GPT-4o with structured JSON output",
+        "Vector similarity search (pgvector) for candidate meal retrieval (~100 meals per generation)",
+        "Preference learning from user feedback using embedding updates",
+        "UK-standard nutrition calculations (Henry/Oxford equations per SACN guidelines)",
+        "Smart meal swapping with intelligent alternatives",
+        "Household meal coordination with individual portion calculations",
+        "Multi-stage onboarding (free calorie tracking → premium meal planning)"
+      ],
+      "technical_highlights": [
+        "RAG pipeline: context loading → target calculation → candidate retrieval → LLM optimization → portion calculation",
+        "Vector embeddings (text-embedding-3-small) for meal recommendations and preference learning",
+        "Calorie targeting within ±10% accuracy with macro distribution",
+        "14-day meal history consideration to avoid repetition",
+        "LiteLLM abstraction for model flexibility (GPT-4o primary, GPT-4o-mini for cost optimization)",
+        "Comprehensive API with meal plans, swapping, feedback, and nutrition endpoints"
+      ],
+      "tags": ["ios", "swift", "swiftui", "python", "fastapi", "llm", "gpt-4", "embeddings", "rag", "pgvector", "ai", "machine-learning", "full-stack"],
+      "relevance": {
+        "ai-ml": "high",
+        "software-eng": "high",
+        "data-science": "high",
+        "quant-dev": "low",
+        "portfolio-risk": "low",
+        "client-solutions": "low",
+        "research": "medium"
+      },
+      "github": "github.com/jevancousins/nutriplan"
+    }
+  }
 }
