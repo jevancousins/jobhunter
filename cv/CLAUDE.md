@@ -33,25 +33,7 @@ When a CV needs more content, use these in order:
 
 ## Content Sources
 
-All content comes from `data/master_cv.json`. Available bullets:
-
-**AGI (9 total):**
-- BarraOne implementation (7 years, 3 legacy systems)
-- Performance attribution models (£25K/report, £15K annual)
-- Team management (9 analysts, SMEs)
-- Stakeholder collaboration (portfolio managers, risk)
-- Power Platform low-code apps
-- Power BI Board dashboard
-- Vendor proposals (£3M+)
-- AI training workstream (200+ professionals)
-- AI adoption pioneering (50+ use cases)
-
-**Other roles:**
-- AGI Intern: Data reconciliation automation (£200K savings)
-- NF Capital: Research team lead (3 analysts, Rates/Credit/FX)
-- UCL: ML exercises, 200+ presentation
-- Amplify: Algo strategy (67% vs S&P), ranking (2nd/70+), diploma
-- All M&A: Macro articles (30% subscription increase)
+All content comes from `data/master_cv.json`.
 
 ## Variant-Specific Focus
 
@@ -67,7 +49,7 @@ All content comes from `data/master_cv.json`. Available bullets:
 
 ## LaTeX Tips for Page Fill
 
-- Each `\cvbullet` adds ~2-3 lines depending on content length
+- Each `\cvbullet` adds ~1-3 lines depending on content length
 - Projects section can be expanded with more technical detail
 - Skills section can add more items per category
 - Profile paragraph can be slightly longer if needed

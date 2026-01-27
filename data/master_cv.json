@@ -6,63 +6,63 @@
     "linkedin": "linkedin.com/in/jevancousins"
   },
   "profiles": {
-    "default": "Solution Architect with 3+ years of experience at Allianz Global Investors, specialising in financial systems implementation, data analytics, and process automation. Led the successful deployment of MSCI BarraOne for global Fixed Income teams, engineered custom performance attribution models, and pioneered AI adoption across operations. Strong technical skills in Python, SQL, and Power BI combined with deep domain expertise in fixed income and investment operations.",
-    "portfolio-risk": "Quantitative professional with a Physics and Mathematics background from UCL, combining analytical rigour with practical implementation experience. Led the technical implementation of MSCI BarraOne across global Fixed Income teams at Allianz Global Investors, delivering a multi-year system transformation that saved over £500,000 in development and maintenance costs. Seeking a Portfolio Analytics or Risk role where I can apply my expertise in performance attribution, risk modelling, and data-driven decision making.",
-    "client-solutions": "Technical implementation specialist with a strong analytical foundation from UCL (Physics and Mathematics). At Allianz Global Investors, I led the successful delivery of MSCI BarraOne across global Fixed Income teams—completing a transformation that had failed twice previously over seven years. I thrive at the intersection of technology and client needs, translating complex requirements into scalable solutions. Seeking a Client Solutions or Implementation role where I can drive successful system deployments and deliver measurable value to clients.",
-    "ai-ml": "Machine learning practitioner with a Physics and Mathematics background from UCL, experienced in deploying AI solutions that deliver business impact. At Allianz Global Investors, I pioneered AI adoption by building a chatbot trained on company data and computer vision modules for document automation, while identifying 50+ use cases for agentic AI. Currently developing NutriPlan, an AI-powered nutrition app using GPT-4o, RAG pipelines, and vector embeddings for personalised meal planning. Seeking an AI/ML Engineering role where I can design, build, and scale intelligent systems.",
-    "data-science": "Data scientist with a quantitative foundation in Physics and Mathematics from UCL, skilled at extracting insights from complex datasets and building data-driven solutions. At Allianz Global Investors, I engineered performance attribution models and 20+ automated reports using Python, SQL and Power BI, delivering £25,000 savings per report and £15,000 annually in reduced maintenance. Passionate about applying statistical methods and machine learning to solve business problems. Seeking a Data Science role where I can turn data into actionable insights and measurable impact.",
-    "quant-dev": "Quantitative developer with a Physics and Mathematics background from UCL, combining strong mathematical foundations with production-grade programming skills. Developed algorithmic trading strategies in Python that outperformed the S&P 500 by 67%, and engineered performance attribution systems processing multi-billion pound portfolios at Allianz Global Investors. Experienced in stochastic methods, statistical modelling, and building robust analytical pipelines. Seeking a Quant Development role where I can apply mathematical and computational skills to trading systems and quantitative finance.",
-    "research": "Research-focused analyst with a Physics and Mathematics background from UCL, combining rigorous analytical training with practical financial markets experience. As Head of Fixed Income at NF Capital, I led a team producing research reports in Rates, Credit and FX that directly influenced investment committee decisions. At Allianz Global Investors, I developed performance attribution models and analytical frameworks for global Fixed Income teams. Seeking a Research or Analysis role where I can apply deep analytical skills to generate actionable insights.",
-    "software-eng": "Software engineer with a Physics and Mathematics background from UCL, experienced in building full-stack applications and data systems. Developing two iOS apps: Lineup (concert tracking with multi-source data pipeline) and NutriPlan (AI-powered meal planning with FastAPI backend). At Allianz Global Investors, I engineered automated workflows and 20+ production reports using Python, SQL and Power BI, saving £500,000+ in costs. Seeking a Software Engineering role where I can design and build systems that deliver real user value."
+    "default": "Solution Architect with 4 years of experience at Allianz Global Investors, specialising in financial systems implementation, data analytics, and process automation. Led the successful deployment of MSCI BarraOne for global Fixed Income teams, engineered custom performance attribution models, and pioneered AI adoption across operations. Strong technical skills in Python, SQL, and Power BI combined with deep domain expertise in fixed income and investment operations.",
+    "portfolio-risk": "Quantitative professional with 4 years of experience managing performance attribution and risk analytics for €176B in global Fixed Income assets at Allianz Global Investors. Led the technical implementation of MSCI BarraOne across all global teams, completing a transformation that failed twice over seven years and saving £500,000+ in development and maintenance costs. Expertise in performance attribution, fixed income analytics, and translating investment requirements into scalable technical solutions.",
+    "client-solutions": "Technical implementation specialist with 4 years of experience at Allianz Global Investors, delivering enterprise system transformations for €176B in global Fixed Income assets. Led the successful deployment of MSCI BarraOne across all global teams—completing a project that had failed twice over seven years. Combines deep technical expertise (Python, SQL, Power BI) with stakeholder management skills to translate complex requirements into scalable solutions and drive adoption through training and change management.",
+    "ai-ml": "ML practitioner with 4 years of experience deploying AI solutions at Allianz Global Investors. Built a RAG pipeline in Python for the Economics team to compare market outlook reports against competitors, automating analysis previously done manually by the Head of Economics. Identified 50+ use cases for agentic AI and directed AI training for 200+ senior professionals. Currently developing NutriPlan, an AI meal planning app using GPT-4o, RAG pipelines, and pgvector embeddings.",
+    "data-science": "Data Scientist with 4 years of experience at Allianz Global Investors, engineering analytics solutions for €176B in global Fixed Income portfolios. Built performance attribution models and 20+ automated reports using Python, SQL, and Power BI, delivering £25,000 savings per report and £15,000 annually in reduced maintenance. Developed RAG pipeline for competitive market analysis. Strong foundation in statistical modelling from UCL Physics and Mathematics degree.",
+    "quant-dev": "Quantitative developer with 4 years of experience engineering performance attribution systems for €176B in Fixed Income portfolios at Allianz Global Investors. Built custom attribution models using Python, SQL, and MSCI BarraOne, saving £25,000 per report in development costs. Developed algorithmic trading strategies outperforming the S&P 500 by 67% during Amplify Trading internship. Strong mathematical foundation from UCL Physics and Mathematics with expertise in stochastic methods and statistical modelling.",
+    "research": "Research-focused analyst with 4 years of experience at Allianz Global Investors, developing analytical frameworks for €176B in global Fixed Income portfolios. Engineered performance attribution models and built RAG pipeline for competitive market outlook analysis. Previously led a team of 3 analysts at NF Capital producing quantitative research in Rates, Credit, and FX that directly influenced investment committee decisions. UCL Physics and Mathematics background with strong foundation in statistical modelling and econometrics.",
+    "software-eng": "Software Engineer with 4 years of experience building production systems. Developing two full-stack applications: Lineup (iOS concert tracking with Python data pipeline aggregating 6 APIs) and NutriPlan (AI meal planning with FastAPI backend, GPT-4o, and RAG pipeline). At Allianz Global Investors, engineered automated workflows and 20+ production reports using Python, SQL, and Power BI, saving £500,000+ in costs. UCL Physics and Mathematics graduate."
   },
   "job_categories": {
     "portfolio-risk": {
       "name": "Portfolio & Risk Analytics",
       "skills_position": "after_profile",
       "section_order": ["profile", "skills", "experience", "education", "extra"],
-      "key_skills": ["Python", "SQL", "VBA", "R", "MSCI BarraOne", "Bloomberg", "Power BI", "Azure", "Databricks"],
+      "key_skills": ["Python", "SQL", "VBA", "R", "Pandas", "NumPy", "MSCI BarraOne", "Bloomberg", "Power BI", "Azure", "Databricks"],
       "experience_focus": ["MSCI BarraOne implementation", "Performance attribution", "Data reconciliation", "Fixed income research"]
     },
     "client-solutions": {
       "name": "Client Solutions / Implementation",
       "skills_position": "after_profile",
       "section_order": ["profile", "skills", "experience", "education", "extra"],
-      "key_skills": ["Python", "SQL", "VBA", "Power BI", "MSCI BarraOne", "Azure", "JIRA", "Stakeholder Management"],
+      "key_skills": ["Python", "SQL", "VBA", "Power BI", "MSCI BarraOne", "Azure", "JIRA", "GitHub Actions", "Stakeholder Management"],
       "experience_focus": ["System implementations", "Stakeholder collaboration", "Training and documentation", "Cross-functional delivery"]
     },
     "ai-ml": {
       "name": "AI/ML Engineering",
       "skills_position": "before_experience",
       "section_order": ["profile", "skills", "experience", "education", "extra"],
-      "key_skills": ["Python", "SQL", "R", "C++", "TensorFlow", "PyTorch", "Scikit-learn", "LLMs", "Computer Vision", "Azure", "Docker"],
+      "key_skills": ["Python", "SQL", "TensorFlow", "Scikit-learn", "LangChain", "LlamaIndex", "OpenAI API", "Claude API", "RAG Architectures", "pgvector", "Claude Code", "Cursor", "GitHub Copilot"],
       "experience_focus": ["AI/agentic AI adoption", "ML development", "Automation projects", "NutriPlan"]
     },
     "data-science": {
       "name": "Data Science",
       "skills_position": "before_experience",
       "section_order": ["profile", "skills", "experience", "education", "extra"],
-      "key_skills": ["Python", "SQL", "R", "MATLAB", "Pandas", "NumPy", "Scikit-learn", "Jupyter", "Power BI"],
+      "key_skills": ["Python", "SQL", "R", "Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Seaborn", "Plotly", "Jupyter Notebook", "Power BI", "PostgreSQL"],
       "experience_focus": ["Performance attribution models", "Data reconciliation", "Quantitative analysis", "ML exercises"]
     },
     "quant-dev": {
       "name": "Quant Development",
       "skills_position": "before_experience",
       "section_order": ["profile", "skills", "experience", "education", "extra"],
-      "key_skills": ["Python", "C++", "SQL", "R", "MATLAB", "Bloomberg", "Stochastic Calculus", "Statistical Modelling"],
+      "key_skills": ["Python", "SQL", "R", "NumPy", "Pandas", "Scikit-learn", "Bloomberg", "Statistical Modelling", "PostgreSQL"],
       "experience_focus": ["Algorithmic trading", "Performance attribution", "Quantitative analysis", "Trading simulation"]
     },
     "research": {
       "name": "Research & Analysis",
       "skills_position": "after_experience",
       "section_order": ["profile", "experience", "skills", "education", "extra"],
-      "key_skills": ["Python", "R", "SQL", "MATLAB", "Bloomberg", "Power BI", "LaTeX", "Statistical Modelling"],
+      "key_skills": ["Python", "R", "SQL", "Pandas", "NumPy", "Bloomberg", "Power BI", "LaTeX", "Matplotlib", "Statistical Modelling"],
       "experience_focus": ["Fixed Income research", "Performance analysis", "Macroeconomic research", "Academic research"]
     },
     "software-eng": {
       "name": "Software Engineering",
       "skills_position": "after_experience",
       "section_order": ["profile", "experience", "skills", "education", "extra"],
-      "key_skills": ["Python", "TypeScript", "Swift", "SQL", "JavaScript", "FastAPI", "SwiftUI", "Git", "Docker", "Azure"],
+      "key_skills": ["Python", "TypeScript", "Swift", "SQL", "JavaScript", "FastAPI", "SwiftUI", "PostgreSQL", "Supabase", "GitHub Actions", "Claude Code", "Cursor"],
       "experience_focus": ["NutriPlan development", "System architecture", "Automation and tooling", "Full-stack development"]
     }
   },
@@ -75,8 +75,8 @@
       "end_date": "Present",
       "bullets": [
         {
-          "text": "Led the technical implementation of the MSCI BarraOne system for all global Fixed Income teams and decommissioning of 3 legacy systems, successfully completing a project previously attempted 2 times in the 7 years prior",
-          "tags": ["leadership", "project-management", "fixed-income", "systems-implementation"],
+          "text": "Led the technical implementation of MSCI BarraOne for all global Fixed Income teams, automating reports, data imports, and custom attribution models via Python, SQL, and Databricks integration with the BarraOne Web API—successfully completing a project that failed twice over 7 years due to data quality and tailoring challenges",
+          "tags": ["leadership", "project-management", "fixed-income", "systems-implementation", "python", "sql", "databricks", "api-integration"],
           "metrics": "Completed project attempted 2 times in 7 years"
         },
         {
@@ -85,29 +85,29 @@
           "metrics": "£25K saved per report, £15K annual maintenance savings"
         },
         {
-          "text": "Managed a cross-functional team of 9 analysts and external SMEs to deliver the BarraOne performance attribution migration, ensuring seamless integration with investment systems and alignment with business objectives",
-          "tags": ["leadership", "team-management", "stakeholder-management"],
-          "metrics": "Managed team of 9"
+          "text": "Managed cross-functional delivery for 10+ investment teams (100+ professionals), coordinating a team of 9 analysts and external SMEs to migrate performance attribution to BarraOne, reducing report delivery from T+3 to T+1 for portfolios totalling €176 billion in AuM",
+          "tags": ["leadership", "team-management", "stakeholder-management", "performance-attribution"],
+          "metrics": "10+ teams, 100+ professionals, T+3 to T+1, €176B AuM"
         },
         {
-          "text": "Collaborated with senior portfolio managers and cross-departmental stakeholders to translate investment and risk requirements into scalable technical solutions and architecture decisions",
-          "tags": ["stakeholder-management", "solution-architecture", "risk-management"],
+          "text": "Conducted regular on-site meetings with portfolio managers across global offices to gather requirements and relay progress, translating complex investment and risk needs into technical specifications and architecture decisions",
+          "tags": ["stakeholder-management", "solution-architecture", "risk-management", "requirements-gathering"],
           "metrics": null
         },
         {
-          "text": "Designed and implemented low-code/no-code applications on Microsoft Power Platform, consulting with business units to identify automation opportunities and define optimal solution architectures",
-          "tags": ["power-platform", "automation", "low-code", "solution-architecture"],
-          "metrics": null
+          "text": "Built a Power Platform guidance application with an AI chatbot (Copilot Studio) and developed 50+ Power Automate flows, saving €80,000 annually in external consulting fees by becoming the internal lead for citizen development support across AGI",
+          "tags": ["power-platform", "automation", "low-code", "solution-architecture", "ai", "chatbot", "cost-savings"],
+          "metrics": "50+ flows, €80K annual savings"
         },
         {
-          "text": "Developed a Power BI dashboard for quarterly UK Board reporting on retail client activity in line with the consumer duty regulation, providing senior executives with the latest performance insights and data-driven decision support",
-          "tags": ["power-bi", "reporting", "regulatory", "data-visualization"],
-          "metrics": "Quarterly Board reporting"
+          "text": "Developed a Power BI dashboard for FCA Consumer Duty compliance, enabling the UK Board to identify vulnerable client trends and fund-level issues through quarterly reporting with quarter-on-quarter delta analysis",
+          "tags": ["power-bi", "reporting", "regulatory", "data-visualization", "compliance"],
+          "metrics": "Quarterly Board reporting, FCA compliance"
         },
         {
-          "text": "Reviewed vendor proposals worth over £3 million for the implementation of AI agents and Generative AI use cases, assessing architecture quality, delivery approach, and ROI potential to advise senior leadership",
+          "text": "Evaluated AI vendor proposals worth £3+ million, recommending a higher-value solution based on architecture quality and ROI analysis—recommendation accepted by senior leadership",
           "tags": ["ai", "vendor-management", "due-diligence", "leadership"],
-          "metrics": "£3M+ vendor proposals reviewed"
+          "metrics": "£3M+ vendor proposals, recommendation accepted"
         },
         {
           "text": "Directed the training and education workstream for the AI in Operations initiative, hosting sessions with industry experts and consultants to upskill ~200 senior managers and operations professionals on AI strategy and applications",
@@ -118,6 +118,11 @@
           "text": "Pioneered the adoption of generative/agentic AI in Operations by identifying 50+ use cases across different teams",
           "tags": ["ai", "innovation", "strategy"],
           "metrics": "50+ AI use cases identified"
+        },
+        {
+          "text": "Resolved performance bottlenecks in complex Power BI data transformations by migrating processing logic to Python, reducing execution time by 70%",
+          "tags": ["python", "power-bi", "performance-optimization", "data-engineering"],
+          "metrics": "70% reduction in processing time"
         }
       ]
     },
@@ -129,9 +134,9 @@
       "end_date": "Aug 2022",
       "bullets": [
         {
-          "text": "Automated 4/4 data reconciliation processes for an internal portfolio management application vs custodian data using SQL and VBA, enabling a reduction of over £200,000 pa in external spend",
+          "text": "Automated all 4 data reconciliation processes between State Street custodian (IBOR) and legacy portfolio management system using SQL and VBA, removing the need for 4 external contractors and saving £200,000+ annually",
           "tags": ["automation", "sql", "vba", "data-reconciliation", "cost-savings"],
-          "metrics": "£200K+ annual savings"
+          "metrics": "4 contractors replaced, £200K+ annual savings"
         }
       ]
     },
@@ -143,9 +148,14 @@
       "end_date": "May 2022",
       "bullets": [
         {
-          "text": "Collaborated with a team of 3 analysts to produce research reports in Rates, Credit and FX, influencing fixed income investment decisions presented to the investment committee",
-          "tags": ["fixed-income", "research", "credit", "rates", "fx", "team-collaboration"],
-          "metrics": "Led team of 3 analysts"
+          "text": "Led a team of 3 analysts producing Rates, Credit, and FX research that informed investment committee decisions, contributing to a 5.7% annualised return on the 20% fixed income allocation via ETF selection",
+          "tags": ["fixed-income", "research", "credit", "rates", "fx", "team-leadership", "investment-performance"],
+          "metrics": "Led team of 3, 5.7% annualised return, 20% FI allocation"
+        },
+        {
+          "text": "Developed quantitative frameworks for analysing fixed income market trends, pricing anomalies, and investment opportunities across global bond markets",
+          "tags": ["fixed-income", "quantitative", "research", "analysis"],
+          "metrics": null
         }
       ]
     },
@@ -157,9 +167,9 @@
       "end_date": "Aug 2021",
       "bullets": [
         {
-          "text": "Developed machine learning-focused Python exercises, applying ML concepts to interdisciplinary science use cases",
-          "tags": ["python", "machine-learning", "education", "research"],
-          "metrics": null
+          "text": "Developed machine learning Python exercises for interdisciplinary science applications, now integrated into the Natural Sciences curriculum and used by 560+ undergraduate students",
+          "tags": ["python", "machine-learning", "education", "research", "curriculum-development"],
+          "metrics": "560+ students, integrated into curriculum"
         },
         {
           "text": "Presented my work, alongside my partner, to 200+ professors and peers with an explanation tailored to the audience",
@@ -192,24 +202,48 @@
     {
       "institution": "University College London",
       "degree": "BSc Natural Sciences (Physics and Mathematics & Statistics)",
-      "grade": "2.1",
+      "grade": "2:1",
       "location": "London, UK",
       "start_date": "Sep 2019",
-      "end_date": "Jun 2022"
+      "end_date": "Jun 2022",
+      "dissertation": {
+        "title": "Tracking Dislocations in Lithium-ion Batteries with Bragg Coherent Diffractive Imaging",
+        "grade": "76% (First)",
+        "summary": "Implemented CNN-based deep learning approach for image reconstruction, reducing processing time from hours/days to milliseconds",
+        "tech": ["Python", "TensorFlow", "PyTorch"],
+        "relevance": ["ai-ml", "data-science", "software-eng", "research"]
+      },
+      "coursework": {
+        "ai-ml": ["Practical Machine Learning for Physicists", "Linear Models & the Analysis of Variance"],
+        "data-science": ["Linear Models & the Analysis of Variance", "Practical Machine Learning for Physicists", "Mathematical Methods"],
+        "quant-dev": ["Financial Mathematics", "Mathematical Methods I-IV", "Theory of Dynamical Systems", "Topics in Scientific Computing"],
+        "portfolio-risk": ["Financial Mathematics", "Mathematical Methods I-IV"],
+        "software-eng": ["Topics in Scientific Computing", "Computing for Mathematical Physics", "Practical Machine Learning for Physicists"],
+        "research": ["Linear Models & the Analysis of Variance", "Theory of Dynamical Systems", "Mathematical Methods I-IV"],
+        "client-solutions": ["Mathematical Methods I-IV"]
+      }
     },
     {
       "institution": "Brighton, Hove & Sussex Sixth Form College",
       "degree": "A-Levels: Mathematics (A*), Further Mathematics (A), Physics (B), Chemistry (A)",
       "location": "Hove, UK",
       "start_date": "Sep 2017",
-      "end_date": "Jun 2019"
+      "end_date": "Jun 2019",
+      "include_in_tailored": false
     }
   ],
   "skills": {
-    "programming": ["Python", "SQL", "R", "DAX", "MATLAB", "Wolfram", "VBA", "JavaScript", "TypeScript", "HTML", "CSS", "LaTeX", "Swift"],
-    "platforms": ["Microsoft Power Platform (BI, Automate, Apps)", "Microsoft Office", "Azure", "JIRA", "Databricks", "GitHub", "Jupyter Notebook"],
-    "domain": ["Fixed Income", "Performance Attribution", "MSCI BarraOne", "Portfolio Management", "Risk Analysis", "Financial Modeling", "Investment Operations"],
-    "soft_skills": ["Leadership", "Stakeholder Management", "Cross-functional Collaboration", "Technical Communication", "Project Management"]
+    "programming": ["Python", "SQL", "R", "DAX", "VBA", "JavaScript", "TypeScript", "Swift", "HTML", "CSS", "LaTeX"],
+    "frameworks_libraries": ["Pandas", "NumPy", "Scikit-learn", "TensorFlow", "FastAPI", "Matplotlib", "Plotly", "Seaborn", "SwiftUI"],
+    "ai_ml": ["LangChain", "LlamaIndex", "OpenAI API", "Claude API", "Prompt Engineering", "RAG Architectures", "pgvector Embeddings"],
+    "ai_dev_tools": ["Claude Code", "Cursor", "GitHub Copilot", "MCP Servers", "Agentic Workflows"],
+    "platforms": ["Microsoft Power Platform (BI, Automate, Apps)", "Microsoft Office", "Azure", "JIRA", "Databricks", "GitHub", "GitHub Actions", "Jupyter Notebook", "Notion API"],
+    "databases": ["PostgreSQL", "Supabase", "SQL Server"],
+    "domain": ["Fixed Income", "Performance Attribution", "MSCI BarraOne", "Bloomberg", "Portfolio Management", "Risk Analysis", "Financial Modelling", "Investment Operations"],
+    "soft_skills": ["Leadership", "Stakeholder Management", "Cross-functional Collaboration", "Technical Communication", "Project Management"],
+    "_notes": {
+      "MATLAB": "University exposure only - not interview-confident"
+    }
   },
   "certifications": [
     {
@@ -233,32 +267,38 @@
     }
   ],
   "interests": [
-    "Football (former semi-pro and UCL 1st XI Captain)",
-    "Chess (Top 1% globally)",
-    "Travelling (20+ countries)",
-    "Mentoring"
+    "Football (UCL 1st XI Captain, Club President; former semi-professional)",
+    "Chess (1600+ Chess.com, Top 1% globally)",
+    "Puzzles (Top 1% daily in LinkedIn Games and Sudoku)",
+    "Continuous learning (ML/AI, mathematics and science)",
+    "Travel (20+ countries)"
   ],
   "extra_curricular": [
     {
-      "activity": "Personal Tutor",
-      "description": "A-Level and GCSE Mathematics and Science (100% A* success rate)",
-      "dates": "Sep 2017 - Present"
+      "activity": "Private Tutor - Mathematics & Science",
+      "description": "A-Level and GCSE tutoring with 100% A* achievement rate across 10+ students",
+      "dates": "Sep 2017 - Present",
+      "tags": ["teaching", "communication", "mentoring"]
     },
     {
-      "activity": "UCL Sports Representative and Football Club President",
-      "dates": "Sep 2021 - Jun 2022"
+      "activity": "UCL Football Club President & Sports Representative",
+      "description": "Led club operations, managed committee, represented athletics at student union",
+      "dates": "Sep 2021 - Jun 2022",
+      "tags": ["leadership", "management", "stakeholder-management"]
     },
     {
-      "activity": "Action Medical Research Hackathon Volunteer",
-      "description": "Improved donor detail retention from 25% to 90%",
-      "dates": "Jul 2021"
+      "activity": "Action Medical Research Hackathon",
+      "description": "Built solution improving donor detail retention from 25% to 90% in 48-hour charity hackathon",
+      "dates": "Jul 2021",
+      "tags": ["hackathon", "problem-solving", "data", "volunteering"]
     }
   ],
   "projects": {
     "lineup": {
       "name": "Lineup",
       "type": "Personal Project",
-      "status": "Beta",
+      "status": "Beta Testing",
+      "beta_testers": 4,
       "start_date": "2024",
       "description": "Concert and event tracking iOS app with multi-source data pipeline",
       "summary_short": "Full-stack iOS app for tracking concerts with automated data pipeline aggregating 6+ event sources",
@@ -300,7 +340,7 @@
     "nutriplan": {
       "name": "NutriPlan",
       "type": "Personal Project",
-      "status": "MVP Development",
+      "status": "Beta Ready",
       "start_date": "2024",
       "description": "AI-powered meal planning iOS app with personalised nutrition",
       "summary_short": "AI-powered meal planning app using GPT-4o and vector embeddings for personalised weekly meal plans",
@@ -341,6 +381,44 @@
         "research": "medium"
       },
       "github": "github.com/jevancousins/nutriplan"
+    },
+    "datacamp-recipe-traffic": {
+      "name": "Recipe Site Traffic Prediction",
+      "type": "Certification Project",
+      "status": "Complete",
+      "start_date": "2023",
+      "description": "Binary classification model predicting high-traffic recipes for homepage optimisation",
+      "summary_short": "ML classification model achieving 82.9% precision on recipe traffic prediction (DataCamp DS Professional certification)",
+      "summary_medium": "End-to-end data science project for DataCamp certification. Built binary classification models to predict high-traffic recipes, achieving 82.9% precision—exceeding the 80% business target. Recommended Logistic Regression for production deployment based on superior precision and no overfitting.",
+      "tech_stack": {
+        "languages": ["Python"],
+        "libraries": ["Pandas", "Scikit-learn", "Matplotlib", "Seaborn"],
+        "models": ["Logistic Regression", "Random Forest"],
+        "tools": ["Jupyter Notebook"]
+      },
+      "key_features": [
+        "Data validation and systematic cleaning pipeline against data dictionary",
+        "Exploratory analysis identifying recipe category as dominant predictor",
+        "Model comparison between Logistic Regression and Random Forest",
+        "Business-focused evaluation using precision as primary KPI"
+      ],
+      "technical_highlights": [
+        "Achieved 82.9% precision exceeding 80% business target",
+        "Identified category membership as dominant predictor over nutritional features (Vegetable 99%, Potato 94% high traffic vs Beverages 5%)",
+        "Recommended Logistic Regression for production due to highest precision and no overfitting",
+        "Delivered actionable A/B testing recommendations for model deployment"
+      ],
+      "tags": ["classification", "scikit-learn", "business-analytics", "data-science", "machine-learning"],
+      "relevance": {
+        "data-science": "high",
+        "ai-ml": "medium",
+        "research": "medium",
+        "quant-dev": "low",
+        "software-eng": "low",
+        "portfolio-risk": "low",
+        "client-solutions": "low"
+      },
+      "github": "github.com/jevancousins/datacamp"
     }
   }
 }
