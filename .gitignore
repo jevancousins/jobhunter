@@ -64,6 +64,7 @@ extracted_cvs/
 # Personal CVs (sensitive)
 *.zip
 CVs from Jevan Cousins.zip
+CVs from Jevan Cousins/
 
 # Playwright
 playwright-report/
