@@ -1,0 +1,78 @@
+{
+  "career_vision": {
+    "5_year_goal": "Founder / Entrepreneur",
+    "problem_type": "Solving puzzles - technical challenges, optimisation",
+    "work_style": "Autonomy with support"
+  },
+  "priorities": {
+    "primary": ["Learning & Growth", "Compensation"],
+    "skills_to_develop": [
+      "Product / Business thinking",
+      "Technical depth (ML/systems)",
+      "Industry expertise"
+    ]
+  },
+  "location": {
+    "scores": {
+      "Paris": 100,
+      "Lyon": 95,
+      "France (Other)": 90,
+      "London": 80,
+      "Remote": 75,
+      "Switzerland": 75,
+      "Luxembourg": 70,
+      "Montreal": 70,
+      "Toronto": 70,
+      "New York": 65,
+      "Boston": 65,
+      "San Francisco": 65,
+      "Los Angeles": 60,
+      "San Diego": 60,
+      "Tokyo": 55,
+      "Other": 30
+    },
+    "notes": "Paris ideal; France/London/CH/USA/Canada acceptable"
+  },
+  "compensation": {
+    "floor_gbp": 70000,
+    "floor_eur": 80000,
+    "flexible_for_equity": true,
+    "notes": "Would accept lower base for meaningful equity at growth-stage"
+  },
+  "target_roles": [
+    "AI/ML Engineer",
+    "Data Scientist",
+    "Quantitative Analyst",
+    "Quantitative Developer",
+    "Software Engineer",
+    "Solution Architect",
+    "Product Manager (Technical)"
+  ],
+  "target_industries": ["Finance", "FinTech", "Tech", "Startups", "AI/ML"],
+  "dealbreakers": {
+    "industries": [
+      "Crypto",
+      "Web3",
+      "Blockchain",
+      "Defence",
+      "Weapons",
+      "Gambling",
+      "Betting"
+    ],
+    "signals": [
+      "Maintenance-only role with no new development",
+      "No clear growth or learning path",
+      "Highly bureaucratic environment",
+      "Unethical business model"
+    ]
+  },
+  "experience_years": 4,
+  "scoring_weights": {
+    "growth_potential": 25,
+    "role_alignment": 20,
+    "founder_relevance": 20,
+    "location_fit": 15,
+    "compensation_signal": 10,
+    "industry_fit": 10
+  }
+}
