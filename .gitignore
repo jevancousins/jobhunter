@@ -90,3 +90,9 @@ test-results/
 *.nav
 *.snm
 *.vrb
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+cv/output/tailored-build/*.pdf
