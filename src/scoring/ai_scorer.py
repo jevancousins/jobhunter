@@ -29,6 +29,7 @@ class AIScorer:
         api_key: Optional[str] = None,
         model: Optional[str] = None,
         master_cv_path: Optional[Path] = None,
+        job_goals_path: Optional[Path] = None,
     ):
         """
         Initialize the AI scorer.
@@ -37,6 +38,7 @@ class AIScorer:
             api_key: Anthropic API key (uses settings if not provided)
             model: Claude model to use (uses settings if not provided)
             master_cv_path: Path to master CV JSON file
+            job_goals_path: Path to job goals JSON file
         """
         self.api_key = api_key or settings.anthropic_api_key
         self.model = model or settings.claude_model
@@ -46,6 +48,12 @@ class AIScorer:
         self.master_cv_path = master_cv_path or DATA_DIR / "master_cv.json"
         self.master_cv = self._load_master_cv()
         self.master_cv_summary = self._create_cv_summary()
+
+        # Load job goals
+        self.job_goals_path = job_goals_path or DATA_DIR / "job_goals.json"
+        self.job_goals = self._load_job_goals()
+        self.job_goals_summary = self._create_goals_summary()
+        self.dealbreakers_summary = self._create_dealbreakers_summary()
 
     def _load_master_cv(self) -> dict:
         """Load master CV from JSON file."""
@@ -58,6 +66,90 @@ class AIScorer:
                 path=str(self.master_cv_path),
             )
             return {}
+
+    def _load_job_goals(self) -> dict:
+        """Load job goals from JSON file."""
+        if self.job_goals_path.exists():
+            with open(self.job_goals_path) as f:
+                return json.load(f)
+        else:
+            logger.warning(
+                "Job goals not found, using defaults",
+                path=str(self.job_goals_path),
+            )
+            return {}
+
+    def _create_goals_summary(self) -> str:
+        """Create a summary of job goals for prompts."""
+        if not self.job_goals:
+            return """
+Career Vision: Founder / Entrepreneur within 5 years
+Priorities: Learning & Growth, Compensation
+Target Roles: AI/ML Engineer, Data Scientist, Quant, Software Engineer
+Target Industries: Finance, FinTech, Tech, Startups
+Experience: 4 years
+Location Preference: Paris ideal, France/London/CH/USA/Canada acceptable
+"""
+
+        parts = []
+
+        # Career vision
+        if "career_vision" in self.job_goals:
+            vision = self.job_goals["career_vision"]
+            parts.append(f"5-Year Goal: {vision.get('5_year_goal', 'N/A')}")
+            parts.append(f"Problem Type: {vision.get('problem_type', 'N/A')}")
+            parts.append(f"Work Style: {vision.get('work_style', 'N/A')}")
+
+        # Priorities
+        if "priorities" in self.job_goals:
+            priorities = self.job_goals["priorities"]
+            parts.append(f"\nPrimary Priorities: {', '.join(priorities.get('primary', []))}")
+            parts.append(f"Skills to Develop: {', '.join(priorities.get('skills_to_develop', []))}")
+
+        # Target roles and industries
+        if "target_roles" in self.job_goals:
+            parts.append(f"\nTarget Roles: {', '.join(self.job_goals['target_roles'])}")
+        if "target_industries" in self.job_goals:
+            parts.append(f"Target Industries: {', '.join(self.job_goals['target_industries'])}")
+
+        # Experience
+        if "experience_years" in self.job_goals:
+            parts.append(f"Experience: {self.job_goals['experience_years']} years")
+
+        # Location
+        if "location" in self.job_goals:
+            loc = self.job_goals["location"]
+            parts.append(f"\nLocation: {loc.get('notes', 'N/A')}")
+
+        # Compensation
+        if "compensation" in self.job_goals:
+            comp = self.job_goals["compensation"]
+            parts.append(f"\nCompensation Floor: £{comp.get('floor_gbp', 'N/A'):,} / €{comp.get('floor_eur', 'N/A'):,}")
+            if comp.get("flexible_for_equity"):
+                parts.append(f"Note: {comp.get('notes', 'Flexible for equity')}")
+
+        return "\n".join(parts)
+
+    def _create_dealbreakers_summary(self) -> str:
+        """Create a summary of dealbreakers for prompts."""
+        if not self.job_goals or "dealbreakers" not in self.job_goals:
+            return """
+Industry Dealbreakers: Crypto, Web3, Blockchain, Defence, Weapons, Gambling, Betting
+Signal Dealbreakers: Maintenance-only role, No growth path, Highly bureaucratic, Unethical business
+"""
+
+        dealbreakers = self.job_goals["dealbreakers"]
+        parts = []
+
+        if "industries" in dealbreakers:
+            parts.append(f"Industry Dealbreakers: {', '.join(dealbreakers['industries'])}")
+
+        if "signals" in dealbreakers:
+            parts.append(f"\nSignal Dealbreakers:")
+            for signal in dealbreakers["signals"]:
+                parts.append(f"- {signal}")
+
+        return "\n".join(parts)
 
     def _create_cv_summary(self) -> str:
         """Create a summary of the master CV for prompts."""
@@ -142,6 +234,8 @@ Languages: English (Native), French (Proficient)
 
         prompt = PROMPTS["job_scoring"].format(
             master_cv_summary=self.master_cv_summary,
+            job_goals_summary=self.job_goals_summary,
+            dealbreakers=self.dealbreakers_summary,
             job_title=job.title,
             company=job.company,
             location=job.location,
@@ -167,20 +261,34 @@ Languages: English (Native), French (Proficient)
             result = self._parse_scoring_response(response_text)
 
             if result:
-                # Update job with scoring results
-                scores = result.get("scores", {})
+                # Check if dealbreaker was triggered
+                dealbreaker = result.get("dealbreaker_triggered")
+                if dealbreaker:
+                    logger.info(
+                        "Dealbreaker triggered",
+                        title=job.title,
+                        dealbreaker=dealbreaker,
+                    )
+                    job.score = 0
+                    job.ai_analysis = f"Dealbreaker: {dealbreaker}"
+                    job.score_breakdown = ScoreBreakdown()
+                else:
+                    # Update job with scoring results (new unified framework)
+                    scores = result.get("scores", {})
 
-                job.score_breakdown = ScoreBreakdown(
-                    location=scores.get("location", {}).get("score", 0),
-                    role_alignment=scores.get("role_alignment", {}).get("score", 0),
-                    industry_fit=scores.get("industry_fit", {}).get("score", 0),
-                    seniority=scores.get("seniority", {}).get("score", 0),
-                    skills_match=scores.get("skills_match", {}).get("score", 0),
-                    impact_potential=scores.get("impact_potential", {}).get("score", 0),
-                )
+                    job.score_breakdown = ScoreBreakdown(
+                        # New unified dimensions
+                        growth_potential=scores.get("growth_potential", {}).get("score", 0),
+                        role_alignment=scores.get("role_alignment", {}).get("score", 0),
+                        founder_relevance=scores.get("founder_relevance", {}).get("score", 0),
+                        location_fit=scores.get("location_fit", {}).get("score", 0),
+                        compensation_signal=scores.get("compensation_signal", {}).get("score", 0),
+                        industry_fit=scores.get("industry_fit", {}).get("score", 0),
+                    )
 
-                job.score = result.get("total_score", job.score_breakdown.total)
-                job.ai_analysis = result.get("summary", "")
+                    job.score = result.get("total_score", job.score_breakdown.total)
+                    job.ai_analysis = result.get("summary", "")
+
                 job.key_requirements = result.get("key_requirements", [])
                 job.potential_concerns = result.get("potential_concerns", [])
 
@@ -188,6 +296,7 @@ Languages: English (Native), French (Proficient)
                     "Job scored",
                     title=job.title,
                     score=job.score,
+                    verdict=result.get("verdict", "N/A"),
                 )
             else:
                 logger.warning(

@@ -29,17 +29,52 @@ class JobSource(Enum):
 
 @dataclass
 class ScoreBreakdown:
-    """Breakdown of job suitability score by factor."""
-    location: float = 0.0  # 0-25
-    role_alignment: float = 0.0  # 0-25
-    industry_fit: float = 0.0  # 0-15
-    seniority: float = 0.0  # 0-10
-    skills_match: float = 0.0  # 0-15
-    impact_potential: float = 0.0  # 0-10
+    """Breakdown of job suitability score by factor (unified framework).
+
+    New unified scoring dimensions (backwards + forward-looking):
+    - growth_potential: Learning opportunities, challenge, skill development (0-25)
+    - role_alignment: Skills match + target role fit (0-20)
+    - founder_relevance: Product exposure, ownership, entrepreneurial skills (0-20)
+    - location_fit: Configurable location preferences (0-15)
+    - compensation_signal: Salary range indicators, equity mentions (0-10)
+    - industry_fit: Finance/FinTech/Tech/Startup + avoid list (0-10)
+
+    Legacy fields maintained for backwards compatibility with existing Notion data.
+    """
+    # New unified framework dimensions
+    growth_potential: float = 0.0      # 0-25
+    role_alignment: float = 0.0        # 0-20
+    founder_relevance: float = 0.0     # 0-20
+    location_fit: float = 0.0          # 0-15
+    compensation_signal: float = 0.0   # 0-10
+    industry_fit: float = 0.0          # 0-10
+
+    # Legacy fields for backwards compatibility (deprecated)
+    location: float = 0.0              # Legacy: 0-25
+    seniority: float = 0.0             # Legacy: 0-10
+    skills_match: float = 0.0          # Legacy: 0-15
+    impact_potential: float = 0.0      # Legacy: 0-10
 
     @property
     def total(self) -> float:
-        """Calculate total score from all factors."""
+        """Calculate total score from all factors.
+
+        Uses new unified dimensions if populated, falls back to legacy.
+        """
+        # Check if new dimensions are populated
+        new_total = (
+            self.growth_potential
+            + self.role_alignment
+            + self.founder_relevance
+            + self.location_fit
+            + self.compensation_signal
+            + self.industry_fit
+        )
+
+        if new_total > 0:
+            return new_total
+
+        # Fall back to legacy dimensions
         return (
             self.location
             + self.role_alignment
@@ -52,9 +87,15 @@ class ScoreBreakdown:
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
-            "location": self.location,
+            # New unified dimensions
+            "growth_potential": self.growth_potential,
             "role_alignment": self.role_alignment,
+            "founder_relevance": self.founder_relevance,
+            "location_fit": self.location_fit,
+            "compensation_signal": self.compensation_signal,
             "industry_fit": self.industry_fit,
+            # Legacy dimensions (for backwards compatibility)
+            "location": self.location,
             "seniority": self.seniority,
             "skills_match": self.skills_match,
             "impact_potential": self.impact_potential,

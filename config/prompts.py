@@ -1,17 +1,15 @@
 """AI prompt templates for JobHunter."""
 
-JOB_SCORING_PROMPT = """You are an expert career advisor helping evaluate job opportunities.
+JOB_SCORING_PROMPT = """You are an expert career advisor evaluating job opportunities.
 
 ## Candidate Profile
 {master_cv_summary}
 
-## Target Preferences
-- Primary location: Paris, France (girlfriend in Lyon)
-- Acceptable locations: London, Remote, Switzerland, Luxembourg, Montreal, Toronto, New York, Boston, San Francisco, Los Angeles, San Diego, Tokyo, anywhere in France
-- Target roles: Quantitative Analyst, Data Scientist (Finance), Investment Analyst, Solution Architect, Product Manager (FinTech), Software Engineer (Finance/Trading), Automation Engineer, BI Developer, Quantitative Developer
-- Industries: Finance, FinTech, Tech, Startups
-- Experience level: ~3.5 years
-- Languages: English (Native), French (Proficient)
+## Career Goals & Preferences
+{job_goals_summary}
+
+## Dealbreakers (auto-reject if any match)
+{dealbreakers}
 
 ## Job Posting
 Title: {job_title}
@@ -21,29 +19,45 @@ Description:
 {job_description}
 
 ## Scoring Task
-Score this job on each factor (provide score and brief reasoning):
+First check dealbreakers. If any match, return total_score: 0 with dealbreaker_triggered set.
 
-1. Location Match (0-25): Paris=25, Lyon=24, France(Other)=22, London=20, Remote=18, Switzerland/Luxembourg=17, North America cities=17, Tokyo=16, Other=7
-2. Role Alignment (0-25): How well does this match the candidate's skills and target roles?
-3. Industry Fit (0-15): Finance/FinTech/Tech/Startup alignment
-4. Seniority Match (0-10): Appropriate for ~3.5 years experience?
-5. Skills Match (0-15): Python, SQL, data analysis, fixed income, Power BI, MSCI BarraOne, performance attribution, etc.
-6. Impact Potential (0-10): Does this role offer meaningful work with business impact?
+Otherwise, score on each dimension:
+1. Growth Potential (0-25): Learning opportunities, technical challenges, skill development, mentorship signals, new vs maintenance work
+2. Role Alignment (0-20): Skills match to candidate profile + target role fit
+3. Founder Relevance (0-20): Product exposure, ownership, autonomy, user-facing work, breadth of responsibility, entrepreneurial skills
+4. Location Fit (0-15): Use location scores - Paris=15, Lyon=14, France(Other)=13, London=12, Remote=11, Switzerland=11, Luxembourg=10, Canada cities=10, US cities=10, Tokyo=8, Other=4
+5. Compensation Signal (0-10): Salary range indicators, seniority signals, equity mentions (if not stated, estimate from role level)
+6. Industry Fit (0-10): Alignment with Finance/FinTech/Tech/Startups/AI-ML
 
 ## Output Format (JSON only, no markdown)
 {{
+  "dealbreaker_triggered": null,
   "scores": {{
-    "location": {{"score": X, "reason": "..."}},
+    "growth_potential": {{"score": X, "reason": "..."}},
     "role_alignment": {{"score": X, "reason": "..."}},
-    "industry_fit": {{"score": X, "reason": "..."}},
-    "seniority": {{"score": X, "reason": "..."}},
-    "skills_match": {{"score": X, "reason": "..."}},
-    "impact_potential": {{"score": X, "reason": "..."}}
+    "founder_relevance": {{"score": X, "reason": "..."}},
+    "location_fit": {{"score": X, "reason": "..."}},
+    "compensation_signal": {{"score": X, "reason": "..."}},
+    "industry_fit": {{"score": X, "reason": "..."}}
   }},
   "total_score": X,
-  "summary": "2-3 sentence overall assessment",
-  "key_requirements": ["req1", "req2", "req3"],
-  "potential_concerns": ["concern1", "concern2"]
+  "verdict": "Apply",
+  "summary": "2-3 sentence assessment",
+  "key_requirements": ["req1", "req2"],
+  "potential_concerns": ["concern1"],
+  "questions_to_ask": ["question1", "question2"]
+}}
+
+If dealbreaker triggered, use this format instead:
+{{
+  "dealbreaker_triggered": "Crypto/Web3 industry",
+  "scores": {{}},
+  "total_score": 0,
+  "verdict": "Skip",
+  "summary": "Role is in dealbreaker industry.",
+  "key_requirements": [],
+  "potential_concerns": [],
+  "questions_to_ask": []
 }}"""
 
 CV_TAILORING_PROMPT = """You are an expert CV writer specialising in finance and technology roles.
