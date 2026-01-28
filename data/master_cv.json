@@ -194,6 +194,26 @@
           "text": "Developed an algorithmic trading strategy in Python using a combination of SMAs that outperformed the S&P 500 buy and hold strategy by 67% (Jun 2019 - Jun 2020)",
           "tags": ["python", "algorithmic-trading", "quantitative", "backtesting"],
           "metrics": "Outperformed S&P 500 by 67%"
+        },
+        {
+          "text": "Ranked 1st overall in daily commercial awareness examinations across the internship cohort, demonstrating strong knowledge of market news and financial events",
+          "tags": ["commercial-awareness", "markets", "competition"],
+          "metrics": "Ranked 1st in cohort"
+        },
+        {
+          "text": "Performed DCF and trading comparables analysis to forecast Caterpillar's share price under blue sky and grey sky scenarios",
+          "tags": ["dcf", "valuation", "comparables", "financial-modelling"],
+          "metrics": null
+        },
+        {
+          "text": "Delivered IPO pitch to simulated investors, optimising target share price based on investor sentiment analysis",
+          "tags": ["pitching", "presentation", "ipo", "valuation"],
+          "metrics": null
+        },
+        {
+          "text": "Produced an 8-page Swedish real estate market analysis in a team of 4 under a 1-hour time constraint, incorporating COVID-19 impact assessment and presenting findings to senior members of the firm",
+          "tags": ["research", "real-estate", "presentation", "time-pressure", "teamwork"],
+          "metrics": "8-page report, 1-hour constraint, team of 4"
         }
       ]
     }
@@ -254,6 +274,11 @@
       "name": "L6 Diploma in Trading and Financial Market Analysis",
       "issuer": "LIBF",
       "grade": "Distinction"
+    },
+    {
+      "name": "Bloomberg Market Concepts",
+      "issuer": "Bloomberg",
+      "description": "Proficiency in financial markets covering 100+ Bloomberg terminal functions"
     }
   ],
   "languages": [
@@ -288,9 +313,63 @@
     },
     {
       "activity": "Action Medical Research Hackathon",
-      "description": "Built solution improving donor detail retention from 25% to 90% in 48-hour charity hackathon",
+      "description": "Built solution improving donor detail retention from 25% to 90% in 48-hour charity hackathon, contributing to £50,000 raised from 266 attendees at Dine with Davina event",
       "dates": "Jul 2021",
       "tags": ["hackathon", "problem-solving", "data", "volunteering"]
+    },
+    {
+      "activity": "Head of Opinions, All M&A",
+      "description": "Led debates on financial news and macroeconomic trends, producing written articles analysing recent M&A deals and their market implications",
+      "dates": "Aug 2021 - Jun 2022",
+      "tags": ["research", "financial-analysis", "writing", "leadership"]
+    },
+    {
+      "activity": "upReach Tech500 Associate",
+      "description": "Selected for competitive programme boosting tech employability; completed UX/UI design project proposing improvements to Zoom's user experience",
+      "dates": "2021",
+      "tags": ["ux-design", "tech", "networking", "competitive-selection"]
+    },
+    {
+      "activity": "SEO London Candidate",
+      "description": "Participated in Step Into Finance and Step Into Technology programmes, networking with 300+ peers and 150+ industry professionals",
+      "dates": "2021",
+      "tags": ["networking", "finance", "technology", "professional-development"]
+    },
+    {
+      "activity": "Citigroup Institutional Banking Virtual Internship",
+      "description": "Constructed client-tailored investment portfolio benchmarked against index; performed DCF valuation and comparables analysis for M&A strategic rationale",
+      "dates": "Sep 2020",
+      "tags": ["investment-banking", "dcf", "valuation", "portfolio-construction"]
+    },
+    {
+      "activity": "Bright Network Investment Banking Virtual Internship",
+      "description": "Produced acquisition research report using trading comparables and valuation metrics to assess target suitability and strategic fit",
+      "dates": "Jun 2020 - Jul 2020",
+      "tags": ["investment-banking", "valuation", "comparables", "m&a", "research"]
+    },
+    {
+      "activity": "Bright Network Investment Banking & Asset Management Virtual Internship",
+      "description": "Completed Green Investment Group (GIG) work sample on company acquisition using multiple valuation metrics; performed Macquarie Infrastructure and Real Assets (MIRA) comparables analysis to identify optimal investment from three candidates",
+      "dates": "Jul 2021",
+      "tags": ["asset-management", "valuation", "comparables", "investment-analysis", "infrastructure"]
+    },
+    {
+      "activity": "Bright Network Financial Services & Consulting Virtual Internship",
+      "description": "Mapped customer journey for coffee shop and PwC UK recruitment process; developed ESG strategy proposal to optimise share price and rebuild stakeholder trust through analysis of public image issues",
+      "dates": "Jul 2021",
+      "tags": ["consulting", "esg", "customer-journey", "strategy", "stakeholder-management"]
+    },
+    {
+      "activity": "Bright Network Public Sector, Policy & Charity Virtual Internship",
+      "description": "Conducted policy review assessing revenue opportunities for museums; drafted ministerial complaint response letter justifying policy decisions",
+      "dates": "Jul 2021",
+      "tags": ["policy", "public-sector", "writing", "analysis"]
+    },
+    {
+      "activity": "Bright Network Technology Virtual Internship",
+      "description": "Created proposal for innovative technologies to support regulatory compliance reporting for a bank facing fines; completed Google Coding Challenge building a functional Python CLI application simulating YouTube user interactions",
+      "dates": "Jul 2021",
+      "tags": ["technology", "python", "regulatory", "fintech", "coding-challenge"]
     }
   ],
   "projects": {
