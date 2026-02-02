@@ -19,16 +19,16 @@ logger = structlog.get_logger()
 # Maximum HTML length to send to Claude (approx 50k chars)
 MAX_HTML_LENGTH = 50_000
 
-# Indicators that the page may be blocked
+# Indicators that the page may be blocked (checked against visible text, not CSS)
 BLOCKING_INDICATORS = [
-    "captcha",
     "access denied",
-    "please verify",
-    "cloudflare",
+    "please verify you are human",
+    "checking your browser",
     "bot detected",
     "unusual traffic",
-    "enable javascript",
-    "browser check",
+    "enable javascript to view",
+    "just a moment",  # Cloudflare
+    "ray id",  # Cloudflare error pages
 ]
 
 
@@ -48,7 +48,7 @@ class CareerSiteScraper(BaseScraper):
         delay_seconds: float = 3.0,
         max_jobs: int = 50,
         max_pagination_pages: int = 2,
-        model: str = "claude-haiku-3-5-latest",
+        model: str = "claude-3-5-haiku-latest",
     ):
         """
         Initialize the career site scraper.
@@ -100,6 +100,24 @@ class CareerSiteScraper(BaseScraper):
         # For now, return the job as-is
         # Could be extended to fetch individual job pages for descriptions
         return job
+
+    async def _fetch_html(self, url: str) -> str:
+        """
+        Fetch HTML content with career page optimisations.
+
+        Uses domcontentloaded + explicit wait instead of networkidle
+        to handle slow-loading job boards like Lever, Greenhouse, etc.
+        """
+        page = await self._get_page()
+        try:
+            # Use domcontentloaded for faster initial load
+            await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            # Wait for dynamic content to load
+            await page.wait_for_timeout(3000)
+            html = await page.content()
+            return html
+        finally:
+            await page.close()
 
     async def scrape_company(self, company: Company) -> list[Job]:
         """
@@ -256,9 +274,14 @@ class CareerSiteScraper(BaseScraper):
         return jobs, next_page_url
 
     def _is_blocked(self, html: str) -> bool:
-        """Check if the page appears to be blocked."""
-        html_lower = html.lower()
-        return any(indicator in html_lower for indicator in BLOCKING_INDICATORS)
+        """Check if the page appears to be blocked.
+
+        Checks cleaned HTML (no scripts/styles) to avoid false positives
+        from CSS class names like '.g-recaptcha'.
+        """
+        # Clean HTML first to check only visible content
+        cleaned = self._clean_html(html).lower()
+        return any(indicator in cleaned for indicator in BLOCKING_INDICATORS)
 
     def _clean_html(self, html: str) -> str:
         """

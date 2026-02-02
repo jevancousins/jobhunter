@@ -23,7 +23,7 @@ class TestCareerSiteScraperInit:
         assert scraper.delay_seconds == 3.0
         assert scraper.max_jobs == 50
         assert scraper.max_pagination_pages == 2
-        assert scraper.model == "claude-haiku-3-5-latest"
+        assert scraper.model == "claude-3-5-haiku-latest"
         assert scraper.use_playwright is True
         assert scraper.source == JobSource.COMPANY_PAGE
 
@@ -122,10 +122,10 @@ class TestHTMLCleaning:
 class TestBlockingDetection:
     """Tests for blocking indicator detection."""
 
-    def test_detects_captcha(self):
-        """Test that CAPTCHA pages are detected."""
+    def test_detects_human_verification(self):
+        """Test that human verification prompts are detected."""
         scraper = CareerSiteScraper()
-        html = "<div>Please complete the CAPTCHA to continue</div>"
+        html = "<div>Please verify you are human to continue</div>"
 
         assert scraper._is_blocked(html) is True
 
@@ -139,7 +139,7 @@ class TestBlockingDetection:
     def test_detects_cloudflare(self):
         """Test that Cloudflare challenge pages are detected."""
         scraper = CareerSiteScraper()
-        html = "<div>Checking your browser before accessing... Cloudflare</div>"
+        html = "<div>Just a moment... Checking your browser</div>"
 
         assert scraper._is_blocked(html) is True
 
@@ -155,10 +155,23 @@ class TestBlockingDetection:
 
         assert scraper._is_blocked(html) is False
 
+    def test_css_captcha_class_not_blocked(self):
+        """Test that CSS class names with 'captcha' don't trigger false positives."""
+        scraper = CareerSiteScraper()
+        # This is what Lever pages have - CSS rules for captcha styling
+        html = """
+        <style>.g-recaptcha div,.h-captcha-spacing {display: block;}</style>
+        <div class="jobs-list">
+            <a href="/job/123">Software Engineer</a>
+        </div>
+        """
+
+        assert scraper._is_blocked(html) is False
+
     def test_case_insensitive_detection(self):
         """Test that blocking detection is case insensitive."""
         scraper = CareerSiteScraper()
-        html = "<div>PLEASE VERIFY you are human</div>"
+        html = "<div>PLEASE VERIFY YOU ARE HUMAN</div>"
 
         assert scraper._is_blocked(html) is True
 
