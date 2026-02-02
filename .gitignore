@@ -96,3 +96,20 @@ test-results/
 *.log
 *.out
 cv/output/tailored-build/*.pdf
+
+# Personal data files (sensitive - DO NOT COMMIT)
+data/master_cv.json
+data/job_goals.json
+
+# CV files with personal information
+cv/sections/header.tex
+cv/sections/experience.tex
+cv/sections/education.tex
+cv/sections/extra.tex
+cv/sections/skills.tex
+cv/profiles/
+cv/variants/
+cv/master-cv.tex
+cv/output/*.pdf
+cv/output/tailored/
+cv/output/tailored-build/

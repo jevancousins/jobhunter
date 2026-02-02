@@ -1,0 +1,74 @@
+{
+  "career_vision": {
+    "5_year_goal": "Your 5-year career goal",
+    "problem_type": "Type of problems you enjoy solving",
+    "work_style": "Preferred work style"
+  },
+  "priorities": {
+    "primary": ["Learning & Growth", "Compensation"],
+    "skills_to_develop": [
+      "Skill area 1",
+      "Skill area 2"
+    ]
+  },
+  "location": {
+    "scores": {
+      "Preferred City 1": 100,
+      "Preferred City 2": 90,
+      "Remote": 75,
+      "Other": 30
+    },
+    "notes": "Location preferences explanation"
+  },
+  "compensation": {
+    "floor_gbp": 50000,
+    "floor_eur": 60000,
+    "flexible_for_equity": true,
+    "notes": "Compensation flexibility notes"
+  },
+  "target_roles": [
+    "Role Type 1",
+    "Role Type 2",
+    "Role Type 3"
+  ],
+  "target_industries": ["Industry 1", "Industry 2", "Tech"],
+  "dealbreakers": {
+    "industries": [
+      "Industry you won't work in"
+    ],
+    "signals": [
+      "Red flag signals in job postings"
+    ]
+  },
+  "experience_years": 3,
+  "candidate_profile": {
+    "education": {
+      "level": "BSc/MSc/PhD",
+      "field": "Your Field",
+      "institution_tier": "Institution description"
+    },
+    "strong_skills": [
+      "Skill 1",
+      "Skill 2"
+    ],
+    "developing_skills": [
+      "Skill to improve 1",
+      "Skill to improve 2"
+    ],
+    "domain_expertise": [
+      "Domain 1",
+      "Domain 2"
+    ],
+    "experience_type": "Description of experience type",
+    "notes": "Additional context about your profile"
+  },
+  "scoring_weights": {
+    "growth_potential": 20,
+    "role_alignment": 15,
+    "competitiveness": 15,
+    "founder_relevance": 15,
+    "location_fit": 15,
+    "compensation_signal": 10,
+    "industry_fit": 10
+  }
+}

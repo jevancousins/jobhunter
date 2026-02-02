@@ -1,0 +1,88 @@
+{
+  "personal": {
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "phone": "+44 XXXX XXX XXX",
+    "linkedin": "linkedin.com/in/yourprofile"
+  },
+  "profiles": {
+    "default": "Your default professional summary goes here.",
+    "data-science": "Data science focused summary.",
+    "ai-ml": "AI/ML focused summary.",
+    "software-eng": "Software engineering focused summary."
+  },
+  "job_categories": {
+    "data-science": {
+      "name": "Data Science",
+      "skills_position": "before_experience",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["Python", "SQL", "Pandas", "NumPy", "Scikit-learn"],
+      "experience_focus": ["Data analysis", "ML models", "Statistical modelling"]
+    }
+  },
+  "experience": [
+    {
+      "company": "Company Name",
+      "title": "Job Title",
+      "location": "City, Country",
+      "start_date": "Mon YYYY",
+      "end_date": "Present",
+      "bullets": [
+        {
+          "text": "Achievement description with metrics",
+          "tags": ["python", "leadership", "data-analysis"],
+          "metrics": "Quantified impact"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University Name",
+      "degree": "Degree Title",
+      "grade": "Grade",
+      "location": "City, Country",
+      "start_date": "Sep YYYY",
+      "end_date": "Jun YYYY",
+      "dissertation": {
+        "title": "Dissertation Title",
+        "grade": "Grade",
+        "summary": "Brief summary",
+        "tech": ["Python", "TensorFlow"],
+        "relevance": ["ai-ml", "data-science"]
+      },
+      "coursework": {
+        "ai-ml": ["Relevant Course 1", "Relevant Course 2"]
+      }
+    }
+  ],
+  "skills": {
+    "programming": ["Python", "SQL", "R"],
+    "frameworks_libraries": ["Pandas", "NumPy", "Scikit-learn"],
+    "ai_ml": ["LangChain", "OpenAI API"],
+    "platforms": ["Azure", "AWS"],
+    "databases": ["PostgreSQL", "MongoDB"],
+    "domain": ["Your Domain Expertise"],
+    "soft_skills": ["Leadership", "Communication"]
+  },
+  "certifications": [
+    {
+      "name": "Certification Name",
+      "issuer": "Issuing Organization",
+      "date": "YYYY"
+    }
+  ],
+  "projects": {
+    "project-key": {
+      "name": "Project Name",
+      "type": "Personal Project",
+      "status": "In Progress",
+      "description": "Brief description",
+      "tech_stack": {
+        "frontend": ["Swift", "SwiftUI"],
+        "backend": ["Python", "FastAPI"]
+      },
+      "tags": ["ios", "python", "full-stack"]
+    }
+  }
+}
