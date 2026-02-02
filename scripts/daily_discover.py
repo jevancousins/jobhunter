@@ -23,11 +23,11 @@ import structlog
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config.settings import settings, TARGET_ROLE_KEYWORDS, TARGET_LOCATIONS
-from src.scrapers import IndeedScraper, LinkedInScraper, WelcomeToTheJungleScraper
+from src.scrapers import IndeedScraper, LinkedInScraper, WelcomeToTheJungleScraper, CareerSiteScraper
 from src.scoring import AIScorer
 from src.scoring.ai_scorer import APIUnavailableError
 from src.notion import NotionClient, NotionSync
-from src.models import Job, JobStatus
+from src.models import Job, JobStatus, Company
 
 # Configure logging
 structlog.configure(
@@ -120,9 +120,64 @@ def is_french_location(location: str) -> bool:
     return any(kw in location.lower() for kw in french_keywords)
 
 
+async def scrape_company_career_pages(
+    notion_client: NotionClient,
+) -> tuple[list[Job], dict[str, str]]:
+    """
+    Scrape jobs from company career pages in the watchlist.
+
+    Args:
+        notion_client: Notion client for fetching companies
+
+    Returns:
+        Tuple of (jobs list, dict mapping company name to page_id for successful scrapes)
+    """
+    all_jobs = []
+    successful_scrapes = {}  # company_name -> page_id
+
+    # Get companies with their page IDs
+    companies_with_ids = notion_client.get_companies_to_check_with_page_ids()
+
+    if not companies_with_ids:
+        logger.info("No companies configured for daily checking")
+        return [], {}
+
+    logger.info(f"Checking {len(companies_with_ids)} company career pages")
+
+    async with CareerSiteScraper(
+        delay_seconds=settings.scrape_delay_seconds,
+        max_jobs=50,
+    ) as scraper:
+        for company, page_id in companies_with_ids:
+            if not company.careers_url:
+                logger.warning(
+                    "Company missing careers URL",
+                    company=company.name,
+                )
+                continue
+
+            try:
+                jobs = await scraper.scrape_company(company)
+                all_jobs.extend(jobs)
+                successful_scrapes[company.name] = page_id
+                logger.info(
+                    f"Career page: {company.name} - found {len(jobs)} jobs",
+                )
+            except Exception as e:
+                logger.error(
+                    f"Failed to scrape career page for {company.name}: {e}"
+                )
+
+    logger.info(f"Career pages: found {len(all_jobs)} total jobs")
+    return all_jobs, successful_scrapes
+
+
 def deduplicate_jobs(jobs: list[Job]) -> list[Job]:
     """
-    Remove duplicate jobs based on URL.
+    Remove duplicate jobs based on URL and company+title combination.
+
+    This handles cases where the same job appears on a job board AND
+    the company's career page with different URLs.
 
     Args:
         jobs: List of jobs
@@ -131,17 +186,24 @@ def deduplicate_jobs(jobs: list[Job]) -> list[Job]:
         Deduplicated list
     """
     seen_urls = set()
+    seen_company_titles = set()
     unique_jobs = []
 
     for job in jobs:
-        if job.url not in seen_urls:
+        # Create a normalised key for company+title matching
+        company_title_key = f"{job.company.lower().strip()}|{job.title.lower().strip()}"
+
+        # Check both URL and company+title
+        if job.url not in seen_urls and company_title_key not in seen_company_titles:
             seen_urls.add(job.url)
+            seen_company_titles.add(company_title_key)
             unique_jobs.append(job)
 
     logger.info(
         "Deduplicated jobs",
         original=len(jobs),
         unique=len(unique_jobs),
+        url_dupes=len(jobs) - len(unique_jobs),
     )
 
     return unique_jobs
@@ -186,6 +248,21 @@ async def main():
     )
 
     jobs = await scrape_all_sources(keywords, locations)
+    logger.info(f"Job boards: found {len(jobs)} jobs")
+
+    # Scrape company career pages
+    career_page_jobs = []
+    successful_career_scrapes = {}
+    if settings.notion_api_key and settings.notion_companies_db_id:
+        try:
+            notion_client = NotionClient()
+            career_page_jobs, successful_career_scrapes = await scrape_company_career_pages(
+                notion_client
+            )
+            jobs.extend(career_page_jobs)
+        except Exception as e:
+            logger.error(f"Career page scraping failed: {e}")
+
     logger.info(f"Total jobs scraped: {len(jobs)}")
 
     if not jobs:
@@ -261,6 +338,24 @@ async def main():
         logger.info("Pushing jobs to Notion")
         sync = NotionSync()
         added, skipped = sync.push_jobs(qualified_jobs)
+
+        # Update Last Checked for successfully scraped companies
+        if successful_career_scrapes:
+            notion_client = NotionClient()
+            for company_name, page_id in successful_career_scrapes.items():
+                try:
+                    notion_client.update_company_last_checked(page_id)
+                    logger.debug(
+                        "Updated Last Checked",
+                        company=company_name,
+                    )
+                except Exception as e:
+                    logger.warning(
+                        f"Failed to update Last Checked for {company_name}: {e}"
+                    )
+            logger.info(
+                f"Updated Last Checked for {len(successful_career_scrapes)} companies"
+            )
 
         # Log daily summary
         summary = sync.get_daily_summary()

@@ -164,10 +164,61 @@ Generate:
 
 For each question, provide a brief note on what the interviewer is looking for."""
 
+CAREER_PAGE_EXTRACTION_PROMPT = """You are an expert at extracting structured job listing data from career pages.
+
+## Task
+Extract all job postings from the following career page HTML. Focus on extracting jobs that are relevant to:
+- Data Science / Machine Learning / AI
+- Quantitative Finance / Portfolio Management / Risk
+- Software Engineering / Python Development
+- Product / Solutions Architecture
+
+## Company Information
+Company Name: {company_name}
+Base URL: {base_url}
+
+## HTML Content
+{html_content}
+
+## Instructions
+1. Identify all job listings on the page
+2. For each job, extract: title, location, URL, department (if available), posted date (if available)
+3. Resolve relative URLs to absolute URLs using the base URL
+4. If no jobs are found or the page appears blocked, indicate this
+5. Look for pagination links if present
+
+## Output Format (JSON only, no markdown)
+{{
+  "jobs": [
+    {{
+      "title": "Job Title",
+      "location": "City, Country or Remote",
+      "url": "https://full-url-to-job-posting",
+      "department": "Engineering",
+      "posted_date": "2024-01-15"
+    }}
+  ],
+  "pagination": {{
+    "has_more_pages": true,
+    "next_page_url": "https://..."
+  }},
+  "blocked": false,
+  "blocked_reason": null,
+  "extraction_confidence": "high"
+}}
+
+Notes:
+- If a field is not available, use null
+- posted_date should be in YYYY-MM-DD format if extractable, otherwise null
+- extraction_confidence: "high" if clear job listings found, "medium" if some ambiguity, "low" if uncertain
+- blocked: true if the page shows a CAPTCHA, access denied, or similar blocking
+- Only include jobs that appear to be open positions (not blog posts, news, etc.)"""
+
 PROMPTS = {
     "job_scoring": JOB_SCORING_PROMPT,
     "cv_tailoring": CV_TAILORING_PROMPT,
     "cover_letter": COVER_LETTER_PROMPT,
     "company_research": COMPANY_RESEARCH_PROMPT,
     "interview_questions": INTERVIEW_QUESTIONS_PROMPT,
+    "career_page_extraction": CAREER_PAGE_EXTRACTION_PROMPT,
 }

@@ -69,6 +69,35 @@ software-eng: check-latex setup
 	@$(LATEX) $(LATEXFLAGS) variants/software-eng.tex > /dev/null 2>&1 && echo "  ✓ output/software-eng.pdf" || \
 		{ echo "  ✗ Build failed. Check output/software-eng.log"; exit 1; }
 
+# Build a specific tailored CV
+# Usage: make tailored FILE=emagine-senior-quant-developer
+tailored: check-latex
+ifndef FILE
+	@echo "Error: FILE not specified"
+	@echo "Usage: make tailored FILE=<filename-without-extension>"
+	@echo ""
+	@echo "Available files:"
+	@ls -1 output/tailored-build/*.tex 2>/dev/null | xargs -I {} basename {} .tex | sed 's/^/  /'
+	@exit 1
+endif
+	@echo "Building $(FILE)..."
+	@$(LATEX) $(LATEXFLAGS)/tailored-build output/tailored-build/$(FILE).tex > /dev/null 2>&1 && \
+		cp output/tailored-build/$(FILE).pdf output/tailored/ && \
+		echo "  ✓ output/tailored/$(FILE).pdf" || \
+		{ echo "  ✗ Build failed. Check output/tailored-build/$(FILE).log"; exit 1; }
+
+# Build all tailored CVs
+tailored-all: check-latex
+	@echo "Building all tailored CVs..."
+	@for tex in output/tailored-build/*.tex; do \
+		name=$$(basename $$tex .tex); \
+		echo "Building $$name..."; \
+		$(LATEX) $(LATEXFLAGS)/tailored-build $$tex > /dev/null 2>&1 && \
+			cp output/tailored-build/$$name.pdf output/tailored/ && \
+			echo "  ✓ output/tailored/$$name.pdf" || \
+			echo "  ✗ Build failed. Check output/tailored-build/$$name.log"; \
+	done
+
 # Clean auxiliary files
 clean:
 	@rm -f output/*.aux output/*.log output/*.out
@@ -84,18 +113,23 @@ help:
 	@echo "CV Build System"
 	@echo ""
 	@echo "Targets:"
-	@echo "  all             Build all variants and master (default)"
-	@echo "  master          Build master CV only"
-	@echo "  portfolio-risk  Build Portfolio & Risk Analytics variant"
+	@echo "  all              Build all variants and master (default)"
+	@echo "  master           Build master CV only"
+	@echo "  portfolio-risk   Build Portfolio & Risk Analytics variant"
 	@echo "  client-solutions Build Client Solutions variant"
-	@echo "  ai-ml           Build AI/ML Engineering variant"
-	@echo "  data-science    Build Data Science variant"
-	@echo "  quant-dev       Build Quant Development variant"
-	@echo "  research        Build Research & Analysis variant"
-	@echo "  software-eng    Build Software Engineering variant"
-	@echo "  clean           Remove auxiliary files"
-	@echo "  cleanall        Remove all output files"
+	@echo "  ai-ml            Build AI/ML Engineering variant"
+	@echo "  data-science     Build Data Science variant"
+	@echo "  quant-dev        Build Quant Development variant"
+	@echo "  research         Build Research & Analysis variant"
+	@echo "  software-eng     Build Software Engineering variant"
+	@echo ""
+	@echo "  tailored FILE=x  Build specific tailored CV (without .tex extension)"
+	@echo "  tailored-all     Build all tailored CVs"
+	@echo ""
+	@echo "  clean            Remove auxiliary files"
+	@echo "  cleanall         Remove all output files"
 	@echo ""
 	@echo "Usage: make [target]"
+	@echo "Example: make tailored FILE=emagine-senior-quant-developer"
 
-.PHONY: all check-latex setup master $(VARIANTS) clean cleanall help
+.PHONY: all check-latex setup master $(VARIANTS) tailored tailored-all clean cleanall help

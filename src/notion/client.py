@@ -238,6 +238,29 @@ class NotionClient:
 
         return companies
 
+    def get_companies_to_check_with_page_ids(self) -> list[tuple[Company, str]]:
+        """
+        Get companies with 'Check Daily' enabled, including their Notion page IDs.
+
+        Returns:
+            List of (Company, page_id) tuples
+        """
+        response = self.client.databases.query(
+            database_id=self.companies_db_id,
+            filter={"property": "Check Daily", "checkbox": {"equals": True}},
+        )
+
+        companies_with_ids = []
+        for page in response["results"]:
+            try:
+                company = self._page_to_company(page)
+                page_id = page["id"]
+                companies_with_ids.append((company, page_id))
+            except Exception as e:
+                logger.warning(f"Failed to parse company: {e}")
+
+        return companies_with_ids
+
     def _page_to_company(self, page: dict) -> Company:
         """Convert Notion page to Company object."""
         props = page["properties"]
