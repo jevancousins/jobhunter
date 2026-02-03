@@ -114,3 +114,4 @@ cv/master-cv.tex
 cv/output/*.pdf
 cv/output/tailored/
 cv/output/tailored-build/
+cv/output/cover-letters/

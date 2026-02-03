@@ -4,7 +4,7 @@
 LATEX = pdflatex
 LATEXFLAGS = -interaction=nonstopmode -halt-on-error -output-directory=output
 
-VARIANTS = portfolio-risk client-solutions ai-ml data-science quant-dev research software-eng
+VARIANTS = portfolio-risk client-solutions ai-ml data-science quant-dev research software-eng forward-deployed data-engineer applied-ai-solutions
 MASTER = master-cv
 
 # Check for pdflatex
@@ -69,6 +69,21 @@ software-eng: check-latex setup
 	@$(LATEX) $(LATEXFLAGS) variants/software-eng.tex > /dev/null 2>&1 && echo "  ✓ output/software-eng.pdf" || \
 		{ echo "  ✗ Build failed. Check output/software-eng.log"; exit 1; }
 
+forward-deployed: check-latex setup
+	@echo "Building forward-deployed..."
+	@$(LATEX) $(LATEXFLAGS) variants/forward-deployed.tex > /dev/null 2>&1 && echo "  ✓ output/forward-deployed.pdf" || \
+		{ echo "  ✗ Build failed. Check output/forward-deployed.log"; exit 1; }
+
+data-engineer: check-latex setup
+	@echo "Building data-engineer..."
+	@$(LATEX) $(LATEXFLAGS) variants/data-engineer.tex > /dev/null 2>&1 && echo "  ✓ output/data-engineer.pdf" || \
+		{ echo "  ✗ Build failed. Check output/data-engineer.log"; exit 1; }
+
+applied-ai-solutions: check-latex setup
+	@echo "Building applied-ai-solutions..."
+	@$(LATEX) $(LATEXFLAGS) variants/applied-ai-solutions.tex > /dev/null 2>&1 && echo "  ✓ output/applied-ai-solutions.pdf" || \
+		{ echo "  ✗ Build failed. Check output/applied-ai-solutions.log"; exit 1; }
+
 # Build a specific tailored CV
 # Usage: make tailored FILE=emagine-senior-quant-developer
 tailored: check-latex
@@ -122,6 +137,9 @@ help:
 	@echo "  quant-dev        Build Quant Development variant"
 	@echo "  research         Build Research & Analysis variant"
 	@echo "  software-eng     Build Software Engineering variant"
+	@echo "  forward-deployed Build Forward Deployed Engineer variant"
+	@echo "  data-engineer    Build Data Engineer variant"
+	@echo "  applied-ai-solutions Build Applied AI Solutions variant"
 	@echo ""
 	@echo "  tailored FILE=x  Build specific tailored CV (without .tex extension)"
 	@echo "  tailored-all     Build all tailored CVs"

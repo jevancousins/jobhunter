@@ -44,6 +44,9 @@ All content comes from `data/master_cv.json`.
 | quant-dev | Attribution, quantitative, data | NF Capital, Amplify (3) | Lineup |
 | research | Analysis, stakeholder, vendor | NF Capital, All M&A, Amplify | - |
 | client-solutions | Implementation, stakeholder, training | NF Capital, UCL | Lineup |
+| forward-deployed | Cross-functional, on-site, stakeholder | NF Capital, UCL, Amplify | Both projects |
+| data-engineer | Data pipelines, architecture, automation | NF Capital, UCL, Amplify | Lineup (pipeline focus) |
+| applied-ai-solutions | AI adoption, RAG, training, vendor | NF Capital, UCL | NutriPlan (AI focus) |
 
 ## LaTeX Tips for Page Fill
 
