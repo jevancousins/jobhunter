@@ -101,6 +101,7 @@ cv/output/tailored-build/*.pdf
 data/master_cv.json
 data/job_goals.json
 data/linkedin_content.md
+data/learning_gaps.md
 
 # CV files with personal information
 cv/sections/header.tex
