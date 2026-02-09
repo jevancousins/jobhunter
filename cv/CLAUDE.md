@@ -9,12 +9,16 @@
 
 ## Validation Process
 
-1. Build PDFs with `make all` (requires `export PATH="/Library/TeX/texbin:$PATH"`)
-2. Read each PDF in `output/` using Claude's Read tool
-3. Visually assess page fill percentage
-4. **If any variant has whitespace at bottom, add more content**
-5. Rebuild and re-validate until ALL variants pass fill to the margin
-6. Never present CVs to user until all pass validation
+1. Build PDF with pdflatex (requires `export PATH="/Library/TeX/texbin:$PATH"`)
+2. Run programmatic page fill check:
+   ```bash
+   python scripts/check_page_fill.py cv/output/tailored-build/[filename].pdf
+   ```
+3. Script returns FULL (gap < 15pt), UNDERFILLED (with line estimate), or OVERFLOW (>1 page)
+4. If UNDERFILLED: add content using the expansion levers below
+5. If OVERFLOW: trim lowest-priority content (interests > shortest bullet > project detail)
+6. Rebuild and recheck — usually 0-1 iterations when starting from a variant template
+7. Never present CVs to user until the script reports FULL
 
 ## Content Expansion Levers
 
