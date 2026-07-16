@@ -1,0 +1,69 @@
+% General CV template (placeholder content)
+% This is the tracked structural template for the "general" variant: a broadly
+% applicable single-page CV. Onboarding (/onboard) copies this file to
+% cv/variants/general.tex and replaces the placeholder content below with real
+% content from data/master_cv.json.
+%
+% The placeholder persona ("Alex Example") matches data/search_config.example.json.
+% Single page optimised: aim to fill the page completely (see cv/CLAUDE.md).
+
+\documentclass{cv}
+
+\begin{document}
+
+\input{sections/header}
+
+\cvprofile{Business Analyst with 3 years at ExampleCorp, combining hands-on SQL and Python analysis with cross-functional delivery across operations, product and finance. Automated the firm's weekly sales reporting pipeline, cutting preparation time from two days to two hours, and built self-serve dashboards now used by 60+ colleagues across four departments. Partnered with stakeholders to define KPIs, consolidated five source systems into a single documented reporting model, and piloted a large language model workflow for summarising customer feedback. English speaker pairing an economics and statistics foundation with practical engineering skills for cross-functional analytical work.}
+
+\section{Skills}
+\cvskillcat{Programming}{Python, SQL, R, VBA}
+\cvskillcat{Data \& BI}{Pandas, Power BI, Tableau, PostgreSQL, Excel}
+\cvskillcat{Tools}{Git, GitHub Actions, Jira, dbt}
+\cvskillcat{Domain}{Requirements Gathering, Process Automation, KPI Design, Stakeholder Management}
+\cvskillcat{Practices}{Agile delivery, A/B testing, Data storytelling, Documentation}
+\cvskillcat{Certifications}{Google Data Analytics Professional Certificate, Agile Business Analysis Foundation}
+\cvskillcatlast{Languages}{English (Native)}
+
+\section{Experience}
+
+\cventry{ExampleCorp}{Business Analyst}{Mar 2023 -- Present}{Toronto, Canada}
+\begin{itemize}
+    \cvbullet{Automated the weekly sales reporting pipeline in Python and SQL, replacing a manual spreadsheet process and cutting preparation time from two days to two hours}
+    \cvbullet{Built 12 self-serve Power BI dashboards for operations and finance stakeholders, adopted by 60+ colleagues across four departments}
+    \cvbullet{Designed and maintained the team's PostgreSQL reporting schema, consolidating data from five source systems into a single documented model}
+    \cvbullet{Led requirements gathering for a customer churn analysis project, translating stakeholder questions into a scored feature backlog, coordinating delivery with two engineers, and presenting findings to senior management}
+    \cvbullet{Reduced monthly invoice reconciliation errors by 40\% by introducing automated validation checks in Python}
+    \cvbullet{Wrote and documented 30+ reusable SQL queries and views, halving the turnaround time for ad hoc data requests}
+    \cvbullet{Ran fortnightly training sessions on SQL and dashboard usage for 25 analysts, raising self-serve adoption across the department}
+    \cvbullet{Piloted a large language model workflow for summarising customer feedback, presenting a build-versus-buy assessment to leadership}
+\end{itemize}
+
+\cventry{Sample Insurance Group}{Data Analyst Intern}{May 2022 -- Aug 2022}{Toronto, Canada}
+\begin{itemize}
+    \cvbullet{Cleaned and analysed three years of claims data in Python (Pandas) to identify seasonal loss patterns, presenting the results and a proposed monitoring metric to the pricing team}
+    \cvbullet{Built a documented Excel tracking template for open claims that the team still uses for monthly reporting}
+    \cvbullet{Automated a weekly extract of policy renewals with a scheduled SQL job, removing a recurring manual copy-and-paste step}
+\end{itemize}
+
+\cventry{University of Example}{Teaching Assistant, Statistics}{Sep 2021 -- Apr 2022}{Toronto, Canada}
+\begin{itemize}
+    \cvbullet{Ran weekly tutorials on probability and regression for two groups of 30 undergraduates, marking assignments and holding office hours}
+    \cvbullet{Rebuilt the course problem sets in Jupyter notebooks so students could check their working interactively, adopted for later cohorts}
+    \cvbullet{Awarded the department's teaching assistant prize on the strength of student feedback scores}
+\end{itemize}
+
+\section{Education}
+\cveducation
+    {University of Example}
+    {BSc Economics and Statistics -- First Class}
+    {Sep 2019 -- Apr 2023}
+    {Toronto, Canada}
+{\small Capstone project: forecasting retail demand with time-series models in Python (ARIMA and gradient boosting), beating the departmental baseline by 12\% \\
+Relevant modules: Statistical Methods, Econometrics, Database Systems, Introduction to Programming, Operations Research}
+
+\section{Projects}
+\cvproject{Budget Buddy}{Personal finance web app with automatic transaction categorisation and monthly spending insights (Python, Flask, PostgreSQL, React)}\\
+\cvproject{Transit Tracker}{Data pipeline ingesting live Toronto transit feeds into PostgreSQL, with a Streamlit dashboard of delay statistics by route and time of day}\\
+\cvproject{Survey Sizer}{Sample-size and power calculator for product surveys, published as a small open-source Python package}
+
+\end{document}

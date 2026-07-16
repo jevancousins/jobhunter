@@ -1,0 +1,84 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-01",
+  "_readme": [
+    "Honest inventory of technical skills with confidence levels, evidence and gaps. Used by /interview-prep to decide what you can safely be grilled on, and by tailoring to avoid overselling weak skills.",
+    "Copy to data/technical_inventory.json and replace the fictional Alex Example content with your own. Evidence entries reference project ids from deep_experience.json or master_cv.json projects."
+  ],
+  "confidence_levels": {
+    "can_explain_deeply": "Could whiteboard it, discuss trade-offs, and answer follow-up questions confidently",
+    "can_discuss": "Comfortable in conversation, might stumble on edge cases or deep follow-ups",
+    "surface_only": "Knows the concepts and when to use it, but cannot go deep on implementation",
+    "gap": "Expected for target roles but weak; needs upskilling or honest framing"
+  },
+  "categories": {
+    "programming_languages": {
+      "SQL": {
+        "level": "can_explain_deeply",
+        "evidence": ["reporting-automation", "league-stats"],
+        "details": "Daily use for 3 years: joins, window functions, CTEs, reconciliation queries against the CRM and finance databases.",
+        "interview_ready": true
+      },
+      "Python": {
+        "level": "can_explain_deeply",
+        "evidence": ["reporting-automation", "budget-tracker", "league-stats"],
+        "details": "Primary tool for 3 years: Pandas pipelines, API integration, scheduled jobs, plus two side projects built end to end.",
+        "interview_ready": true
+      },
+      "JavaScript": {
+        "level": "surface_only",
+        "evidence": ["budget-tracker"],
+        "details": "Used only for the React frontend of the budgeting app. Can read and modify code but would struggle with a JS-specific interview.",
+        "interview_ready": false
+      }
+    },
+    "data_and_analytics": {
+      "Power BI": {
+        "level": "can_explain_deeply",
+        "evidence": ["reporting-automation"],
+        "details": "Built and maintains 12 production dashboards: data model design, DAX measures, row-level security, refresh scheduling.",
+        "interview_ready": true
+      },
+      "Forecasting / regression": {
+        "level": "can_discuss",
+        "evidence": ["reporting-automation"],
+        "details": "Built one production demand forecasting model (scikit-learn) and an econometrics dissertation. Solid on regression fundamentals; weaker on time-series specifics like SARIMA.",
+        "interview_ready": true
+      },
+      "A/B testing": {
+        "level": "gap",
+        "evidence": [],
+        "details": "Understands the theory from coursework but has never run a real experiment. Frame as a learning goal, never claim hands-on experience.",
+        "interview_ready": false
+      }
+    },
+    "engineering_practices": {
+      "Git / CI": {
+        "level": "can_discuss",
+        "evidence": ["budget-tracker", "league-stats"],
+        "details": "Uses Git daily and set up GitHub Actions CI for both side projects. Comfortable with branching and pull requests; no experience with large-team workflows.",
+        "interview_ready": true
+      },
+      "Cloud platforms": {
+        "level": "gap",
+        "evidence": [],
+        "details": "Side projects run on a single VPS. No AWS/GCP/Azure production experience; a known gap for data engineering adjacent roles.",
+        "interview_ready": false
+      }
+    }
+  },
+  "gap_summary": {
+    "critical_for_target_roles": [
+      "Cloud platforms (AWS/GCP); expected for many analytics engineering roles",
+      "A/B testing; expected for product analyst roles"
+    ],
+    "nice_to_have": [
+      "dbt or similar transformation tooling",
+      "Deeper statistics (time-series forecasting)"
+    ],
+    "honest_weaknesses": [
+      "No people-management experience",
+      "Frontend skills are hobby-level only"
+    ]
+  }
+}

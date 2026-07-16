@@ -24,14 +24,12 @@
 
 When a CV needs more content, use these in order:
 
-1. **Add more AGI bullets** - There are 9 available in master_cv.json; use 7-8 per variant
-2. **Include NF Capital** - Relevant research/fixed income experience (1-2 bullets)
-3. **Expand UCL Innovation Lab** - 2 bullets (ML exercises + presentation)
-4. **Expand Amplify Trading** - Up to 3 bullets (algo strategy, ranking, diploma)
-5. **Add All M&A** - For research variant (macroeconomist role)
-6. **Expand Projects section** - Include projects like Lineup and NutriPlan with technical details
-7. **Add certifications line** - DataCamp, LIBF diploma
-8. **Expand skills** - Add more tools/libraries relevant to role
+1. **Add more bullets from the primary role** - master_cv.json usually holds more bullets than any single variant uses; pull in the most role-relevant unused ones
+2. **Include earlier roles** - Add 1-2 bullets from earlier experience entries in master_cv.json where they support the target role
+3. **Expand education** - Modules, dissertation, or awards from master_cv.json education
+4. **Expand the Projects section** - Add projects from master_cv.json with technical detail relevant to the role
+5. **Add a certifications line** - Certifications recorded in master_cv.json
+6. **Expand skills** - Add more tools/libraries relevant to the role
 
 ## Content Sources
 
@@ -39,18 +37,7 @@ All content comes from `data/master_cv.json`.
 
 ## Variant-Specific Focus
 
-| Variant | Primary Bullets | Secondary Experience | Projects |
-|---------|-----------------|---------------------|----------|
-| data-science | Analytics, AI, data reconciliation | NF Capital, UCL, Amplify | NutriPlan + Lineup |
-| ai-ml | AI adoption, training, vendor review | NF Capital, UCL, Amplify | NutriPlan (detailed) + Lineup |
-| software-eng | Engineering, automation, systems | NF Capital, UCL, Amplify | Lineup (detailed) + NutriPlan |
-| portfolio-risk | BarraOne, attribution, team mgmt | NF Capital, Amplify | Lineup |
-| quant-dev | Attribution, quantitative, data | NF Capital, Amplify (3) | Lineup |
-| research | Analysis, stakeholder, vendor | NF Capital, All M&A, Amplify | - |
-| client-solutions | Implementation, stakeholder, training | NF Capital, UCL | Lineup |
-| forward-deployed | Cross-functional, on-site, stakeholder | NF Capital, UCL, Amplify | Both projects |
-| data-engineer | Data pipelines, architecture, automation | NF Capital, UCL, Amplify | Lineup (pipeline focus) |
-| applied-ai-solutions | AI adoption, RAG, training, vendor | NF Capital, UCL | NutriPlan (AI focus) |
+Variant guidance lives in `cv/templates/` and `cv/variants/variants.json`: which roles, bullets, and projects each variant emphasises. Consult those rather than hard-coding a focus table here.
 
 ## LaTeX Tips for Page Fill
 

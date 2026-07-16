@@ -1,0 +1,229 @@
+{
+  "frameworks": [
+    {
+      "type": "hr_screen",
+      "name": "HR / Recruiter Screen",
+      "duration_minutes": "15-30",
+      "purpose": "Filter for baseline fit: compensation, logistics, motivation, communication skills",
+      "typical_questions": [
+        "Tell me about yourself",
+        "Why are you interested in this role?",
+        "Why are you leaving your current role?",
+        "What are your salary expectations?",
+        "What's your notice period / availability?",
+        "What do you know about our company?",
+        "Where do you see yourself in 5 years?",
+        "What's your ideal work environment?"
+      ],
+      "preparation_focus": [
+        "90-second pitch tailored to the role",
+        "Clear, honest reason for leaving",
+        "Salary range researched and ready",
+        "2-3 sentences about the company showing genuine knowledge",
+        "Enthusiasm without desperation"
+      ],
+      "star_story_count": 2,
+      "star_themes_to_prioritise": ["motivation", "career-trajectory", "culture-fit"],
+      "red_flags_to_avoid": [
+        "Badmouthing previous employer",
+        "Vague or generic answers about the company",
+        "Salary expectations wildly misaligned",
+        "Lack of questions about the role"
+      ],
+      "questions_to_ask": [
+        "What does the interview process look like from here?",
+        "What's the team structure for this role?",
+        "What does success look like in the first 6 months?",
+        "Is there anything about my background you'd like me to clarify?"
+      ]
+    },
+    {
+      "type": "hiring_manager",
+      "name": "Hiring Manager Interview",
+      "duration_minutes": "45-60",
+      "purpose": "Assess technical competence, team fit, and ability to deliver in the specific role",
+      "typical_questions": [
+        "Tell me about yourself",
+        "Walk me through your most impactful project",
+        "How do you approach [core responsibility of the role]?",
+        "Tell me about a time you dealt with a difficult stakeholder",
+        "Describe a time something went wrong and how you handled it",
+        "How do you prioritise competing demands?",
+        "What's your approach to [specific technology/methodology]?",
+        "Why this company? Why this team?",
+        "Where do you need to grow?",
+        "Tell me about a time you disagreed with a decision"
+      ],
+      "preparation_focus": [
+        "Deep understanding of the JD requirements",
+        "4-6 STAR stories covering leadership, technical delivery, stakeholder management, failure/recovery",
+        "Specific examples mapped to each JD requirement",
+        "Understanding of the team's current challenges",
+        "Genuine questions showing you've thought about the role"
+      ],
+      "star_story_count": 6,
+      "star_themes_to_prioritise": ["leadership", "technical-delivery", "stakeholder-management", "failure-recovery", "business-impact"],
+      "red_flags_to_avoid": [
+        "Generic answers not specific to the role",
+        "Inability to go deep on claimed experience",
+        "No questions about the team or challenges",
+        "Arrogance or inability to acknowledge growth areas"
+      ],
+      "questions_to_ask": [
+        "What's the biggest challenge the team is facing right now?",
+        "How do you measure success for this role?",
+        "What does the team's roadmap look like for the next 6-12 months?",
+        "What's the working style of the team — how do you collaborate?",
+        "What would make someone really successful vs. just adequate in this role?"
+      ]
+    },
+    {
+      "type": "culture_values",
+      "name": "Culture / Values Interview",
+      "duration_minutes": "30-45",
+      "purpose": "Assess alignment with company values, collaboration style, and cultural add",
+      "typical_questions": [
+        "Tell me about a time you went above and beyond",
+        "How do you handle conflict with a colleague?",
+        "Describe your ideal team environment",
+        "Tell me about a time you received difficult feedback",
+        "How do you handle ambiguity?",
+        "What motivates you?",
+        "Tell me about a time you helped someone on your team",
+        "How do you handle work-life balance?"
+      ],
+      "preparation_focus": [
+        "Research company values and map stories to each value",
+        "Authentic examples — interviewers detect rehearsed answers",
+        "Emphasis on collaboration, growth mindset, and self-awareness",
+        "Specific examples of helping others, receiving feedback, and adapting"
+      ],
+      "star_story_count": 4,
+      "star_themes_to_prioritise": ["collaboration", "growth-mindset", "initiative", "resilience", "helping-others"],
+      "red_flags_to_avoid": [
+        "Taking sole credit for team achievements",
+        "Inability to describe personal growth or learning",
+        "Generic, values-poster answers",
+        "Negativity about previous teams or companies"
+      ],
+      "questions_to_ask": [
+        "How would you describe the team culture?",
+        "What do people enjoy most about working here?",
+        "How does the team handle disagreements?",
+        "What's the onboarding experience like?"
+      ]
+    },
+    {
+      "type": "technical_data",
+      "name": "Technical Interview — Data / Analytics",
+      "duration_minutes": "45-60",
+      "purpose": "Assess hands-on technical skills in SQL, Python, data modelling, and domain-specific knowledge",
+      "typical_questions": [
+        "Write a SQL query to [specific scenario]",
+        "How would you design a data model for [domain]?",
+        "Walk me through how you'd build a data pipeline for [use case]",
+        "How do you handle data quality issues?",
+        "Explain your approach to query optimisation",
+        "What's the difference between [technical concept A] and [technical concept B]?",
+        "How do you handle slowly changing dimensions?",
+        "Describe your experience with [specific tool/platform from JD]",
+        "How would you reconcile data from two different sources?",
+        "Walk me through a technical architecture you designed"
+      ],
+      "preparation_focus": [
+        "SQL fluency — joins, window functions, CTEs, aggregation, subqueries",
+        "Data modelling concepts — star schema, normalisation, SCDs",
+        "Python data processing — Pandas, data pipelines, API integration",
+        "Query optimisation — execution plans, indexing, partitioning",
+        "Domain-specific data knowledge (investment data if finance role)",
+        "Whiteboard/verbal explanation of architecture decisions"
+      ],
+      "star_story_count": 3,
+      "star_themes_to_prioritise": ["technical-depth", "architecture", "data-quality", "performance-optimisation"],
+      "red_flags_to_avoid": [
+        "Unable to write basic SQL",
+        "No understanding of data modelling",
+        "Can't explain architecture decisions and trade-offs",
+        "Overcomplicating simple problems"
+      ],
+      "questions_to_ask": [
+        "What does the tech stack look like?",
+        "What's the most challenging data problem the team is working on?",
+        "How is data quality monitored and maintained?",
+        "What does the development workflow look like — version control, code review, deployment?"
+      ]
+    },
+    {
+      "type": "technical_engineering",
+      "name": "Technical Interview — Software Engineering",
+      "duration_minutes": "45-90",
+      "purpose": "Assess coding ability, system design, and engineering best practices",
+      "typical_questions": [
+        "Solve this coding problem [algorithm/data structure]",
+        "Design a system that [high-level requirement]",
+        "How would you scale [existing system] to handle 10x traffic?",
+        "Walk me through your testing approach",
+        "How do you handle errors and edge cases?",
+        "Explain the architecture of something you built",
+        "What's your approach to code review?",
+        "How do you decide between [framework A] and [framework B]?"
+      ],
+      "preparation_focus": [
+        "LeetCode medium-level problems (arrays, strings, hashmaps, trees)",
+        "System design fundamentals — load balancing, caching, databases, queues",
+        "Be able to discuss projects in deep technical detail",
+        "Testing strategies — unit, integration, E2E",
+        "Clean code principles and trade-offs"
+      ],
+      "star_story_count": 3,
+      "star_themes_to_prioritise": ["technical-depth", "system-design", "code-quality", "debugging"],
+      "red_flags_to_avoid": [
+        "Can't code a basic algorithm",
+        "No consideration of edge cases",
+        "Can't explain trade-offs in design decisions",
+        "No experience with testing or version control"
+      ],
+      "questions_to_ask": [
+        "What's the engineering culture like — how opinionated is the team?",
+        "What does the deployment process look like?",
+        "How do you handle technical debt?",
+        "What's the most interesting technical challenge the team has solved recently?"
+      ]
+    },
+    {
+      "type": "case_study",
+      "name": "Case Study / Presentation",
+      "duration_minutes": "60-90",
+      "purpose": "Assess structured thinking, communication, and ability to solve open-ended problems",
+      "typical_format": "Given a business problem or dataset, prepare an analysis/recommendation and present it. May be given in advance (take-home) or on the spot.",
+      "typical_questions": [
+        "Here's a dataset — what insights can you find?",
+        "A stakeholder wants X — how would you approach it?",
+        "Walk us through your analysis methodology",
+        "What assumptions did you make and why?",
+        "How would you present these findings to a non-technical audience?",
+        "What would you do differently with more time?"
+      ],
+      "preparation_focus": [
+        "Structured problem-solving framework (define → analyse → recommend → validate)",
+        "Clear, concise presentation skills",
+        "Ability to handle ambiguity and state assumptions explicitly",
+        "Data visualisation best practices",
+        "Anticipate follow-up questions and have answers ready"
+      ],
+      "star_story_count": 2,
+      "star_themes_to_prioritise": ["structured-thinking", "communication", "business-impact"],
+      "red_flags_to_avoid": [
+        "Jumping to solutions without defining the problem",
+        "Poor presentation skills or unclear communication",
+        "Inability to handle pushback on assumptions",
+        "Overcomplicating the analysis"
+      ],
+      "questions_to_ask": [
+        "How often does the team work on this type of analysis?",
+        "Who are the typical stakeholders for this kind of work?",
+        "How do you balance speed vs. rigour in analysis?"
+      ]
+    }
+  ]
+}

@@ -1,4 +1,12 @@
-# Environment and secrets
+# ============================================================
+# JobHunter .gitignore
+#
+# Rule of thumb: everything about YOU stays out of git; the
+# system that operates on it is tracked. Files ending in
+# .example.* are the tracked templates for the ignored files.
+# ============================================================
+
+# --- Environment and secrets ---
 .env
 .env.local
 .env.*.local
@@ -8,35 +16,63 @@ credentials.json
 *-credentials.json
 service-account*.json
 
-# Python
+# --- Personal profile data (never commit) ---
+data/master_cv.json
+data/job_goals.json
+data/application_profile.json
+data/search_config.json
+data/deep_experience.json
+data/star_stories.json
+data/technical_inventory.json
+data/learning_gaps.md
+data/linkedin_content.md
+data/screening-answers*.md
+data/*.docx
+data/job_descriptions/
+
+# --- Runtime state and generated artefacts ---
+data/.linkedin-state.json
+data/.playwright-profile/
+data/applications/
+data/auto-apply-runs/
+data/apply-intelligence.json
+data/last_email_check.json
+data/seen_job_ids.json
+data/company_watchlist_cache.json
+/interview-prep/
+/cover-letters/
+/Second Brain/
+
+# --- CV files with personal information ---
+cv/sections/*.tex
+!cv/sections/*.example.tex
+cv/variants/
+cv/profiles/
+cv/master-cv.tex
+cv/output/
+
+# --- Claude Code local state (skills/agents ARE tracked) ---
+.claude/settings.local.json
+.claude/worktrees/
+.claude/.DS_Store
+.agents/
+.codex/
+AGENTS.md
+
+# --- Python ---
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual environments
 venv/
 ENV/
 env/
 .venv/
 
-# IDE
+# --- IDE / OS ---
 .idea/
 .vscode/
 *.swp
@@ -44,76 +80,25 @@ env/
 *~
 .DS_Store
 
-# Testing
+# --- Testing ---
 .pytest_cache/
 .coverage
 htmlcov/
-.tox/
-.nox/
 
-# Jupyter
-.ipynb_checkpoints/
-
-# Logs
+# --- Logs ---
 *.log
 logs/
 
-# Extracted files (temporary)
-extracted_cvs/
-
-# Personal CVs (sensitive)
-*.zip
-CVs from Jevan Cousins.zip
-CVs from Jevan Cousins/
-
-# Playwright
+# --- Playwright ---
 playwright-report/
 test-results/
 
-# Local config overrides
-.claude/
-
-# LaTeX build artifacts
+# --- LaTeX build artifacts ---
 *.aux
-*.log
 *.out
 *.toc
-*.lof
-*.lot
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-*.synctex(busy)
-*.pdfsync
 *.bbl
 *.blg
-*.nav
-*.snm
-*.vrb
-
-# LaTeX build artifacts
-*.aux
-*.log
-*.out
-cv/output/tailored-build/*.pdf
-
-# Personal data files (sensitive - DO NOT COMMIT)
-data/master_cv.json
-data/job_goals.json
-data/linkedin_content.md
-data/learning_gaps.md
-data/job_descriptions/
-
-# CV files with personal information
-cv/sections/header.tex
-cv/sections/experience.tex
-cv/sections/education.tex
-cv/sections/extra.tex
-cv/sections/skills.tex
-cv/profiles/
-cv/variants/
-cv/master-cv.tex
-cv/output/*.pdf
-cv/output/tailored/
-cv/output/tailored-build/
-cv/output/cover-letters/

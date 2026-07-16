@@ -1,0 +1,243 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-01",
+  "_readme": [
+    "Canonical answers for the screening questions that appear on LinkedIn Apply, Greenhouse, Workday, Lever and similar ATS forms. Used by /apply-job and /auto-apply; low-confidence or novel questions fall back to deep_experience.json and a human-review gate.",
+    "Copy to data/application_profile.json, replace every Alex Example value with your own, then run: chmod 600 data/application_profile.json",
+    "REQUIRED fields: identity.first_name, identity.last_name, identity.email and identity.phone must be present; the pipeline scripts raise an error if any of them is missing. Everything else is optional with sensible defaults.",
+    "This file contains contact details and home address. It must NEVER be committed to git (it is covered by .gitignore) and should stay chmod 600.",
+    "The verified_form_answers block at the bottom is the authoritative lookup table for exact ATS field labels seen in real forms. It compounds over time: whenever the walker encounters and correctly answers a new label, add it here so future runs answer it deterministically instead of re-deriving it."
+  ],
+
+  "identity": {
+    "full_name": "Alex Example",
+    "first_name": "Alex",
+    "last_name": "Example",
+    "email": "alex@example.com",
+    "phone": "+1 555 0100",
+    "phone_country_code": "+1",
+    "phone_national": "555 0100",
+    "linkedin_url": "https://linkedin.com/in/alex-example",
+    "github_url": "https://github.com/alex-example",
+    "portfolio_url": "",
+    "pronouns": "",
+    "_pronouns_comment": "Optional; leave empty to skip pronoun fields on forms.",
+    "date_of_birth": "",
+    "gender": "Prefer not to say",
+    "address_line_1": "123 Example Street",
+    "address_line_2": "",
+    "city": "Toronto",
+    "county": "Ontario",
+    "postcode": "M5V 0A0",
+    "country": "Canada",
+    "address_note": "Home address for ATS forms only. It must NOT appear on any CV or public document."
+  },
+
+  "citizenship_and_authorisation": {
+    "citizenship": ["Canada"],
+    "current_residence_country": "Canada",
+    "current_residence_city": "Toronto",
+    "by_country": {
+      "_comment": "One entry per country you apply in. The walker answers right-to-work and sponsorship questions from this block; countries not listed are escalated to a human.",
+      "Canada": {
+        "authorised_to_work": true,
+        "requires_sponsorship_now": false,
+        "requires_sponsorship_future": false,
+        "notes": "Canadian citizen, full right to work in Canada."
+      },
+      "United States": {
+        "authorised_to_work": false,
+        "requires_sponsorship_now": true,
+        "requires_sponsorship_future": true,
+        "notes": "No US work authorisation. Requires TN / H-1B or equivalent sponsorship. Open to sponsorship."
+      },
+      "United Kingdom": {
+        "authorised_to_work": false,
+        "requires_sponsorship_now": true,
+        "requires_sponsorship_future": true,
+        "notes": "Requires a UK Skilled Worker visa. Open to sponsorship."
+      }
+    }
+  },
+
+  "availability": {
+    "notice_period_weeks": 4,
+    "notice_period_text": "4 weeks",
+    "notice_period_linkedin_dropdown": "1 month",
+    "earliest_start_date_relative": "4 weeks from offer",
+    "employment_status": "Employed full-time (Business Analyst at ExampleCorp)",
+    "willing_to_relocate": false,
+    "relocation_preferences": [],
+    "willing_to_travel": true,
+    "travel_percentage_acceptable": "Up to 10%",
+    "work_mode_preferences": ["Hybrid", "Remote"],
+    "work_mode_notes": "Prefers hybrid in Toronto or remote within Canada."
+  },
+
+  "compensation": {
+    "_policy": "Salary expectations vary by role and should be researched per application. 'floor' values are the acceptance threshold (offers below are rejected); do NOT anchor form answers to them. If the JD states a range, answer within it; if not, derive an expectation from role title, seniority and employer type before falling back to the default target.",
+    "currency_primary": "CAD",
+    "currency_symbol": "$",
+    "default_target": 70000,
+    "_default_target_comment": "default_target (number) and currency_symbol (string) are the currency-neutral keys the scripts read. The legacy per-currency key default_target_gbp is still accepted for backwards compatibility.",
+    "floor_cad": 65000,
+    "stretch_cad": 85000,
+    "_stretch_use": "Use the stretch value when the JD signals senior level or states an upper band above the default target.",
+    "flexible_for_equity": true,
+    "bonus_expectation_notes": "Open to discuss; happy for total compensation to include bonus and equity."
+  },
+
+  "candidate_summary_for_salary_research": {
+    "_use": "Concise anchor passed to salary research so band lookups are grounded in actual experience. Update when your employment situation or title changes.",
+    "current_status": "Employed as Business Analyst at ExampleCorp, Toronto.",
+    "headline": "3 years at ExampleCorp as Business Analyst (2023 - present). Strong SQL, Python, reporting automation and stakeholder management; no people-management experience.",
+    "key_titles_held": ["Business Analyst (ExampleCorp, 3y)", "Operations Intern (Sample Retail Group, 3 mo)"],
+    "titles_never_held": ["Data Scientist", "Software Engineer", "Product Manager", "Consultant"],
+    "domain_strengths": ["Operations analytics", "KPI design and reporting", "Process mapping", "Forecasting", "Customer analytics"],
+    "tech_strengths": ["SQL (3y)", "Python / Pandas (3y)", "Power BI (3y)", "Excel (advanced)", "Flask / React (side projects)"],
+    "education": "BSc Economics, Example University, 2023. 2:1 equivalent.",
+    "languages": "English native, Spanish conversational.",
+    "right_to_work": "Canadian citizen; sponsorship needed for the US and UK.",
+    "salary_anchor_signal": "3 years total experience. Strong fit for Business Analyst / Operations Analyst / Data Analyst at non-senior level; stretch into senior analyst or bizops manager titles."
+  },
+
+  "languages": {
+    "English": { "level": "Native", "cefr": "C2" },
+    "Spanish": { "level": "Conversational", "cefr": "B1", "notes": "Comfortable in casual conversation; not a working language." }
+  },
+
+  "experience_years": {
+    "_comment": "Used to answer 'how many years of experience with X' questions deterministically. Overall figure first, then per-skill overrides; skills not listed fall back to an LLM judgement with a review gate.",
+    "overall_professional": 3,
+    "by_skill": {
+      "SQL": 3,
+      "Python": 3,
+      "Pandas": 3,
+      "Power BI": 3,
+      "Excel": 3,
+      "Microsoft Excel": 3,
+      "Data Analysis": 3,
+      "Stakeholder Management": 3,
+      "Business Analysis": 3,
+      "Process Improvement": 3,
+      "Forecasting": 2,
+      "JavaScript": 1,
+      "React": 1,
+      "Flask": 1,
+      "PostgreSQL": 2,
+      "Git": 3,
+      "JIRA": 3,
+      "Machine Learning": 1,
+      "Project Management": 2
+    },
+    "notes": "3 years overall at ExampleCorp (2023 - present). Skills below 2 years reflect side projects (budget tracker, league stats dashboard) rather than day-job usage."
+  },
+
+  "education": {
+    "highest_level": "Bachelor's Degree",
+    "degree": "BSc Economics",
+    "institution": "Example University",
+    "country": "Canada",
+    "graduation_year": 2023,
+    "gpa_uk_classification": "Upper Second-Class Honours equivalent (2:1)",
+    "gpa_us_equivalent_4_0": 3.5,
+    "has_masters": false,
+    "has_phd": false,
+    "notes": ""
+  },
+
+  "demographic_optional": {
+    "_comment": "All demographic questions are optional on ATS forms. The safe default is 'Prefer not to say' for every field; change individual values only if you actively want to disclose. The scripts read these demographic fields (ethnicity, disability_status, veteran_status, etc.) from this block for diversity questions, defaulting each to 'Prefer not to say' when a key is absent.",
+    "ethnicity": "Prefer not to say",
+    "gender_identity": "Prefer not to say",
+    "sexual_orientation": "Prefer not to say",
+    "disability_status": "Prefer not to say",
+    "veteran_status": "Prefer not to say",
+    "neurodiversity": "Prefer not to say"
+  },
+
+  "misc_common_questions": {
+    "how_did_you_hear_about_us": "LinkedIn",
+    "why_this_company": "See cover letter; tailored per role.",
+    "are_you_18_or_older": true,
+    "have_you_worked_here_before": false,
+    "have_criminal_record": false,
+    "willing_to_take_drug_test": true,
+    "willing_to_take_background_check": true,
+    "willing_to_sign_ip_assignment": true,
+    "willing_to_sign_non_compete": "Depends on scope; willing to discuss.",
+    "can_start_immediately": false,
+    "are_currently_employed": true,
+    "referral_source": "",
+    "referred_by_employee": ""
+  },
+
+  "strengths_signal_questions": {
+    "_comment": "Short first-person answers to common open questions, written once and reused. Keep them honest and specific to your own record.",
+    "biggest_strength": "Turning vague operational questions into structured analysis that people act on; for example the onboarding process redesign at ExampleCorp that cut turnaround time by 30%.",
+    "biggest_weakness": "I can spend too long polishing analysis before sharing it. I now share a rough draft early and iterate with stakeholders instead.",
+    "why_leaving_current_role": "I have learned a lot at ExampleCorp, but I am looking for a role with more scope for advanced analytics and a bigger data platform to work with.",
+    "five_year_goal": "Leading an analytics or business operations function, combining hands-on analysis with team responsibility."
+  },
+
+  "question_matching_hints": {
+    "_comment": "Regex/substring hints the screening answerer uses to route a raw form question to the right section of this file.",
+    "years_experience_regex_hints": [
+      "years of experience with",
+      "years experience with",
+      "years of",
+      "how many years",
+      "experience with"
+    ],
+    "authorisation_regex_hints": [
+      "authori[sz]ed to work",
+      "right to work",
+      "work authori[sz]ation",
+      "legally authori[sz]ed",
+      "require sponsorship",
+      "need sponsorship",
+      "visa sponsorship",
+      "work visa"
+    ],
+    "compensation_regex_hints": [
+      "salary expectation",
+      "expected salary",
+      "salary range",
+      "compensation expectation",
+      "desired compensation",
+      "pay range",
+      "annual salary expectation"
+    ],
+    "notice_regex_hints": [
+      "notice period",
+      "earliest start",
+      "when can you start",
+      "availability to start"
+    ],
+    "location_regex_hints": [
+      "willing to relocate",
+      "open to relocation",
+      "current location",
+      "based in"
+    ]
+  },
+
+  "verified_form_answers": {
+    "_description": "Exact ATS form labels observed in real submissions, mapped to the answer to fill. Matched by label substring (case-insensitive) before falling back to regex-based answering. 'kind' tells the walker how to fill: 'fill_text' for textboxes, 'select' for comboboxes, 'click_option' for typeahead listboxes, 'check' for required checkboxes, 'compute_salary_per_role' for per-role salary research. Add new labels as the walker encounters them so this table compounds over runs.",
+
+    "How many years of relevant experience do you have for this role?*": {
+      "kind": "fill_text",
+      "answer": "3",
+      "note": "Defaults to overall_professional; prefer the by_skill lookup for skill-specific questions."
+    },
+    "How many years of work experience do you have with SQL?": {
+      "kind": "fill_text",
+      "answer": "3",
+      "note": "From experience_years.by_skill. Example of a skill-specific years question."
+    },
+    "What are your salary expectations for this role?*": {
+      "kind": "compute_salary_per_role",
+      "note": "Never a fixed number: research per role. Most ATS validation requires a single decimal number, not a range string."
+    }
+  }
+}

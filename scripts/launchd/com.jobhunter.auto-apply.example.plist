@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Template launchd job for the daily auto-apply run (macOS).
+
+  Install:
+    1. Copy this file to ~/Library/LaunchAgents/com.jobhunter.auto-apply.plist
+    2. Replace every __JOBHUNTER_DIR__ with the absolute path to your clone,
+       e.g. /Users/you/projects/jobhunter
+    3. Review the EnvironmentVariables block below, in particular
+       JOBHUNTER_HEADLESS (see the warning) and PATH.
+    4. Load it:
+         launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.jobhunter.auto-apply.plist
+       (on older macOS: launchctl load ~/Library/LaunchAgents/com.jobhunter.auto-apply.plist)
+    5. Check it is loaded:
+         launchctl list | grep jobhunter
+    6. Trigger a test run without waiting for the schedule:
+         launchctl kickstart gui/$(id -u)/com.jobhunter.auto-apply
+
+  Log-path warning: keep StandardOutPath/StandardErrorPath OUT of ~/Documents.
+  macOS attaches a com.apple.macl extended attribute to files there, and
+  launchd then silently fails to spawn the job with EX_CONFIG (a "78" in
+  `launchctl list`). /tmp or ~/Library/Logs (as an absolute path; launchd does
+  not expand ~) are safe. The pipeline's own run logs are written separately
+  by the script to data/auto-apply-runs/ and are not affected.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jobhunter.auto-apply</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>__JOBHUNTER_DIR__/scripts/daily_auto_apply.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__JOBHUNTER_DIR__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <!-- launchd jobs get a minimal PATH; include the directory holding
+             the `claude` binary (check with: which claude), or set CLAUDE_BIN
+             to its full path instead. -->
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+        <!-- WARNING: setting JOBHUNTER_HEADLESS=1 makes the script run Claude
+             Code with permission prompts disabled, so it can act (including
+             submitting applications) without asking. Only enable this once
+             you have run the pipeline interactively and trust it. Without it
+             the script prints instructions and exits. -->
+        <key>JOBHUNTER_HEADLESS</key>
+        <string>1</string>
+    </dict>
+
+    <!-- Daily at 09:00 local time. Adjust to taste. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- launchd's own stdout/stderr. See the log-path warning above:
+         never point these into ~/Documents. -->
+    <key>StandardOutPath</key>
+    <string>/tmp/com.jobhunter.auto-apply.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/com.jobhunter.auto-apply.err.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

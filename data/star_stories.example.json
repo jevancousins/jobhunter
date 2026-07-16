@@ -1,0 +1,74 @@
+{
+  "_readme": [
+    "Reusable STAR (Situation, Task, Action, Result) stories for interviews and long-form screening answers. Built from deep_experience.json during onboarding; /interview-prep selects stories by theme.",
+    "Copy to data/star_stories.json and replace the fictional Alex Example stories with your own. Each story needs: id, title, themes (used for matching against interview question types), situation, task, action, result, reflection, metrics, flex_points (what to expand or contract depending on the question), and source_cv_refs (which CV bullets the story substantiates)."
+  ],
+  "stories": [
+    {
+      "id": "onboarding-redesign",
+      "title": "Customer Onboarding Redesign",
+      "themes": [
+        "stakeholder-management",
+        "process-improvement",
+        "influence-without-authority",
+        "business-impact",
+        "structured-thinking"
+      ],
+      "situation": "Onboarding a new customer at ExampleCorp touched five departments with handoffs tracked in email. Average turnaround was 14 days, customers complained, and a previous attempt to fix it with a shared spreadsheet had failed because nobody owned it.",
+      "task": "I was asked to work out why onboarding was slow and propose a fix, with no formal authority over any of the departments involved.",
+      "action": "I ran eight discovery workshops to map the real process rather than the documented one, then used six months of ticket and email timestamps to quantify where the delays actually were, which turned a blame debate into a data discussion. I designed a future state with four explicit handoff points and a single tracked intake queue, deliberately built in our existing ticketing tool so no procurement was needed. When the legal team pushed back on being tracked, I let them define their own stage names and SLAs, which converted the loudest sceptic into a sponsor. We piloted with three customers before rolling out.",
+      "result": "Average onboarding turnaround fell by 30%, measured like-for-like on the dashboard I built for the purpose. The process survived a subsequent reorganisation because each department owned its own stages.",
+      "reflection": "The data analysis mattered less for finding the answer than for getting five departments to accept it. I would now involve legal earlier rather than designing around them and negotiating afterwards.",
+      "metrics": [
+        "30% reduction in onboarding turnaround",
+        "5 departments, 8 discovery workshops",
+        "3-customer pilot before rollout"
+      ],
+      "flex_points": {
+        "expand_for": [
+          "stakeholder management detail",
+          "how the baseline analysis was built",
+          "handling the legal team's resistance"
+        ],
+        "contract_for": [
+          "quick example of process improvement",
+          "influence without authority"
+        ]
+      },
+      "source_cv_refs": ["experience.examplecorp.bullets[2]"]
+    },
+    {
+      "id": "reporting-automation",
+      "title": "Monthly Reporting Automation",
+      "themes": [
+        "technical-delivery",
+        "automation",
+        "data-quality",
+        "initiative",
+        "building-trust"
+      ],
+      "situation": "ExampleCorp's monthly operations pack was nine Excel workbooks assembled by hand from CRM and finance exports. It consumed the last two days of every month and errors were regularly found after the pack had gone to leadership.",
+      "task": "I proposed and owned the automation of the pack, including winning over a finance manager who did not trust numbers a human had not checked.",
+      "action": "I negotiated read-only database access with IT, rebuilt the transformations in Python and SQL, and wrote reconciliation checks (row counts, control totals, orphan detection) that run before anything is published. Rather than asking anyone to take the new numbers on faith, I ran the automated pipeline in parallel with the manual process for two full monthly cycles and reviewed every discrepancy with the finance manager. Only when two consecutive months matched did we switch the manual process off.",
+      "result": "The team saves over ten hours a week, month-end reporting errors halved, and the pipeline ran untouched during my two-week holiday because I had documented it for a colleague. The parallel-run approach became the team's standard for automating any trusted report.",
+      "reflection": "Trust is migrated, not asserted: the two parallel cycles felt slow at the time but were the reason adoption was painless. Building the validation checks first also meant I found upstream data problems that the manual process had been silently absorbing.",
+      "metrics": [
+        "10+ hours saved per week",
+        "Month-end error rate halved",
+        "2 parallel-run cycles before cutover"
+      ],
+      "flex_points": {
+        "expand_for": [
+          "technical detail of the pipeline and validation checks",
+          "handling the sceptical stakeholder",
+          "documentation and handover practice"
+        ],
+        "contract_for": [
+          "quick example of automation impact",
+          "example of initiative"
+        ]
+      },
+      "source_cv_refs": ["experience.examplecorp.bullets[0]", "experience.examplecorp.bullets[4]"]
+    }
+  ]
+}

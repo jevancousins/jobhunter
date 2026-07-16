@@ -22,6 +22,7 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{xcolor}
 \RequirePackage{etoolbox}
+\RequirePackage{xstring}
 
 % Hyperlink settings (black, no boxes, clickable)
 \hypersetup{
@@ -75,10 +76,13 @@
 % ============================================
 
 % Header command - Name centered, clickable links below
+% #1 = Name, #2 = Email, #3 = LinkedIn URL, #4 = GitHub URL
+% Display text strips the https:// prefix from the URLs.
+\newcommand{\cvheaderstrip}[1]{\StrDel{#1}{https://}[\cvheaderstripped]\cvheaderstripped}
 \newcommand{\cvheader}[4]{%
     \begin{center}
         {\Large\bfseries #1}\\[2pt]
-        {\small \href{mailto:#2}{#2} | \href{#3}{linkedin.com/in/jevancousins} | \href{#4}{github.com/jevancousins}}
+        {\small \href{mailto:#2}{#2} | \href{#3}{\cvheaderstrip{#3}} | \href{#4}{\cvheaderstrip{#4}}}
     \end{center}
     \vspace{2pt}
 }

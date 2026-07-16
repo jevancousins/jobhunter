@@ -1,88 +1,370 @@
 {
+  "_readme": [
+    "Single source of truth for CV content. Every fact a tailored CV, cover letter or screening answer may claim MUST exist in this file first.",
+    "Created and maintained by the /onboard skill; edit by hand whenever your experience changes.",
+    "Copy to data/master_cv.json and replace every Alex Example value with your own. All content below is fictional.",
+    "Structure notes: 'profiles' holds one summary paragraph per job category; 'job_categories' controls section order and skill emphasis per category; 'experience' is keyed by employer slug; bullets carry 'versions' (short/medium/long) so the tailoring system can trade length for page fill without rewriting facts."
+  ],
   "personal": {
-    "name": "Your Name",
-    "email": "your.email@example.com",
-    "phone": "+44 XXXX XXX XXX",
-    "linkedin": "linkedin.com/in/yourprofile"
+    "name": "Alex Example",
+    "email": "alex@example.com",
+    "phone": "+1 555 0100",
+    "linkedin": "linkedin.com/in/alex-example",
+    "github": "github.com/alex-example"
   },
   "profiles": {
-    "default": "Your default professional summary goes here.",
-    "data-science": "Data science focused summary.",
-    "ai-ml": "AI/ML focused summary.",
-    "software-eng": "Software engineering focused summary."
+    "_comment": "One tailorable profile paragraph per job category, plus a default. The tailoring skills start from the closest match and adapt it to the JD.",
+    "default": "Business Analyst with 3 years of experience at ExampleCorp in Toronto, specialising in operations analytics, reporting automation and stakeholder-facing process improvement. Strong SQL and Python skills combined with a track record of turning ambiguous business questions into decision-ready analysis.",
+    "bizops": "Business operations analyst with 3 years at ExampleCorp supporting a 200-person services business. Owns the monthly KPI reporting cycle, automated recurring reports in Python to save 10+ hours a week, and led the process mapping work behind a customer onboarding redesign that cut turnaround time by 30%. Comfortable presenting to directors and translating messy operational questions into structured analysis.",
+    "data-analyst": "Data analyst with 3 years of hands-on SQL and Python experience at ExampleCorp. Built and maintains 12 self-serve dashboards used by 30+ stakeholders, introduced data quality checks that halved reporting errors, and developed a demand forecasting model that improved staffing decisions. BSc Economics with a quantitative dissertation on retail price elasticity.",
+    "product-analyst": "Analyst with 3 years at ExampleCorp working at the boundary of operations and product, gathering requirements from 30+ stakeholders, defining KPIs for new internal tools and validating impact after launch. Side projects include a personal budgeting web app and a football league statistics dashboard, both built end-to-end with Python and JavaScript."
   },
   "job_categories": {
-    "data-science": {
-      "name": "Data Science",
+    "bizops": {
+      "name": "Business Operations & Strategy",
+      "skills_position": "after_profile",
+      "section_order": ["profile", "skills", "experience", "education", "extra"],
+      "key_skills": ["SQL", "Python", "Excel", "Power BI", "Process Mapping", "Stakeholder Management", "KPI Design", "Forecasting"],
+      "experience_focus": ["Reporting automation", "Process improvement", "Stakeholder collaboration", "KPI ownership"]
+    },
+    "data-analyst": {
+      "name": "Data & Analytics",
       "skills_position": "before_experience",
       "section_order": ["profile", "skills", "experience", "education", "extra"],
-      "key_skills": ["Python", "SQL", "Pandas", "NumPy", "Scikit-learn"],
-      "experience_focus": ["Data analysis", "ML models", "Statistical modelling"]
+      "key_skills": ["SQL", "Python", "Pandas", "Power BI", "Data Modelling", "Statistics", "PostgreSQL", "Git"],
+      "experience_focus": ["Dashboard development", "Data quality", "Forecasting model", "Analysis for decisions"]
+    },
+    "product-analyst": {
+      "name": "Product / Internal Tools Analysis",
+      "skills_position": "after_experience",
+      "section_order": ["profile", "experience", "skills", "education", "extra"],
+      "key_skills": ["SQL", "Python", "Requirements Gathering", "A/B Analysis", "JIRA", "Stakeholder Management"],
+      "experience_focus": ["Requirements gathering", "Tool adoption", "Impact measurement", "Side projects"]
     }
   },
-  "experience": [
-    {
-      "company": "Company Name",
-      "title": "Job Title",
-      "location": "City, Country",
-      "start_date": "Mon YYYY",
+  "experience": {
+    "_comment_structure": "Keyed by a short employer slug. Each entry: company, title, title_variants, location, start_date, end_date, bullets. Every bullet needs text, tags, metrics (or null) and versions; 'note' is optional guidance for the tailoring system.",
+    "examplecorp": {
+      "company": "ExampleCorp",
+      "title": "Business Analyst",
+      "title_variants": ["Business Analyst", "Business Operations Analyst", "Data & Operations Analyst"],
+      "_comment_title_variants": "Alternative honest framings of the recorded title that tailored CVs and answers are allowed to use. Tailoring must never invent a title outside this list.",
+      "location": "Toronto, Canada",
+      "start_date": "Jul 2023",
       "end_date": "Present",
       "bullets": [
         {
-          "text": "Achievement description with metrics",
-          "tags": ["python", "leadership", "data-analysis"],
-          "metrics": "Quantified impact"
+          "text": "Automated the monthly operations reporting pack using Python and SQL, replacing a manual Excel process and saving the team 10+ hours per week while eliminating copy-paste errors",
+          "tags": ["python", "sql", "automation", "reporting", "efficiency"],
+          "metrics": "10+ hours saved per week",
+          "versions": {
+            "short": "Automated the monthly operations reporting pack in Python and SQL, saving 10+ hours per week",
+            "medium": "Automated the monthly operations reporting pack using Python and SQL, replacing a manual Excel process and saving the team 10+ hours per week",
+            "long": "Automated the monthly operations reporting pack using Python and SQL, replacing a manual Excel process and saving the team 10+ hours per week while eliminating copy-paste errors and making the outputs reproducible and auditable"
+          }
+        },
+        {
+          "text": "Built and maintain 12 self-serve Power BI dashboards covering sales, staffing and service quality, used weekly by 30+ stakeholders from team leads to directors",
+          "tags": ["power-bi", "dashboards", "data-visualisation", "stakeholder-management"],
+          "metrics": "12 dashboards, 30+ weekly users",
+          "versions": {
+            "short": "Built 12 self-serve Power BI dashboards used weekly by 30+ stakeholders",
+            "medium": "Built and maintain 12 self-serve Power BI dashboards covering sales, staffing and service quality, used weekly by 30+ stakeholders",
+            "long": "Built and maintain 12 self-serve Power BI dashboards covering sales, staffing and service quality, used weekly by 30+ stakeholders from team leads to directors, reducing ad hoc data requests to the analytics team by roughly half"
+          }
+        },
+        {
+          "text": "Led process mapping and requirements gathering for a customer onboarding redesign, running workshops with 5 departments and cutting average onboarding turnaround time by 30%",
+          "tags": ["process-improvement", "requirements-gathering", "stakeholder-management", "workshops"],
+          "metrics": "30% faster onboarding, 5 departments",
+          "note": "Lead bullet for bizops and process improvement roles.",
+          "versions": {
+            "short": "Led the process mapping behind a customer onboarding redesign, cutting turnaround time by 30%",
+            "medium": "Led process mapping and requirements gathering for a customer onboarding redesign, running workshops with 5 departments and cutting turnaround time by 30%",
+            "long": "Led process mapping and requirements gathering for a customer onboarding redesign, running structured workshops with 5 departments to document the as-is process, identify bottlenecks and agree a future state, cutting average onboarding turnaround time by 30%"
+          }
+        },
+        {
+          "text": "Developed a demand forecasting model in Python (Pandas, scikit-learn) that improved weekly staffing decisions, reducing overtime spend by an estimated CAD 40,000 per year",
+          "tags": ["python", "forecasting", "machine-learning", "cost-savings"],
+          "metrics": "CAD 40,000 estimated annual savings",
+          "versions": {
+            "short": "Developed a Python demand forecasting model, reducing overtime spend by ~CAD 40,000 per year",
+            "medium": "Developed a demand forecasting model in Python (Pandas, scikit-learn) that improved weekly staffing decisions, reducing overtime spend by an estimated CAD 40,000 per year",
+            "long": "Developed a demand forecasting model in Python using Pandas and scikit-learn that improved weekly staffing decisions across two service teams, reducing overtime spend by an estimated CAD 40,000 per year and giving managers a two-week planning horizon they previously lacked"
+          }
+        },
+        {
+          "text": "Introduced automated data quality checks between the CRM and the finance system, reconciling records daily and halving the error rate in month-end reporting",
+          "tags": ["data-quality", "reconciliation", "sql", "automation"],
+          "metrics": "Reporting error rate halved",
+          "versions": {
+            "short": "Introduced automated CRM-to-finance data quality checks, halving month-end reporting errors",
+            "medium": "Introduced automated data quality checks between the CRM and the finance system, reconciling records daily and halving the error rate in month-end reporting",
+            "long": "Introduced automated data quality checks between the CRM and the finance system, reconciling records daily, flagging mismatches to owners, and halving the error rate in month-end reporting within one quarter"
+          }
+        },
+        {
+          "text": "Defined and now own the company KPI framework, agreeing 15 core metrics with department heads and presenting a monthly performance review to the leadership team",
+          "tags": ["kpi-design", "stakeholder-management", "presentation", "leadership-exposure"],
+          "metrics": "15 core KPIs, monthly leadership review",
+          "versions": {
+            "short": "Defined and own the company KPI framework of 15 core metrics, presenting monthly to leadership",
+            "medium": "Defined and own the company KPI framework, agreeing 15 core metrics with department heads and presenting a monthly performance review to the leadership team",
+            "long": "Defined and now own the company KPI framework, agreeing 15 core metrics with department heads, documenting definitions and data sources for each, and presenting a monthly performance review to the leadership team that drives quarterly priorities"
+          }
+        },
+        {
+          "text": "Evaluated three workforce management tools against agreed requirements and cost criteria, recommending the option adopted by leadership and supporting rollout to 60 users",
+          "tags": ["vendor-evaluation", "requirements-gathering", "change-management"],
+          "metrics": "3 tools evaluated, 60 users onboarded",
+          "versions": {
+            "short": "Evaluated three workforce management tools and supported rollout of the chosen option to 60 users",
+            "medium": "Evaluated three workforce management tools against agreed requirements and cost criteria, recommending the option adopted by leadership and supporting rollout to 60 users",
+            "long": "Evaluated three workforce management tools against agreed requirements and cost criteria, ran vendor demos with end users, recommended the option adopted by leadership, and supported the rollout to 60 users including training materials and a feedback loop"
+          }
+        },
+        {
+          "text": "Wrote SQL views and documentation that opened up the operational database to non-technical colleagues, then ran lunch-and-learn sessions to train 20 staff on self-serve reporting",
+          "tags": ["sql", "documentation", "training", "enablement"],
+          "metrics": "20 staff trained on self-serve reporting",
+          "versions": {
+            "short": "Wrote SQL views and trained 20 staff on self-serve reporting",
+            "medium": "Wrote SQL views and documentation that opened up the operational database to non-technical colleagues, training 20 staff on self-serve reporting",
+            "long": "Wrote SQL views and documentation that opened up the operational database to non-technical colleagues, then ran lunch-and-learn sessions to train 20 staff on self-serve reporting, reducing routine data requests to the analytics team"
+          }
+        },
+        {
+          "text": "Analysed customer churn using cohort analysis in Python, identifying two at-risk segments and informing a retention campaign that recovered an estimated 5% of lapsing accounts",
+          "tags": ["python", "analysis", "churn", "business-impact"],
+          "metrics": "~5% of lapsing accounts recovered",
+          "versions": {
+            "short": "Analysed customer churn in Python, informing a retention campaign that recovered ~5% of lapsing accounts",
+            "medium": "Analysed customer churn using cohort analysis in Python, identifying two at-risk segments and informing a retention campaign that recovered an estimated 5% of lapsing accounts",
+            "long": "Analysed customer churn using cohort analysis in Python, identifying two at-risk segments by tenure and usage pattern, and informing a targeted retention campaign that recovered an estimated 5% of lapsing accounts in its first quarter"
+          }
+        }
+      ]
+    },
+    "sample-retail": {
+      "company": "Sample Retail Group",
+      "title": "Operations Intern",
+      "title_variants": ["Operations Intern", "Business Operations Intern"],
+      "location": "Toronto, Canada",
+      "start_date": "May 2022",
+      "end_date": "Aug 2022",
+      "bullets": [
+        {
+          "text": "Built an Excel stock-level tracker with automated reorder alerts for 3 store locations, reducing out-of-stock incidents over the summer period",
+          "tags": ["excel", "automation", "inventory", "retail"],
+          "metrics": "3 stores covered",
+          "versions": {
+            "short": "Built an Excel stock tracker with reorder alerts for 3 stores",
+            "medium": "Built an Excel stock-level tracker with automated reorder alerts for 3 store locations, reducing out-of-stock incidents",
+            "long": "Built an Excel stock-level tracker with automated reorder alerts for 3 store locations, working with store managers to set thresholds and reducing out-of-stock incidents over the summer period"
+          }
+        },
+        {
+          "text": "Cleaned and consolidated two years of sales data into a single reporting sheet used by the regional manager for weekly performance reviews",
+          "tags": ["data-cleaning", "reporting", "excel"],
+          "metrics": "2 years of data consolidated",
+          "versions": {
+            "short": "Consolidated two years of sales data into a weekly reporting sheet for the regional manager",
+            "medium": "Cleaned and consolidated two years of sales data into a single reporting sheet used by the regional manager for weekly performance reviews",
+            "long": "Cleaned and consolidated two years of inconsistent, store-level sales data into a single reporting sheet with standard definitions, used by the regional manager for weekly performance reviews for the rest of the year"
+          }
         }
       ]
     }
-  ],
+  },
   "education": [
     {
-      "institution": "University Name",
-      "degree": "Degree Title",
-      "grade": "Grade",
-      "location": "City, Country",
-      "start_date": "Sep YYYY",
-      "end_date": "Jun YYYY",
+      "institution": "Example University",
+      "degree": "BSc Economics",
+      "grade": "Upper Second-Class Honours equivalent (2:1)",
+      "location": "Toronto, Canada",
+      "start_date": "Sep 2019",
+      "end_date": "Jun 2023",
       "dissertation": {
-        "title": "Dissertation Title",
-        "grade": "Grade",
-        "summary": "Brief summary",
-        "tech": ["Python", "TensorFlow"],
-        "relevance": ["ai-ml", "data-science"]
+        "title": "Price Elasticity of Demand in Online Grocery Retail: Evidence from Promotional Data",
+        "grade": "78%",
+        "summary": "Estimated own-price and cross-price elasticities from two years of promotional data using panel regression in Python, finding significantly higher elasticity in own-brand categories",
+        "tech": ["Python", "Pandas", "statsmodels"]
       },
-      "coursework": {
-        "ai-ml": ["Relevant Course 1", "Relevant Course 2"]
-      }
+      "modules": {
+        "_comment": "Keyed by job category (must match keys in job_categories). The tailoring system picks the module list for the CV's category.",
+        "bizops": ["Managerial Economics", "Operations Research", "Corporate Strategy", "Business Statistics"],
+        "data-analyst": ["Econometrics I & II", "Business Statistics", "Introduction to Programming for Economists", "Data Analysis in Practice"],
+        "product-analyst": ["Behavioural Economics", "Business Statistics", "Operations Research", "Data Analysis in Practice"]
+      },
+      "modules_by_year": {
+        "year_1": ["Principles of Microeconomics", "Principles of Macroeconomics", "Mathematics for Economists", "Business Statistics", "Introduction to Programming for Economists"],
+        "year_2": ["Intermediate Microeconomics", "Intermediate Macroeconomics", "Econometrics I", "Operations Research", "Accounting Fundamentals"],
+        "year_3": ["Econometrics II", "Behavioural Economics", "Managerial Economics", "Industrial Organisation", "Data Analysis in Practice"],
+        "year_4": ["Corporate Strategy", "Labour Economics", "Applied Econometrics Project", "Dissertation"]
+      },
+      "activities": ["Treasurer, Economics Society", "Intramural football league organiser"]
+    },
+    {
+      "institution": "Example Secondary School",
+      "degree": "High School Diploma with distinction in Mathematics",
+      "location": "Toronto, Canada",
+      "start_date": "Sep 2015",
+      "end_date": "Jun 2019",
+      "include_in_tailored": false
     }
   ],
   "skills": {
-    "programming": ["Python", "SQL", "R"],
-    "frameworks_libraries": ["Pandas", "NumPy", "Scikit-learn"],
-    "ai_ml": ["LangChain", "OpenAI API"],
-    "platforms": ["Azure", "AWS"],
-    "databases": ["PostgreSQL", "MongoDB"],
-    "domain": ["Your Domain Expertise"],
-    "soft_skills": ["Leadership", "Communication"]
+    "programming": ["SQL", "Python", "JavaScript", "VBA"],
+    "frameworks_libraries": ["Pandas", "NumPy", "scikit-learn", "Matplotlib", "Flask", "React (basic)"],
+    "ai_ml": ["Regression modelling", "Forecasting", "Clustering", "Prompt-assisted analysis"],
+    "ai_dev_tools": ["GitHub Copilot", "ChatGPT"],
+    "platforms": ["Power BI", "Excel (advanced)", "Google Sheets", "JIRA", "Confluence", "Git", "GitHub Actions"],
+    "databases": ["PostgreSQL", "SQL Server", "SQLite"],
+    "domain": ["Operations analytics", "KPI design", "Process mapping", "Forecasting", "Customer analytics"],
+    "soft_skills": ["Stakeholder management", "Workshop facilitation", "Presentation", "Documentation", "Training delivery"],
+    "_notes": {
+      "_comment": "Honest caveats about weaker skills, so tailoring and interview prep never oversell them.",
+      "React (basic)": "Used in the budgeting side project only; can build simple components but not a frontend specialist.",
+      "VBA": "Maintenance-level: can read and patch inherited macros, prefers migrating them to Python.",
+      "Clustering": "Applied k-means once in the churn analysis; would need revision before a technical deep-dive."
+    }
   },
   "certifications": [
     {
-      "name": "Certification Name",
-      "issuer": "Issuing Organization",
-      "date": "YYYY"
+      "name": "Data Analyst Associate",
+      "issuer": "Example Learning Platform",
+      "date": "Mar 2025",
+      "expires": "Mar 2027"
+    },
+    {
+      "name": "Business Analysis Fundamentals",
+      "issuer": "Example Institute",
+      "date": "Nov 2023"
+    }
+  ],
+  "awards": [
+    {
+      "name": "Quarterly Impact Award",
+      "issuer": "ExampleCorp",
+      "date": "Oct 2024",
+      "description": "Awarded for the onboarding redesign that cut turnaround time by 30%"
+    }
+  ],
+  "test_scores": [
+    {
+      "name": "Business Statistics Final Exam",
+      "score": "92%",
+      "course": "ECON2040",
+      "institution": "Example University",
+      "date": "Apr 2021"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "level": "Native"
+    },
+    {
+      "language": "Spanish",
+      "level": "Conversational"
+    }
+  ],
+  "interests": [
+    "Five-a-side football (local league player and stats keeper)",
+    "Personal finance and budgeting tools",
+    "Board games and puzzles",
+    "Cycling"
+  ],
+  "extra_curricular": [
+    {
+      "activity": "Local Football League Committee Member",
+      "description": "Help run a 12-team amateur league: fixtures, results collection, and the stats dashboard the league now uses weekly",
+      "dates": "Sep 2023 - Present",
+      "tags": ["organisation", "community", "data"]
+    },
+    {
+      "activity": "Volunteer Maths Tutor",
+      "description": "Weekly tutoring for secondary school students through a local charity",
+      "dates": "Jan 2024 - Present",
+      "tags": ["teaching", "communication", "mentoring"]
     }
   ],
   "projects": {
-    "project-key": {
-      "name": "Project Name",
+    "_comment": "Keyed by project slug. 'relevance' maps job categories to high/medium/low so tailoring knows which projects to surface.",
+    "budget-tracker": {
+      "name": "budget-tracker",
+      "display_name": "Personal Budget Tracker",
       "type": "Personal Project",
-      "status": "In Progress",
-      "description": "Brief description",
+      "status": "Live",
+      "scale": "3 active users (self, family)",
+      "start_date": "2024",
+      "description": "Web app for tracking personal spending against monthly budgets, with CSV bank statement import, automatic category rules and trend charts",
+      "summary_short": "Budgeting web app with CSV import, auto-categorisation and trend charts (Flask, PostgreSQL, React)",
+      "summary_medium": "Personal budgeting web app: Flask API with PostgreSQL, React frontend, CSV bank statement import with rule-based auto-categorisation, monthly budget targets and trend visualisations. Deployed on a low-cost VPS with GitHub Actions CI",
       "tech_stack": {
-        "frontend": ["Swift", "SwiftUI"],
-        "backend": ["Python", "FastAPI"]
+        "backend": ["Python", "Flask", "PostgreSQL"],
+        "frontend": ["React", "Chart.js"],
+        "infrastructure": ["Docker", "GitHub Actions", "VPS deployment"]
       },
-      "tags": ["ios", "python", "full-stack"]
+      "key_features": [
+        "CSV bank statement import with rule-based auto-categorisation",
+        "Monthly budget targets with variance alerts",
+        "Trend charts for category spend over time"
+      ],
+      "technical_highlights": [
+        "Idempotent import pipeline that deduplicates re-uploaded statements",
+        "Rule engine for categorisation with a manual-override learning loop",
+        "CI pipeline running tests and linting on every push"
+      ],
+      "github": "github.com/alex-example/budget-tracker",
+      "relevance": {
+        "bizops": "medium",
+        "data-analyst": "high",
+        "product-analyst": "high"
+      },
+      "tags": ["python", "flask", "react", "postgresql", "full-stack"],
+      "versions": {
+        "short": "Built a budgeting web app (Flask, PostgreSQL, React) with CSV import and rule-based auto-categorisation",
+        "long": "Built and deployed a personal budgeting web app: Flask API over PostgreSQL with a React frontend, CSV bank statement import with rule-based auto-categorisation and a manual-override learning loop, monthly budget targets with variance alerts, and a GitHub Actions CI pipeline"
+      }
+    },
+    "league-stats": {
+      "name": "league-stats",
+      "display_name": "Local Football League Stats Dashboard",
+      "type": "Personal Project",
+      "status": "Live",
+      "scale": "12 teams, ~150 players, 2 seasons of data",
+      "start_date": "2023",
+      "description": "Statistics dashboard for a 12-team amateur football league: results entry, automatically computed league tables, player stats and head-to-head records",
+      "summary_short": "Football league stats dashboard: results entry, auto-computed tables and player stats (Python, SQLite, Plotly)",
+      "summary_medium": "Stats dashboard for a 12-team amateur football league. Python data pipeline validates weekly results submissions into SQLite, recomputes league tables, top scorers and head-to-head records, and publishes an interactive Plotly dashboard the league uses every week",
+      "tech_stack": {
+        "backend": ["Python", "SQLite"],
+        "visualisation": ["Plotly", "Dash"],
+        "infrastructure": ["GitHub Actions scheduled rebuild"]
+      },
+      "key_features": [
+        "Weekly results ingestion with validation (duplicate fixtures, impossible scores)",
+        "Auto-computed league tables, top scorers and head-to-head records",
+        "Interactive dashboard published for all 12 teams"
+      ],
+      "technical_highlights": [
+        "Schema design covering seasons, fixtures, players and transfers between teams",
+        "Data validation layer that catches malformed weekly submissions before they corrupt the tables",
+        "Scheduled GitHub Actions job that rebuilds and republishes the dashboard"
+      ],
+      "github": "github.com/alex-example/league-stats",
+      "relevance": {
+        "bizops": "low",
+        "data-analyst": "high",
+        "product-analyst": "medium"
+      },
+      "tags": ["python", "sqlite", "plotly", "data-pipeline"],
+      "versions": {
+        "short": "Built a stats dashboard for a 12-team football league (Python, SQLite, Plotly) used weekly by all teams",
+        "long": "Built the statistics platform for a 12-team amateur football league: a Python pipeline validating weekly results into SQLite, recomputing league tables, top scorers and head-to-head records, and republishing an interactive Plotly dashboard via a scheduled GitHub Actions job; now the league's official source of standings"
+      }
     }
   }
 }

@@ -1,18 +1,21 @@
 # CV Build Makefile
-# Builds all CV variants to output/ directory
+# Builds every CV variant in variants/ to the output/ directory.
+# Variants are discovered dynamically: any variants/*.tex file is a target.
+# Run from the cv/ directory (or `make -C cv ...`) so relative paths to
+# cv.cls and sections/ resolve.
 
 LATEX = pdflatex
 LATEXFLAGS = -interaction=nonstopmode -halt-on-error -output-directory=output
 
-VARIANTS = portfolio-risk client-solutions ai-ml data-science quant-dev research software-eng forward-deployed data-engineer applied-ai-solutions
-MASTER = master-cv
+VARIANT_SRCS := $(wildcard variants/*.tex)
+VARIANTS := $(patsubst variants/%.tex,%,$(VARIANT_SRCS))
 
 # Check for pdflatex
 check-latex:
 	@command -v $(LATEX) >/dev/null 2>&1 || { \
 		echo "Error: pdflatex not found."; \
 		echo ""; \
-		echo "Install MacTeX with:"; \
+		echo "On macOS, install MacTeX with:"; \
 		echo "  brew install --cask mactex-no-gui"; \
 		echo ""; \
 		echo "Then restart your terminal or run:"; \
@@ -21,96 +24,85 @@ check-latex:
 	}
 
 # Default target: build all variants
-all: check-latex setup $(VARIANTS) master
+all: check-latex setup
+	@if [ -z "$(VARIANTS)" ]; then \
+		echo "No variants found in variants/."; \
+		echo "Run /onboard to generate them, or start from templates/general.tex."; \
+		exit 1; \
+	fi
+	@for tex in $(VARIANT_SRCS); do \
+		name=$$(basename $$tex .tex); \
+		echo "Building $$name..."; \
+		$(LATEX) $(LATEXFLAGS) $$tex > /dev/null 2>&1 && echo "  ok output/$$name.pdf" || \
+			{ echo "  FAILED: check output/$$name.log"; exit 1; }; \
+	done
 
-# Create output directory
+# Create output directories
 setup:
-	@mkdir -p output
+	@mkdir -p output output/tailored-build output/tailored
 
-# Build master CV
-master: check-latex setup
-	@echo "Building master-cv..."
-	@$(LATEX) $(LATEXFLAGS) $(MASTER).tex > /dev/null 2>&1 && echo "  ✓ output/$(MASTER).pdf" || \
-		{ echo "  ✗ Build failed. Check output/$(MASTER).log"; exit 1; }
+# Build a single variant by name
+# Usage: make variant NAME=general
+variant: check-latex setup
+	@if [ -z "$(NAME)" ]; then \
+		echo "Error: NAME not specified"; \
+		echo "Usage: make variant NAME=<variant>"; \
+		echo ""; \
+		echo "Available variants:"; \
+		ls -1 variants/*.tex 2>/dev/null | while read -r f; do basename $$f .tex | sed 's/^/  /'; done; \
+		exit 1; \
+	fi
+	@echo "Building $(NAME)..."
+	@$(LATEX) $(LATEXFLAGS) variants/$(NAME).tex > /dev/null 2>&1 && echo "  ok output/$(NAME).pdf" || \
+		{ echo "  FAILED: check output/$(NAME).log"; exit 1; }
 
-# Build individual variants
-portfolio-risk: check-latex setup
-	@echo "Building portfolio-risk..."
-	@$(LATEX) $(LATEXFLAGS) variants/portfolio-risk.tex > /dev/null 2>&1 && echo "  ✓ output/portfolio-risk.pdf" || \
-		{ echo "  ✗ Build failed. Check output/portfolio-risk.log"; exit 1; }
-
-client-solutions: check-latex setup
-	@echo "Building client-solutions..."
-	@$(LATEX) $(LATEXFLAGS) variants/client-solutions.tex > /dev/null 2>&1 && echo "  ✓ output/client-solutions.pdf" || \
-		{ echo "  ✗ Build failed. Check output/client-solutions.log"; exit 1; }
-
-ai-ml: check-latex setup
-	@echo "Building ai-ml..."
-	@$(LATEX) $(LATEXFLAGS) variants/ai-ml.tex > /dev/null 2>&1 && echo "  ✓ output/ai-ml.pdf" || \
-		{ echo "  ✗ Build failed. Check output/ai-ml.log"; exit 1; }
-
-data-science: check-latex setup
-	@echo "Building data-science..."
-	@$(LATEX) $(LATEXFLAGS) variants/data-science.tex > /dev/null 2>&1 && echo "  ✓ output/data-science.pdf" || \
-		{ echo "  ✗ Build failed. Check output/data-science.log"; exit 1; }
-
-quant-dev: check-latex setup
-	@echo "Building quant-dev..."
-	@$(LATEX) $(LATEXFLAGS) variants/quant-dev.tex > /dev/null 2>&1 && echo "  ✓ output/quant-dev.pdf" || \
-		{ echo "  ✗ Build failed. Check output/quant-dev.log"; exit 1; }
-
-research: check-latex setup
-	@echo "Building research..."
-	@$(LATEX) $(LATEXFLAGS) variants/research.tex > /dev/null 2>&1 && echo "  ✓ output/research.pdf" || \
-		{ echo "  ✗ Build failed. Check output/research.log"; exit 1; }
-
-software-eng: check-latex setup
-	@echo "Building software-eng..."
-	@$(LATEX) $(LATEXFLAGS) variants/software-eng.tex > /dev/null 2>&1 && echo "  ✓ output/software-eng.pdf" || \
-		{ echo "  ✗ Build failed. Check output/software-eng.log"; exit 1; }
-
-forward-deployed: check-latex setup
-	@echo "Building forward-deployed..."
-	@$(LATEX) $(LATEXFLAGS) variants/forward-deployed.tex > /dev/null 2>&1 && echo "  ✓ output/forward-deployed.pdf" || \
-		{ echo "  ✗ Build failed. Check output/forward-deployed.log"; exit 1; }
-
-data-engineer: check-latex setup
-	@echo "Building data-engineer..."
-	@$(LATEX) $(LATEXFLAGS) variants/data-engineer.tex > /dev/null 2>&1 && echo "  ✓ output/data-engineer.pdf" || \
-		{ echo "  ✗ Build failed. Check output/data-engineer.log"; exit 1; }
-
-applied-ai-solutions: check-latex setup
-	@echo "Building applied-ai-solutions..."
-	@$(LATEX) $(LATEXFLAGS) variants/applied-ai-solutions.tex > /dev/null 2>&1 && echo "  ✓ output/applied-ai-solutions.pdf" || \
-		{ echo "  ✗ Build failed. Check output/applied-ai-solutions.log"; exit 1; }
+# Smoke-test the LaTeX toolchain on a fresh clone by building the tracked
+# placeholder template. If you have not created sections/header.tex yet, the
+# example header is copied in temporarily and removed afterwards.
+template: check-latex setup
+	@created=0; \
+	if [ ! -f sections/header.tex ]; then \
+		cp sections/header.example.tex sections/header.tex; \
+		created=1; \
+		echo "Using sections/header.example.tex as a temporary header"; \
+	fi; \
+	echo "Building templates/general.tex..."; \
+	$(LATEX) $(LATEXFLAGS) -jobname=template-general templates/general.tex > /dev/null 2>&1; \
+	status=$$?; \
+	if [ "$$created" -eq 1 ]; then rm -f sections/header.tex; fi; \
+	if [ "$$status" -eq 0 ]; then \
+		echo "  ok output/template-general.pdf"; \
+	else \
+		echo "  FAILED: check output/template-general.log"; \
+		exit 1; \
+	fi
 
 # Build a specific tailored CV
-# Usage: make tailored FILE=emagine-senior-quant-developer
-tailored: check-latex
-ifndef FILE
-	@echo "Error: FILE not specified"
-	@echo "Usage: make tailored FILE=<filename-without-extension>"
-	@echo ""
-	@echo "Available files:"
-	@ls -1 output/tailored-build/*.tex 2>/dev/null | xargs -I {} basename {} .tex | sed 's/^/  /'
-	@exit 1
-endif
+# Usage: make tailored FILE=some-company-role
+tailored: check-latex setup
+	@if [ -z "$(FILE)" ]; then \
+		echo "Error: FILE not specified"; \
+		echo "Usage: make tailored FILE=<filename-without-extension>"; \
+		echo ""; \
+		echo "Available files:"; \
+		ls -1 output/tailored-build/*.tex 2>/dev/null | while read -r f; do basename $$f .tex | sed 's/^/  /'; done; \
+		exit 1; \
+	fi
 	@echo "Building $(FILE)..."
 	@$(LATEX) $(LATEXFLAGS)/tailored-build output/tailored-build/$(FILE).tex > /dev/null 2>&1 && \
 		cp output/tailored-build/$(FILE).pdf output/tailored/ && \
-		echo "  ✓ output/tailored/$(FILE).pdf" || \
-		{ echo "  ✗ Build failed. Check output/tailored-build/$(FILE).log"; exit 1; }
+		echo "  ok output/tailored/$(FILE).pdf" || \
+		{ echo "  FAILED: check output/tailored-build/$(FILE).log"; exit 1; }
 
 # Build all tailored CVs
-tailored-all: check-latex
-	@echo "Building all tailored CVs..."
+tailored-all: check-latex setup
 	@for tex in output/tailored-build/*.tex; do \
 		name=$$(basename $$tex .tex); \
 		echo "Building $$name..."; \
 		$(LATEX) $(LATEXFLAGS)/tailored-build $$tex > /dev/null 2>&1 && \
 			cp output/tailored-build/$$name.pdf output/tailored/ && \
-			echo "  ✓ output/tailored/$$name.pdf" || \
-			echo "  ✗ Build failed. Check output/tailored-build/$$name.log"; \
+			echo "  ok output/tailored/$$name.pdf" || \
+			echo "  FAILED: check output/tailored-build/$$name.log"; \
 	done
 
 # Clean auxiliary files
@@ -128,18 +120,9 @@ help:
 	@echo "CV Build System"
 	@echo ""
 	@echo "Targets:"
-	@echo "  all              Build all variants and master (default)"
-	@echo "  master           Build master CV only"
-	@echo "  portfolio-risk   Build Portfolio & Risk Analytics variant"
-	@echo "  client-solutions Build Client Solutions variant"
-	@echo "  ai-ml            Build AI/ML Engineering variant"
-	@echo "  data-science     Build Data Science variant"
-	@echo "  quant-dev        Build Quant Development variant"
-	@echo "  research         Build Research & Analysis variant"
-	@echo "  software-eng     Build Software Engineering variant"
-	@echo "  forward-deployed Build Forward Deployed Engineer variant"
-	@echo "  data-engineer    Build Data Engineer variant"
-	@echo "  applied-ai-solutions Build Applied AI Solutions variant"
+	@echo "  all              Build every variant in variants/ (default)"
+	@echo "  variant NAME=x   Build a single variant by name"
+	@echo "  template         Smoke-test the toolchain with templates/general.tex"
 	@echo ""
 	@echo "  tailored FILE=x  Build specific tailored CV (without .tex extension)"
 	@echo "  tailored-all     Build all tailored CVs"
@@ -147,7 +130,11 @@ help:
 	@echo "  clean            Remove auxiliary files"
 	@echo "  cleanall         Remove all output files"
 	@echo ""
-	@echo "Usage: make [target]"
-	@echo "Example: make tailored FILE=emagine-senior-quant-developer"
+	@echo "Discovered variants:"
+	@if [ -n "$(VARIANTS)" ]; then \
+		for v in $(VARIANTS); do echo "  $$v"; done; \
+	else \
+		echo "  (none yet: run /onboard or see templates/README.md)"; \
+	fi
 
-.PHONY: all check-latex setup master $(VARIANTS) tailored tailored-all clean cleanall help
+.PHONY: all check-latex setup variant template tailored tailored-all clean cleanall help

@@ -1,193 +1,142 @@
-# JobHunter AI
+# JobHunter
 
-Personal job-search automation: a Python harness driven from Claude Code, with Notion as the source of truth and a small set of focused sub-agents for the parts that genuinely need an LLM. Replaces the original "scrape → score → manually review → manually apply" workflow with a single end-to-end pipeline that takes you from "search LinkedIn" to "submitted application" in one command.
+An open-source job-search automation system you run yourself: a Python harness driven from [Claude Code](https://claude.com/claude-code), with Notion as the database and review UI, and a small set of focused sub-agents for the parts that genuinely need an LLM. It takes a search from "what's out there?" to "submitted application" with as much or as little automation as you choose.
 
-## Architecture (v2, May 2026)
+Built and battle-tested across a real multi-month job search (hundreds of applications across LinkedIn, Greenhouse, Workday, Lever, Ashby and more), then genericised so anyone can adapt it to their own search.
+
+## What it does
+
+- **Discovers** roles daily from LinkedIn search (plus any career board or posting URL you feed it ad hoc) using your configured locations, query angles and recency window.
+- **Filters deterministically** before any LLM sees a role: title and industry rules, seniority caps, language requirements, right-to-work logic, all from your config. Zero tokens spent on obvious mismatches.
+- **Scores and logs** every surviving role to a Notion database that acts as the single source of truth, with a status state machine from `ToReview` through to `Offer`.
+- **Tailors your CV** per role with a template-first LaTeX system: honest, fact-checked against your own data, iterated until the page is exactly full.
+- **Applies**, if you let it: deterministic Python form-walkers for LinkedIn Apply, Greenhouse, Workday, Lever, Ashby, SmartRecruiters, BambooHR, Teamtailor, Jobvite and Welcome to the Jungle, with an LLM sub-agent picking up edge cases (novel forms, required cover letters, unknown ATSs).
+- **Monitors responses**: a skill scans Gmail for rejections, interview invites and offers, and moves Notion statuses accordingly.
+
+## Choose your autonomy level
+
+Set once during onboarding, change any time in `data/search_config.json`:
+
+| Level | What the system does | What you do |
+|---|---|---|
+| `search` | Finds, filters, scores, logs to Notion | Review and apply yourself |
+| `tailor` | Search, plus a tailored CV per role | Submit each application |
+| `full` | End-to-end, including form submission | Review escalations and results |
+
+Most people should start at `search`, watch a week of results, tune their filters, then decide how much to delegate. The Python side enforces the level: application commands refuse to run below `full`.
+
+## Requirements
+
+- Python 3.10+ and Node (for `playwright-cli`)
+- [Claude Code](https://claude.com/claude-code) with a subscription (a standard $20/month plan is enough; the pipeline is designed so the deterministic work costs nothing and LLM work runs in context-isolated sub-agents)
+- A free Notion account
+- Optional: a LaTeX distribution (MacTeX / TeX Live) for CV tailoring; without it you can run in bring-your-own-PDF mode
+
+No Anthropic API key is required: all LLM calls happen inside your Claude Code session and bill against your subscription. The Python orchestrator itself never calls an LLM.
+
+## Getting started
+
+```bash
+git clone <this repo> && cd jobhunter
+pip install -r requirements.txt
+claude        # open a Claude Code session in the repo
+```
+
+Then, inside Claude Code:
 
 ```
-Claude Code main session  (Opus 4.6, billed against Claude Max)
+/onboard
+```
+
+Onboarding is a guided interview that builds your personal files (all gitignored, none of them ever committed): your CV data, goals, screening answers, search configuration, Notion database and first CV variant. It ends with a small test run. Budget 30 to 60 minutes for a thorough setup; see [docs/PERSONAS.md](docs/PERSONAS.md) for two worked example configurations (a cross-border relocator and a multi-board ops search).
+
+## Day-to-day use
+
+| Command | Purpose |
+|---|---|
+| `/auto-apply --discover` | The daily run at your autonomy level |
+| `/auto-apply <job-url>` | Push a single posting (any board) through the pipeline |
+| `/check-emails` | Scan Gmail for responses; update Notion |
+| `/tailor-cv` | High-touch manual tailoring for a hand-picked role |
+| `/cover-letter` | Tailored cover letter |
+| `/interview-prep` | Prep document for an upcoming round |
+| `/drain-queue` | Work through the ReadyToApply backlog (at `full` autonomy) |
+
+## Architecture
+
+```
+Claude Code main session
   │
-  └─ /auto-apply skill  ── thin orchestrator
+  └─ /auto-apply skill ── thin orchestrator
         │
         ├─ Bash: python scripts/auto_apply.py search ...
-        │     deterministic: LinkedIn search, scroll, title-filter, JD-fetch,
-        │     JD-aware filter, Notion dedup, dismiss SKIPs on LinkedIn,
-        │     write APPLY rows to Notion as Status="NeedsTailoring"
-        │     (zero LLM tokens)
+        │     deterministic: LinkedIn search, title/JD filter, dedup,
+        │     Notion rows written as Status="NeedsTailoring"  (zero LLM tokens)
         │
-        ├─ Agent(role-tailorer)  per role  [Opus 4.6, isolated context]
-        │     reads jd.txt + role-context.json,
-        │     runs /tailor-cv-light, falls back to template PDF on failure,
-        │     returns one summary line; sub-agent context dies after each role
+        ├─ Agent(role-tailorer)  per role  [isolated context]
+        │     tailors the CV from data/master_cv.json, returns one line
         │
         ├─ Bash: python scripts/auto_apply.py apply --role <id>
-        │     deterministic walker per ATS:
-        │       LinkedIn Apply, Greenhouse, Workday, Lever, Ashby
-        │     fills the form using application_profile.json + answer_screening.py,
-        │     submits, captures confirmation, writes submission-log.json
+        │     deterministic walker per ATS  (only at autonomy=full)
         │
-        ├─ Agent(edge-case-applicator)  on escalation  [Opus 4.6, isolated]
-        │     handles unknown ATS hosts, novel form fields, required cover
-        │     letters, low-confidence answers, salary research with WebSearch
-        │
-        └─ Bash: python scripts/auto_apply.py mark-applied / mark-escalated /
-                 mark-failed / summary / session-close
+        └─ Agent(edge-case-applicator)  on escalation  [isolated context]
+              unknown ATS, novel fields, cover letters, salary research
 ```
 
-**Two design principles:**
+Two design principles carried through everything:
 
-1. **Programmatic orchestrator over LLM orchestrator.** Almost every step in the daily run is deterministic (search-result extraction, regex/keyword filtering, form-walking, Notion bookkeeping). All of it is Python. The LLM is reserved for steps that genuinely need open-ended reasoning: CV tailoring, cover-letter generation, edge-case form-walking, salary research with no published band.
+1. **Programmatic over LLM orchestration.** Search extraction, filtering, form-walking and bookkeeping are plain Python. The LLM is reserved for open-ended reasoning: tailoring, cover letters, novel forms.
+2. **Sub-agent isolation.** Each role's LLM work runs in a fresh sub-agent returning a one-line summary, so a 50-role run does not blow up the main session's context.
 
-2. **Sub-agent isolation, not one big context.** Each role's tailoring runs in its own Claude Code sub-agent that returns a one-line summary. The main session never accumulates JD bodies, form snapshots, or DOM dumps. A 50-role run stays under a few-percent of the main context budget.
+Notion holds every role's state, so the pipeline can crash mid-run and resume from where it left off.
 
-This is what makes the pipeline actually run end-to-end on Claude Max: the heavy parallel work happens in Python (free) or in fresh sub-agents (Max-billed, context-isolated), and the main session is just a thin coordinator.
+## Your data stays yours
 
-## Notion as source of truth
+Everything personal lives in gitignored files with tracked `.example` templates:
 
-The Jobs Database in Notion holds every role's full state. Status moves through a state machine and is the only persistent coordination point between phases — the orchestrator can crash mid-run and resume from Notion on the next invocation.
+| File | Contents |
+|---|---|
+| `data/master_cv.json` | CV content, the single source of truth for factual claims |
+| `data/job_goals.json` | Goals, preferences, scoring weights |
+| `data/application_profile.json` | Identity and screening answers (keep chmod 600) |
+| `data/search_config.json` | Search targets, filters, autonomy |
+| `data/deep_experience.json` | Rich experience narratives (optional, unlocks better output) |
+| `cv/variants/`, `cv/sections/header.tex` | Your actual CV files |
 
-```
-NeedsTailoring  ──►  ReadyToApply  ──►  AwaitingResponse  ──► [downstream]
-                                  └──►  Escalated   (edge-case agent escalation)
-                                  └──►  Failed      (terminal walker error)
-```
-
-Full status options (grouped, set in Notion as `type: "status"`):
-
-- **to_do**: `ToReview`, `Consider`, `Apply`, `NeedsTailoring`, `ReadyToApply`, `Escalated`, `Failed`
-- **in_progress**: `AwaitingResponse`, `ResponseReceived`, `PhoneScreen`, `Test`, `CultureInterview`, `TechnicalInterview`, `FinalRound`, `Offer`
-- **complete**: `Expired`, `NoResponse`, `Rejected`, `Skip`, `Accepted`
-
-Auto-apply only writes the five active states above. Downstream transitions (response received → interview stages → terminal) are owned by `/check-emails`, which scans Gmail for replies and updates Notion accordingly.
-
-## Quick start
-
-### 1. Install dependencies
-
-```bash
-pip install -r requirements.txt
-npm install -g @playwright/cli@latest
-```
-
-### 2. Configure environment
-
-```bash
-cp .env.example .env
-```
-
-Required:
-- `NOTION_API_KEY` — your Notion integration token, granted access to the Jobs Database
-- `NOTION_JOBS_DB_ID` — the Jobs DB ID
-
-The Anthropic API key is **not required** — the pipeline is designed to bill against your Claude Max subscription. All LLM calls happen inside Claude Code (main session and sub-agents); the Python orchestrator itself never makes an LLM call.
-
-### 3. Capture LinkedIn auth (one-time)
-
-```bash
-python scripts/save_linkedin_state.py
-```
-
-This logs you in interactively and persists the cookies to `data/.linkedin-state.json`. Re-run when LinkedIn forces a re-auth (typically every 2-3 months).
-
-### 4. Run the pipeline from a Claude Code session
-
-```
-/auto-apply --discover --max-roles 5 --location london --term solutions
-```
-
-Start small to validate the flow, then ramp:
-
-```
-/auto-apply --discover                 # default: 24h, paris+london, solutions/python/data
-/auto-apply --discover --limit 50      # cap at 50 successful submissions
-/auto-apply --discover --watchlist     # use the company watchlist URL pattern
-/auto-apply <linkedin-url>             # ad-hoc single-role apply
-```
+The system is deliberately strict about honesty: tailoring and screening answers may only claim what is present in your data files, and a fact-check pass runs before any CV ships.
 
 ## Repository structure
 
 ```
 jobhunter/
 ├── scripts/
-│   ├── auto_apply.py              # the Python orchestrator (search/filter/dispatch/apply/mark-*)
-│   ├── walkers/                   # one module per ATS, pure Python
-│   │   ├── linkedin_apply.py      # verified
-│   │   ├── greenhouse.py          # planned (currently escalates to edge-case agent)
-│   │   ├── workday.py             # planned
-│   │   ├── lever.py               # planned
-│   │   └── ashby.py               # planned
-│   ├── quick_filter.py            # deterministic title + JD filter (no LLM)
-│   ├── select_variant.py          # title → CV variant matcher
-│   ├── answer_screening.py        # screening-question lookup (verified_form_answers)
-│   ├── salary_research.py         # JD-band positioning + sanity bounds
-│   ├── notion_cli.py              # Notion read/write CLI
-│   ├── save_linkedin_state.py     # one-time auth capture
-│   └── ...                        # legacy scripts (daily_discover.py etc., deprecated)
-│
+│   ├── auto_apply.py          # the Python orchestrator
+│   ├── walkers/               # one module per ATS
+│   ├── quick_filter.py        # deterministic title + JD filter
+│   ├── answer_screening.py    # profile-driven screening answers
+│   ├── select_variant.py      # job title → CV variant rules
+│   ├── notion_cli.py          # Notion read/write CLI
+│   ├── check_page_fill.py     # CV page-fill validator (+ format/facts checkers)
+│   └── launchd/               # scheduled-run templates (macOS)
 ├── .claude/
-│   ├── agents/
-│   │   ├── role-tailorer.md           # Opus 4.6 sub-agent: per-role CV tailoring
-│   │   └── edge-case-applicator.md    # Opus 4.6 sub-agent: unknown ATS, novel fields,
-│   │                                   #                    cover letters, salary research
-│   └── skills/auto-apply/
-│       ├── SKILL.md                   # the orchestrator wrapper (thin)
-│       └── MIGRATION.md               # v1→v2 notes, file change log
-│
-├── data/
-│   ├── master_cv.json                 # source content for tailoring
-│   ├── deep_experience.json           # rich JD-driven evidence pool for /tailor-cv-full
-│   ├── application_profile.json       # canonical screening answers (verified_form_answers
-│   │                                  # block compounds over time)
-│   ├── job_goals.json                 # candidate profile, dealbreakers, thresholds
-│   ├── linkedin-apply-learnings.md    # walker DOM patterns (formerly easy-apply-learnings.md)
-│   ├── .linkedin-state.json           # gitignored; persisted browser auth
-│   ├── applications/<linkedin-id>/    # per-role folder: jd.txt, role-context.json,
-│   │                                  # cv.pdf (or cv-template-fallback.pdf),
-│   │                                  # submission-log.json, screenshots
-│   └── auto-apply-runs/<date>/        # daily run summary artefacts
-│
-├── cv/
-│   ├── variants/                      # 20 canonical CV variants (.tex)
-│   ├── output/<variant>.pdf           # pre-built fallback PDFs
-│   └── ...
-│
-└── src/                                # legacy module (notion client, scrapers, scoring)
-                                        # used by daily_discover.py and notion_cli.py
+│   ├── skills/                # onboard, auto-apply, tailor-cv*, cover-letter,
+│   │                          # interview-prep, check-emails, apply-job, drain-queue
+│   └── agents/                # role-tailorer, edge-case-applicator(s), answer-reviewer
+├── data/                      # your data (gitignored) + .example templates
+├── cv/                        # LaTeX CV system: cv.cls, templates/, your variants/
+└── docs/                      # personas and guides
 ```
 
-## How costs work
+## Disclaimers, please read
 
-Per 50-role run (rough):
+- **Platform terms.** Automated interaction with job platforms may breach their terms of service (LinkedIn in particular restricts automation). You choose your autonomy level and you carry that risk; the system never bypasses CAPTCHAs or bot detection, and backs off when it meets them.
+- **Every application is sent in your name.** Review what the system produces, especially in your first weeks. The escalation paths exist so that uncertain answers reach a human; do not disable them.
+- **Accuracy is enforced but starts with you.** Fill `master_cv.json` honestly during onboarding; everything downstream trusts it.
 
-| Phase | Tokens / cost |
-|---|---|
-| Search (deterministic Python) | £0 |
-| Tailor (Opus 4.6 sub-agent × ~50) | £7-12 — dominant cost |
-| Apply (deterministic Python for known ATS) | £0 |
-| Apply edge cases (Opus sub-agent × ~5-10) | £1-3 |
-| Orchestrator main session (summary lines only) | £0.40 |
-| **Total** | **£8-15** per 50-role run |
+## Contributing
 
-All of this bills against the Claude Max subscription via the interactive Claude Code session. The Python orchestrator does no LLM calls of its own. If you ever need to run cron-scheduled (no Claude Code session), the LLM-needing phases would have to switch to API-billed Anthropic SDK calls — out of scope for v2.
+See [CONTRIBUTING.md](CONTRIBUTING.md). The most valuable contributions are new or hardened ATS walkers and discovery sources. Never include personal data in a pull request.
 
-## Other commands
+## Licence
 
-| Command | Purpose |
-|---|---|
-| `/auto-apply --discover` | The daily run |
-| `/auto-apply <url>` | Single ad-hoc role |
-| `/check-emails` | Scan Gmail for application responses; update Notion accordingly |
-| `/tailor-cv` | Manual high-touch tailoring for a hand-picked role |
-| `/tailor-cv-light` | The lightweight tailor used inside the role-tailorer sub-agent |
-| `/tailor-cv-full` | JD-driven full rewrite for top-priority roles |
-| `/cover-letter` | Manual cover letter generation |
-| `/interview-prep` | Tailored interview prep for an upcoming round |
-| `/apply-job <url>` | Legacy single-role orchestrator with manual review gates (kept for high-touch applications) |
-
-## Documentation
-
-- [`.claude/skills/auto-apply/SKILL.md`](.claude/skills/auto-apply/SKILL.md) — the orchestrator wrapper (definitive runbook)
-- [`.claude/skills/auto-apply/MIGRATION.md`](.claude/skills/auto-apply/MIGRATION.md) — v1→v2 design notes, file change log, rollback path
-- [`.claude/agents/role-tailorer.md`](.claude/agents/role-tailorer.md) — CV tailoring sub-agent contract
-- [`.claude/agents/edge-case-applicator.md`](.claude/agents/edge-case-applicator.md) — escalation sub-agent contract
-- [`JobHunter PRD.md`](JobHunter%20PRD.md) — original product requirements (the v2 Architecture section at the top supersedes the rest where they differ)
+[MIT](LICENSE)

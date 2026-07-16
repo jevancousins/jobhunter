@@ -1,72 +1,109 @@
 {
+  "_readme": [
+    "Career goals and scoring preferences. Copy to data/job_goals.json and fill in (the /onboard skill does this for you). All content below is fictional example data for 'Alex Example'.",
+    "Consumed by scripts/quick_filter.py (experience_years, candidate_profile.education.level, strong/developing skills) and by the AI screening step (target roles, philosophy, dealbreakers, scoring_weights).",
+    "scoring_weights values MUST sum to 100; they weight the per-dimension scores in role screening."
+  ],
   "career_vision": {
-    "5_year_goal": "Your 5-year career goal",
-    "problem_type": "Type of problems you enjoy solving",
-    "work_style": "Preferred work style"
+    "5_year_goal": "Leading an analytics or business operations function",
+    "problem_type": "Ambiguous operational and commercial questions where analysis changes a real decision. Enjoys owning a metric or process end to end; dislikes pure ticket-queue reporting work.",
+    "work_style": "Autonomy with support"
   },
   "priorities": {
     "primary": ["Learning & Growth", "Compensation"],
     "skills_to_develop": [
-      "Skill area 1",
-      "Skill area 2"
+      "Advanced analytics and modelling",
+      "Data engineering fundamentals",
+      "Commercial and product thinking"
     ]
   },
   "location": {
     "scores": {
-      "Preferred City 1": 100,
-      "Preferred City 2": 90,
-      "Remote": 75,
-      "Other": 30
+      "Toronto": 100,
+      "Remote (Canada)": 85,
+      "Vancouver": 60,
+      "Montreal": 55,
+      "Other": 20
     },
-    "notes": "Location preferences explanation"
+    "notes": "Toronto strongly preferred (no relocation planned). Remote-within-Canada is a good option. Scores are 0-100 and feed the location_fit scoring dimension."
   },
   "compensation": {
-    "floor_gbp": 50000,
-    "floor_eur": 60000,
+    "floor_cad": 65000,
     "flexible_for_equity": true,
-    "notes": "Compensation flexibility notes"
+    "notes": "CAD 65K base minimum; would accept slightly lower base for meaningful equity at a growth-stage company. Add one floor_<currency> key per currency you apply in."
   },
   "target_roles": [
-    "Role Type 1",
-    "Role Type 2",
-    "Role Type 3"
+    "Business Analyst",
+    "Business Operations Analyst",
+    "Data Analyst",
+    "Operations Analyst",
+    "Strategy Analyst",
+    "BizOps Associate"
   ],
-  "target_industries": ["Industry 1", "Industry 2", "Tech"],
+  "target_role_philosophy": "The common thread is not a job title; it is roles where the candidate solves open-ended business problems with data and gets feedback from real outcomes. An operations role redesigning a process is as valid as a data analyst role building dashboards, provided the work involves genuine analysis that changes decisions. Roles that are purely report maintenance, purely administrative, or disconnected from outcomes are poor fits regardless of title.",
+  "target_industries": ["Tech", "SaaS", "Retail", "Logistics", "FinTech", "Any (no strong preference)"],
   "dealbreakers": {
+    "_comment": "Hard exclusions. 'industries' are matched against company and JD text; 'signals' are red flags in the posting itself. Be specific; these reject roles before any human sees them.",
     "industries": [
-      "Industry you won't work in"
+      "Gambling",
+      "Betting",
+      "Tobacco",
+      "Payday lending",
+      "Multi-level marketing"
     ],
     "signals": [
-      "Red flag signals in job postings"
+      "Maintenance-only role with no new analysis or development",
+      "No clear growth or learning path",
+      "100% on-site outside commutable distance",
+      "Commission-only or heavily commission-based compensation",
+      "Unpaid trial projects requested before offer",
+      "Unethical business model"
     ]
   },
   "experience_years": 3,
   "candidate_profile": {
     "education": {
-      "level": "BSc/MSc/PhD",
-      "field": "Your Field",
-      "institution_tier": "Institution description"
+      "level": "BSc",
+      "field": "Economics",
+      "institution_tier": "Well-regarded national university (Example University)"
     },
     "strong_skills": [
-      "Skill 1",
-      "Skill 2"
+      "SQL",
+      "Python",
+      "Pandas",
+      "Power BI",
+      "Excel",
+      "Data Analysis",
+      "Stakeholder Management",
+      "Process Mapping"
     ],
     "developing_skills": [
-      "Skill to improve 1",
-      "Skill to improve 2"
+      "Machine Learning",
+      "Data Engineering",
+      "Cloud Platforms",
+      "A/B Testing"
     ],
     "domain_expertise": [
-      "Domain 1",
-      "Domain 2"
+      "Operations analytics",
+      "KPI design and reporting",
+      "Customer analytics"
     ],
-    "experience_type": "Description of experience type",
-    "notes": "Additional context about your profile"
+    "experience_type": "Business Analyst in a mid-size services company, hybrid operations + analytics",
+    "relevant_experience_notes": {
+      "_comment": "Tells the screener how to treat different role families. 'guidance' is read verbatim by the AI screening prompt.",
+      "direct_match": ["Business Analyst", "Operations Analyst", "Data Analyst (business-facing)", "Reporting Analyst"],
+      "strongly_adjacent": ["BizOps Associate", "Strategy Analyst", "Analytics Engineer (junior)", "Product Analyst"],
+      "weakly_adjacent": ["Data Scientist", "Data Engineer", "Product Manager", "Management Consultant"],
+      "guidance": "3 years total experience does not equal 3 years in any single discipline. For weakly-adjacent roles target junior/entry level (1-2 years required). For strongly-adjacent roles, 2-3 years required is realistic. Operations domain knowledge gives extra leverage at services and logistics companies."
+    },
+    "notes": "Strong in SQL/Python/BI with genuine stakeholder-facing delivery. Weaker in ML, cloud, and formal engineering practice. No people-management experience; screen out roles requiring it."
   },
   "scoring_weights": {
+    "_comment": "Must sum to 100. Used to weight the per-dimension 0-100 scores into the overall role score during screening.",
     "growth_potential": 20,
-    "role_alignment": 15,
-    "competitiveness": 15,
-    "founder_relevance": 15,
+    "role_alignment": 20,
+    "competitiveness": 20,
+    "founder_relevance": 5,
     "location_fit": 15,
     "compensation_signal": 10,
     "industry_fit": 10

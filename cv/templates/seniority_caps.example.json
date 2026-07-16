@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "description": "Maximum years of experience the candidate can credibly claim per CV variant. Used by scoring and tailoring to avoid over-claiming. Every cap must be anchored in actual master_cv.json evidence.",
+    "how_to_use": "This is an example file with placeholder entries for the 'Alex Example' persona. The /onboard skill generates the real file at cv/variants/seniority_caps.json (gitignored, since it encodes personal career history). Add one entry per CV variant in cv/variants/.",
+    "candidate_total_years": 3,
+    "candidate_primary_role": "Business Analyst at ExampleCorp (Mar 2023 - present)",
+    "tolerance_years": 1,
+    "tolerance_note": "When a JD requires N years and the variant cap is C, application is allowed if N <= C + tolerance_years. Strict skip when N > C + tolerance_years."
+  },
+  "general": {
+    "max_years": 3,
+    "rationale": "Full ExampleCorp tenure plus internship; broadly applicable analyst evidence, 3 years direct"
+  },
+  "data-analyst": {
+    "max_years": 3,
+    "rationale": "Reporting pipelines, dashboards and SQL are the bulk of the ExampleCorp work; 3 years direct"
+  }
+}

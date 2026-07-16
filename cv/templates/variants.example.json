@@ -1,0 +1,52 @@
+{
+  "_readme": [
+    "Copy this file to cv/variants/variants.json and adapt it to your own CV variants",
+    "(the /onboard skill does this for you). scripts/select_variant.py evaluates the",
+    "rules in order against the job title; the first matching pattern wins. Patterns",
+    "are Python regular expressions, matched case-insensitively.",
+    "Each rule's 'variant' must correspond to a cv/variants/<variant>.tex file",
+    "(and its compiled cv/output/<variant>.pdf).",
+    "'swaps' is optional: when the job description matches any context_patterns",
+    "regex and the matched variant appears in variant_map, the mapped alternative",
+    "is used instead (e.g. an industry-flavoured version of the same CV).",
+    "If this file is missing, select_variant falls back to 'default_variant' from",
+    "search_config.json cv.default_variant, then to 'general'."
+  ],
+  "default_variant": "general",
+  "rules": [
+    {
+      "variant": "data-analyst",
+      "title_patterns": [
+        "\\bdata\\s+analyst\\b",
+        "\\bbi\\s+(analyst|developer)\\b",
+        "\\bbusiness\\s+intelligence\\b"
+      ],
+      "reason": "Data Analyst / BI title"
+    },
+    {
+      "variant": "software-engineer",
+      "title_patterns": [
+        "\\b(software|backend|full[\\s-]?stack|frontend)\\s+(developer|engineer)\\b"
+      ],
+      "reason": "Software Engineer title"
+    },
+    {
+      "variant": "general",
+      "title_patterns": [
+        "\\banalyst\\b"
+      ],
+      "reason": "generic analyst fallback"
+    }
+  ],
+  "swaps": {
+    "context_patterns": [
+      "\\bhedge\\s+fund\\b",
+      "\\basset\\s+manage(r|ment)\\b",
+      "\\bbuy[-\\s]?side\\b"
+    ],
+    "variant_map": {
+      "data-analyst": "data-analyst-buyside"
+    },
+    "label": "buy-side context"
+  }
+}

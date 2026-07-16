@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Template launchd job for the auto-apply watchdog (macOS): a small,
+  claude-free dead-man's switch that alerts if the daily run never happened
+  or never finished.
+
+  Install:
+    1. Copy this file to ~/Library/LaunchAgents/com.jobhunter.auto-apply-watchdog.plist
+    2. Replace every __JOBHUNTER_DIR__ with the absolute path to your clone,
+       e.g. /Users/you/projects/jobhunter
+    3. Load it:
+         launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.jobhunter.auto-apply-watchdog.plist
+       (on older macOS: launchctl load ~/Library/LaunchAgents/com.jobhunter.auto-apply-watchdog.plist)
+    4. Check it is loaded:
+         launchctl list | grep jobhunter
+
+  Schedule: every 30 minutes. The script itself stays quiet before
+  WATCHDOG_EARLIEST_HOUR (default 12:00, giving a 09:00 daily run time to
+  finish) and alerts at most once per day, so the frequent schedule does not
+  cause alert spam.
+
+  Log-path warning: keep StandardOutPath/StandardErrorPath OUT of ~/Documents.
+  macOS attaches a com.apple.macl extended attribute to files there, and
+  launchd then silently fails to spawn the job with EX_CONFIG (a "78" in
+  `launchctl list`). /tmp or ~/Library/Logs (as an absolute path; launchd does
+  not expand ~) are safe.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jobhunter.auto-apply-watchdog</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>__JOBHUNTER_DIR__/scripts/auto_apply_watchdog.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__JOBHUNTER_DIR__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+        <!-- Hour (0-23) before which the watchdog never alerts. Set it a few
+             hours after the daily run's start time. -->
+        <key>WATCHDOG_EARLIEST_HOUR</key>
+        <string>12</string>
+    </dict>
+
+    <!-- Every 30 minutes. -->
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
+    <!-- launchd's own stdout/stderr. See the log-path warning above:
+         never point these into ~/Documents. -->
+    <key>StandardOutPath</key>
+    <string>/tmp/com.jobhunter.auto-apply-watchdog.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/com.jobhunter.auto-apply-watchdog.err.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

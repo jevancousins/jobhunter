@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(source:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(ls:*)",
+      "Bash(echo:*)",
+      "Bash(cat /tmp/auto-apply-run-*.log)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(pdflatex:*)",
+      "Bash(pip install:*)",
+      "Bash(python3 -m pip install:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(playwright install:*)",
+      "Bash(playwright-cli -s=auto-apply:*)",
+      "Bash(playwright-cli -s=ats-walk:*)",
+      "Bash(playwright-cli -s=apply-*)",
+      "Bash(playwright-cli --help*)",
+      "Bash(playwright-cli upload --help*)",
+      "Bash(grep:*)",
+      "Bash(sleep:*)",
+      "Bash(rm -rf /tmp/auto-apply-*)",
+      "Bash(mkdir -p /tmp/auto-apply-*)",
+      "mcp__notion__notion-search",
+      "mcp__notion__notion-fetch",
+      "mcp__notion__notion-update-page",
+      "mcp__notion__notion-create-pages",
+      "mcp__notion__notion-update-data-source",
+      "WebFetch(domain:www.linkedin.com)",
+      "WebFetch(domain:linkedin.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

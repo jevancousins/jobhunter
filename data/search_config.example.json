@@ -1,0 +1,91 @@
+{
+  "_readme": [
+    "Copy this file to data/search_config.json and fill it in (the /onboard skill does this for you).",
+    "This file holds every pipeline tuning knob: what to search, what to filter out, and how much",
+    "autonomy the system has. Identity and screening answers live in application_profile.json;",
+    "career goals and scoring preferences live in job_goals.json."
+  ],
+
+  "autonomy": {
+    "_options": "search = discover and score roles only, human applies. tailor = also produce tailored CVs, human submits. full = end-to-end automated applications.",
+    "level": "search",
+    "max_daily_linkedin_applications": 25,
+    "pause_full_autonomy_on_captcha": true
+  },
+
+  "candidate": {
+    "_comment": "Short factual summary used in deterministic and LLM realism filters. Keep it honest: it is used to REJECT roles you cannot credibly get.",
+    "display_name": "Alex Example",
+    "summary": "Alex Example, 3 years total experience (2023 - present), currently a Business Analyst at ExampleCorp in Toronto. Strong SQL, Python and stakeholder management; no people-management experience.",
+    "total_experience_years": 3,
+    "languages": ["English"],
+    "home_countries": ["Canada"],
+    "_home_countries_comment": "Countries where you already have the right to work without sponsorship.",
+    "right_to_work_labels": ["Canadian citizen", "citizen of Canada"],
+    "_right_to_work_labels_comment": "Phrases that identify YOUR option on 'What is your work authorisation?' radio buttons.",
+    "needs_sponsorship_in": ["United States", "United Kingdom"],
+    "_needs_sponsorship_comment": "Countries you would need a visa for. Roles there are only kept if the JD suggests sponsorship is possible; hard-gated forms get skipped or escalated."
+  },
+
+  "search": {
+    "_comment": "Named locations (with LinkedIn geo IDs from the geoId= URL parameter of a manual LinkedIn search) and named query phrases. defaults are what /auto-apply --discover uses when no flags are given.",
+    "locations": {
+      "toronto": { "linkedin_geo_id": "100025096", "label": "Toronto", "country": "Canada" },
+      "remote_canada": { "linkedin_geo_id": "101174742", "label": "Canada", "country": "Canada" }
+    },
+    "default_locations": ["toronto"],
+    "queries": {
+      "ops": "business operations strategy",
+      "chief_of_staff": "chief of staff",
+      "bizops": "bizops strategy analyst"
+    },
+    "default_queries": ["ops", "bizops"],
+    "recency_hours": 24,
+    "watchlist_urls": [],
+    "_watchlist_comment": "Optional: career-board URLs to check beyond LinkedIn (Ashby, Greenhouse, Lever company boards). Any single posting can also be run ad hoc with /auto-apply <url>."
+  },
+
+  "filters": {
+    "_comment": "Deterministic pre-filters applied before any LLM sees the role. Empty lists disable a filter. Patterns are case-insensitive substrings unless prefixed with 're:' for regex.",
+    "title_blacklist": ["director", "vp ", "vice president", "intern", "internship"],
+    "title_whitelist": [],
+    "_title_whitelist_comment": "If non-empty, at least one entry must match the title.",
+    "industry_dealbreakers": ["gambling", "tobacco"],
+    "company_blacklist": [],
+    "_company_blacklist_comment": "Companies never to apply to, e.g. your current employer and its subsidiaries.",
+    "seniority_tolerance_years": 1,
+    "_seniority_comment": "A JD asking for N years is kept while N <= your variant cap + tolerance (see cv/variants/seniority_caps.json).",
+    "required_language_ok": ["English"],
+    "_required_language_comment": "If a JD requires a language not in this list, the role is skipped.",
+    "skip_contract_types": ["internship", "apprenticeship"],
+    "_skip_contract_types_comment": "Contract types to skip. Examples: internship, apprenticeship, stage, alternance, VIE.",
+    "home_location_patterns": ["toronto", "gta"],
+    "_home_location_patterns_comment": "Extra location substrings treated as home (city names, regions) in addition to the home_countries names.",
+    "lacking_skills": [],
+    "_lacking_skills_comment": "Skills or languages you clearly lack; JDs demanding years of them get skipped, e.g. [\"java\", \"kubernetes\"]."
+  },
+
+  "cv": {
+    "_comment": "Which CV variant to use when no rule matches, and the employer-facing filename. Variants live in cv/variants/ and are generated during onboarding.",
+    "default_variant": "general",
+    "employer_filename_base": "Alex Example CV",
+    "_employer_filename_comment": "Applications upload the CV as '<employer_filename_base> - <Company> <Title>.pdf'."
+  },
+
+  "notion": {
+    "_comment": "Database IDs live in .env (NOTION_API_KEY, NOTION_JOBS_DB_ID). These are display labels the pipeline writes into the Location select column, keyed by country.",
+    "location_labels": {
+      "Canada": "Toronto",
+      "United States": "US"
+    }
+  },
+
+  "notifications": {
+    "_comment": "Used by run_notify.py for end-of-run emails and desktop notifications. Leave email empty to disable. Gmail needs an app password in GMAIL_APP_PASSWORD or ~/.config/jobhunter/gmail_app_password.",
+    "email": "",
+    "smtp_host": "smtp.gmail.com",
+    "desktop_notifications": true,
+    "alert_senders": [],
+    "_alert_senders_comment": "Optional extra job-alert email senders for /check-emails, e.g. [\"welcometothejungle.com\", \"careers@somebank.com\"]."
+  }
+}

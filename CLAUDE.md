@@ -2,15 +2,23 @@
 
 ## Project Overview
 
-Personal job search automation platform using Notion as the database/UI and Claude API for AI-powered scoring and generation.
+Job search automation platform: Notion as the database/UI, a Python harness for the deterministic pipeline, and Claude Code sub-agents for the work that genuinely needs an LLM (CV tailoring, edge-case applications, answer review).
 
-See `JobHunter PRD.md` for full requirements and `README.md` for setup instructions.
+See `README.md` for setup instructions.
 
 ## Key Data Files
 
-- `data/master_cv.json` - Complete CV data used for tailoring
-- `data/job_goals.json` - Career goals and preferences for job scoring
-- `data/learning_gaps.md` - Skills to develop (updated during CV optimisation)
+All personal data files are gitignored and have tracked `.example` templates. The `/onboard` skill creates the real files.
+
+- `data/master_cv.json` - Canonical CV data: roles, employment dates, bullets, projects, skills, education, languages, and allowed title framings (`title_variants`)
+- `data/job_goals.json` - Career goals and preferences used for job scoring
+- `data/application_profile.json` - Identity, work authorisation, and verified screening-form answers
+- `data/search_config.json` - Pipeline tuning: search queries and locations, filters, autonomy level, CV filename base, sponsorship posture
+- `data/deep_experience.json` - Long-form project deep-dives, metrics, and learnings; richer than the CV bullets
+
+## Personal Data
+
+The data files above must never be committed; the `.gitignore` enforces this. Before adding any new data file, check whether it contains personal information and add it to `.gitignore` if it does. Only `.example` templates belong in version control.
 
 ## Notion MCP Usage
 

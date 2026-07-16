@@ -1,0 +1,122 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-01",
+  "_readme": [
+    "Rich evidence pool behind the CV: detailed project narratives with context, architecture, metrics and interview angles. This is what /tailor-cv-full, /cover-letter and /interview-prep draw on when the one-line CV bullets are not enough.",
+    "Built during onboarding interviews (20-30 minutes of questions per role) and extended in instalments afterwards. Copy to data/deep_experience.json and replace the fictional Alex Example content with your own.",
+    "Structure: 'roles' holds per-employer project deep-dives; 'experience_clusters' groups related work into themes with skills demonstrated and story angles; 'validation_questions' tracks what is still unconfirmed so future sessions can fill the gaps. You can add extra domain-specific sections (the shape is open); anything here is treated as evidence the tailoring system may cite."
+  ],
+  "roles": [
+    {
+      "role": "Business Analyst",
+      "company": "ExampleCorp",
+      "location": "Toronto, Canada",
+      "period": "Jul 2023 - Present",
+      "context": "Mid-size B2B services company (~200 staff). Joined as the second analyst in a small operations team reporting to the Head of Operations; the team owns company reporting, process improvement and internal tooling decisions.",
+      "projects": [
+        {
+          "id": "onboarding-redesign",
+          "name": "Customer Onboarding Redesign",
+          "summary": "Led the process mapping and requirements work behind a redesign of customer onboarding, cutting average turnaround time by 30% across 5 departments.",
+          "timeline": "~6 months (Jan 2025 - Jun 2025). Discovery workshops in the first 6 weeks, agreed future-state map by month 3, phased rollout through month 6.",
+          "problem_context": {
+            "background": "Onboarding a new customer touched sales, legal, finance, operations and support, with handoffs tracked in email. Average turnaround was 14 days and nobody owned the end-to-end picture.",
+            "previous_failures": [
+              {
+                "system": "Shared checklist spreadsheet",
+                "details": "An earlier attempt to coordinate via a shared spreadsheet died because nobody kept it current and it had no notion of ownership or deadlines."
+              }
+            ]
+          },
+          "architecture": "Documented the as-is process as a swimlane map (one lane per department, 40+ steps), then designed a future state with 4 explicit handoff points, a single intake form feeding a tracked queue, and automated status notifications. Implementation used the company's existing ticketing tool rather than new software.",
+          "implementation_details": [
+            "Ran 8 discovery workshops across the 5 departments to capture the real process, not the documented one",
+            "Quantified the baseline from 6 months of ticket and email timestamps using Python, which turned an opinion debate into a data discussion",
+            "Wrote the requirements spec for the intake form and queue configuration, then tested it with 3 pilot customers before rollout",
+            "Built the before/after measurement dashboard so the 30% claim is based on like-for-like turnaround data"
+          ],
+          "team_dynamics": "No formal authority: worked through the Head of Operations and one sponsor per department. The hardest part was legal, who saw the tracker as surveillance; resolved by letting them define their own stage names and SLAs.",
+          "technical_depth": "Python (Pandas) for the baseline timestamp analysis; process mapping notation; ticketing tool configuration. Deliberately low-tech implementation; the insight was process design, not software.",
+          "interview_angles": [
+            "Influencing without authority across 5 departments",
+            "Using data to defuse an opinion-driven disagreement",
+            "Scoping discipline: shipping with existing tools instead of proposing a new system"
+          ],
+          "cv_bullet_refs": ["experience.examplecorp.bullets[2]"],
+          "star_story_refs": ["onboarding-redesign"]
+        },
+        {
+          "id": "reporting-automation",
+          "name": "Monthly Reporting Automation",
+          "summary": "Replaced the manual monthly operations reporting pack with an automated Python and SQL pipeline, saving 10+ hours a week and halving month-end errors.",
+          "timeline": "~4 months (2024), then ongoing ownership.",
+          "problem_context": {
+            "background": "The monthly pack was 9 Excel workbooks assembled by hand from CRM and finance exports. It consumed the last two days of every month and errors were regularly discovered after distribution.",
+            "previous_failures": []
+          },
+          "architecture": "Python scripts pull from the CRM API and the finance database (read-only SQL), transform with Pandas, validate against a set of reconciliation rules, and publish to Power BI datasets. A scheduled job runs daily so month-end is just a review, not a build.",
+          "implementation_details": [
+            "Negotiated read-only database access with IT, the single biggest unblock",
+            "Wrote reconciliation checks (row counts, control totals, orphaned records) that run before anything is published",
+            "Kept one legacy workbook alive in parallel for two cycles to prove the numbers matched before switching off the manual process",
+            "Documented the pipeline so a colleague could run and modify it; it survived my two-week absence untouched"
+          ],
+          "team_dynamics": "Solo build with review from the finance manager, who was initially sceptical that automated numbers could be trusted; the parallel-run period converted them.",
+          "technical_depth": "Python (Pandas, requests), SQL (joins, window functions for period-over-period deltas), Power BI dataset design, scheduled execution and logging.",
+          "interview_angles": [
+            "Building trust in automation with a parallel-run migration",
+            "Data quality as a first-class feature, not an afterthought",
+            "Quantified impact: 10+ hours a week, error rate halved"
+          ],
+          "cv_bullet_refs": ["experience.examplecorp.bullets[0]", "experience.examplecorp.bullets[4]"],
+          "star_story_refs": ["reporting-automation"]
+        }
+      ]
+    }
+  ],
+  "experience_clusters": [
+    {
+      "id": "ec-operations-analytics",
+      "name": "Operations Analytics & Reporting Ownership",
+      "organisation": "ExampleCorp",
+      "role": "Business Analyst",
+      "period": "Jul 2023 - Present",
+      "summary": "Owns the company's operational reporting end to end: the automated monthly pack, 12 self-serve dashboards, the KPI framework, and the data quality checks underneath them. The through-line is turning manual, error-prone reporting into automated, trusted, self-serve analytics.",
+      "projects": ["reporting-automation", "onboarding-redesign"],
+      "skills_demonstrated": [
+        "SQL",
+        "Python (Pandas)",
+        "Power BI",
+        "Data quality and reconciliation",
+        "KPI design",
+        "Stakeholder management",
+        "Training and enablement"
+      ],
+      "evidence": [
+        "Monthly pack automated: 10+ hours a week saved, errors halved",
+        "12 dashboards with 30+ weekly users",
+        "15-metric KPI framework presented monthly to leadership",
+        "20 staff trained on self-serve reporting"
+      ],
+      "confidence": "high",
+      "interview_story_angles": [
+        "From manual reporting to self-serve analytics: the 18-month arc",
+        "How you get non-technical stakeholders to trust automated numbers",
+        "Owning a metric framework used by leadership"
+      ],
+      "representative_cv_bullets": [
+        "experience.examplecorp.bullets[0]",
+        "experience.examplecorp.bullets[1]",
+        "experience.examplecorp.bullets[5]"
+      ]
+    }
+  ],
+  "validation_questions": {
+    "description": "Questions to answer in follow-up sessions to complete low-confidence entries and fill documentation gaps. The onboarding interview adds items here whenever the user is unsure of a number or detail.",
+    "general_questions": [
+      "Exact baseline and post-redesign onboarding turnaround figures (currently '14 days' and '30% faster' from memory)",
+      "Which CRM and finance systems can be named publicly in interviews, and which should stay generic?",
+      "Confirm the overtime savings estimate (CAD 40,000) with the source calculation before using it in a cover letter"
+    ]
+  }
+}
