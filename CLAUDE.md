@@ -2,9 +2,20 @@
 
 ## Project Overview
 
-Job search automation platform: Notion as the database/UI, a Python harness for the deterministic pipeline, and Claude Code sub-agents for the work that genuinely needs an LLM (CV tailoring, edge-case applications, answer review).
+Job search automation platform: a pluggable job tracker (Notion, or a local JSON store with a CSV view), a Python harness for the deterministic pipeline, and Claude Code sub-agents for the work that genuinely needs an LLM (CV tailoring, edge-case applications, answer review).
 
 See `README.md` for setup instructions.
+
+## Backends
+
+Two layers are pluggable, set in `data/search_config.json`:
+
+- `tracker.backend`: `local` (data/tracker.json + data/tracker.csv via `scripts/local_tracker_cli.py`) or `notion` (`scripts/notion_cli.py`). Both expose the identical CLI surface; `auto_apply.py` dispatches automatically. Always go through `auto_apply.py mark-*` for state transitions.
+- `cv.backend`: `pdf` (fixed cv/master.pdf, no tailoring), `docx` (cv/master.docx, tailored copies per role), or `latex` (cv/variants system). Tailoring skills branch on this value.
+
+When the user asks for a pipeline overview ("show me my pipeline") on the local backend, read data/tracker.json and render a table; suggest data/tracker.csv for spreadsheet review.
+
+To add a company to the watchlist, append to `data/watchlist.json` (schema in `data/watchlist.example.json`). Never remove entries without being asked.
 
 ## Key Data Files
 
@@ -13,8 +24,10 @@ All personal data files are gitignored and have tracked `.example` templates. Th
 - `data/master_cv.json` - Canonical CV data: roles, employment dates, bullets, projects, skills, education, languages, and allowed title framings (`title_variants`)
 - `data/job_goals.json` - Career goals and preferences used for job scoring
 - `data/application_profile.json` - Identity, work authorisation, and verified screening-form answers
-- `data/search_config.json` - Pipeline tuning: search queries and locations, filters, autonomy level, CV filename base, sponsorship posture
-- `data/deep_experience.json` - Long-form project deep-dives, metrics, and learnings; richer than the CV bullets
+- `data/search_config.json` - Pipeline tuning: search queries and locations, filters, autonomy level, tracker and CV backends, CV filename base, sponsorship posture
+- `data/watchlist.json` - Target-company watchlist with career-board URLs; built during onboarding, grown over time
+- `data/tracker.json` / `data/tracker.csv` - The pipeline itself (local tracker backend only)
+- `data/deep_experience.json` - Optional long-form project deep-dives, metrics, and learnings; richer than the CV bullets. Skills degrade gracefully when absent (as do `star_stories.json` and `technical_inventory.json`)
 
 ## Personal Data
 

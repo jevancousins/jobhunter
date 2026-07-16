@@ -10,6 +10,14 @@ This skill applies the locked Light methodology: matched variant + four surgical
 
 The methodology was locked after a controlled tailoring experiment ("Phase 0d") that compared modification strategies; this skill is the operational implementation of the winning definition.
 
+## CV backend
+
+Read `cv.backend` from `data/search_config.json` first; the four modifications are the same, the medium differs:
+
+- **`latex`** (the documented flow below): edit the variant `.tex`, compile with pdflatex, iterate the page-fill gates to FULL.
+- **`docx`**: copy `cv/master.docx` to `<output-dir>/cv.docx` and apply the same four modifications with python-docx via Bash (rewrite the profile paragraph, reorder/rename the skills lines, swap up to 2 bullet paragraphs; never touch the master file). Skip the pdflatex page-fill gates; instead, if `soffice` is on PATH, convert to `cv.pdf` (`soffice --headless --convert-to pdf`) and check with PyMuPDF that the page count matches the master's. Factual verification (Phase 4) applies in full. Print the same `LIGHT_TAILOR_OK` / `LIGHT_TAILOR_FAIL` contract.
+- **`pdf`**: tailoring is not possible on a fixed PDF. Print `LIGHT_TAILOR_FAIL cv-backend-pdf-no-tailoring` immediately; the caller falls back to the master PDF.
+
 ## Inputs
 
 - **`<variant>`** — variant name from `cv/variants/seniority_caps.json` (e.g. `ai-engineer`, `forward-deployed-engineer`). The variant `.tex` at `cv/variants/<variant>.tex` is the starting point.

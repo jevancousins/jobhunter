@@ -6,6 +6,9 @@ argument-hint: "[job-url OR notion-page-id]"
 
 # Apply Job Skill
 
+> **Tracker note:** wherever this skill reads or writes job state, use the configured backend (`tracker.backend` in `data/search_config.json`): Notion via the Notion MCP / `scripts/notion_cli.py`, or the local store via `scripts/local_tracker_cli.py`. State transitions should go through `scripts/auto_apply.py mark-*`, which dispatches automatically.
+
+
 Orchestrates the full application pipeline for a single job: review → tailor CV → cover letter → pre-answer screening questions → drive ATS form → human approval gate → submit → Notion update.
 
 ## Usage

@@ -121,7 +121,7 @@ For each interviewer, identify:
 2. Read `data/job_goals.json` for "why this role" framing
 3. Read `data/star_stories.json` for the STAR story bank
 4. Read `data/interview_frameworks.json` for the matching interview type template
-5. Read `data/deep_experience.json` for deep project narratives with architecture decisions, trade-offs, and challenges
+5. Read `data/deep_experience.json` for deep project narratives with architecture decisions, trade-offs, and challenges. This file and `star_stories.json`/`technical_inventory.json` are optional: when missing, build talking points from `master_cv.json` bullets plus a short interview with the user about their strongest relevant projects (offer to save what they tell you into the missing files for next time), and skip the confidence-level annotations rather than inventing them
 6. Read `data/technical_inventory.json` for confidence levels per skill (can_explain_deeply / can_discuss / surface_only / gap)
 
 #### Gap Analysis (CRITICAL)

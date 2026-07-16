@@ -1,6 +1,6 @@
 ---
 name: auto-apply
-description: The single end-to-end daily job-application pipeline. Searches LinkedIn, filters with deterministic rules, tailors CVs via the role-tailorer sub-agent, applies through Python ATS walkers, and writes results to Notion as the source of truth. The orchestrator (this skill, running in the main Claude Code session) acts as a thin shell over `scripts/auto_apply.py` and dispatches sub-agents only for genuinely LLM-needing work (CV tailoring, edge cases). Use as the daily run via `/auto-apply --discover`, or for a single role via `/auto-apply <linkedin-url>`.
+description: The single end-to-end daily job-application pipeline. Searches LinkedIn, filters with deterministic rules, tailors CVs via the role-tailorer sub-agent, applies through Python ATS walkers, and writes results to the tracker (Notion or the local data/tracker.json backend) as the source of truth. The orchestrator (this skill, running in the main Claude Code session) acts as a thin shell over `scripts/auto_apply.py` and dispatches sub-agents only for genuinely LLM-needing work (CV tailoring, edge cases). Use as the daily run via `/auto-apply --discover`, or for a single role via `/auto-apply <linkedin-url>`.
 ---
 
 # Auto-apply (orchestrator skill)
@@ -48,7 +48,7 @@ Main Claude Code session  (subscription-billed)  ── this skill orchestrates
   └─ Bash: python scripts/auto_apply.py session-close
 ```
 
-**Notion state machine:**
+**Tracker state machine** (identical for both backends):
 
 ```
 NeedsTailoring  ──► ReadyToApply  ──► AwaitingResponse
@@ -61,7 +61,7 @@ Offer → Accepted, OR a terminal Rejected / NoResponse / Expired. Those
 later transitions are owned by /check-emails, not /auto-apply.)
 ```
 
-The pipeline is **resumable from any point.** If the session crashes mid-run, the next `/auto-apply` invocation reads Notion, picks up roles in `NeedsTailoring` or `ReadyToApply`, and continues. Idempotent throughout.
+The pipeline is **resumable from any point.** If the session crashes mid-run, the next `/auto-apply` invocation reads the tracker, picks up roles in `NeedsTailoring` or `ReadyToApply`, and continues. Idempotent throughout.
 
 ## Autonomy
 
@@ -69,7 +69,7 @@ At the start of every run, read `autonomy.level` from `data/search_config.json`.
 
 | Level | Behaviour |
 |---|---|
-| `search` | Run the search phase only. Write scored roles to Notion (status `ToReview` / `Apply`) and stop. The human reviews and applies. |
+| `search` | Run the search phase only. Write scored roles to the tracker (status `ToReview` / `Apply`) and stop. The human reviews and applies. |
 | `tailor` | Run search, then CV tailoring for accepted roles, then stop at `ReadyToApply`. The human submits the applications. |
 | `full` | Run the entire pipeline end-to-end, including form submission. |
 
@@ -94,7 +94,7 @@ The orchestrator sizes the run from `--per-query` by default. Whatever the searc
 
 A `/auto-apply` invocation does, in order:
 
-1. **Search** up to `URL-count × --per-query` candidate roles. APPLY rows are written to Notion. Watchlist matches → `NeedsTailoring`. Non-watchlist matches → fast-tracked to `ReadyToApply` with the variant template PDF (no per-role tailoring).
+1. **Search** up to `URL-count × --per-query` candidate roles. APPLY rows are written to the tracker. Watchlist matches → `NeedsTailoring`. Non-watchlist matches → fast-tracked to `ReadyToApply` with the variant template PDF (no per-role tailoring).
 2. **Tailor** every `NeedsTailoring` row from this run via the role-tailorer sub-agent (or the first `--max-tailor` if specified).
 3. **Submit** every `ReadyToApply` row via the form-walkers (or the first `--max-apply` if specified). Edge-case agent runs on escalation.
 
@@ -117,7 +117,7 @@ python scripts/auto_apply.py search \
 
 `--per-query` controls per-URL fairness (default 5). Pass it through from the user's `/auto-apply` invocation. Do NOT pass `--max-roles` unless the user explicitly set it as a hard global ceiling.
 
-The Python script writes APPLY rows to Notion as `NeedsTailoring`, dismisses SKIP roles on LinkedIn, and prints a compact summary like:
+The Python script writes APPLY rows to the tracker as `NeedsTailoring`, dismisses SKIP roles on LinkedIn, and prints a compact summary like:
 
 ```json
 {"summary": {"scanned": 120, "title_skip": 24, "duplicate": 2,
@@ -130,7 +130,9 @@ The Python script writes APPLY rows to Notion as `NeedsTailoring`, dismisses SKI
 
 ### Step 2 — Tailor phase
 
-**Autonomy gate:** if `autonomy.level` is `search`, skip this step and Step 3, print the search summary, and end the run. The scored roles are in Notion for human review.
+**Autonomy gate:** if `autonomy.level` is `search`, skip this step and Step 3, print the search summary, and end the run. The scored roles are in the tracker for human review (local backend: also print a compact table of the day's roles, since there is no Notion UI to open).
+
+**CV backend gate:** if `cv.backend` in `data/search_config.json` is `pdf`, there is no tailoring; for each `NeedsTailoring` role run `prepare` then `mark-ready` directly (the master CV is the application CV) and continue to Step 3. The `docx` and `latex` backends both dispatch the role-tailorer sub-agent below; the agent adapts to the backend.
 
 ```
 python scripts/auto_apply.py list-queue --status NeedsTailoring [--limit <max-tailor>]
@@ -140,7 +142,7 @@ If the user passed `--max-tailor`, append `--limit <n>`. Otherwise omit `--limit
 
 For each role in the returned list:
 
-1. `python scripts/auto_apply.py prepare --role <id>` (sets up folder + variant + fallback PDF)
+1. `python scripts/auto_apply.py prepare --role <id>` (sets up folder + variant/master CV + fallback file; output includes `cv_backend`)
 2. Spawn the `role-tailorer` sub-agent with prompt:
 
 ```
@@ -160,7 +162,7 @@ exactly one of: OK <id> <pdf> | FALLBACK <id> <pdf> <reason> | ERROR <id> <reaso
 
 3. Read the sub-agent's last line. On `OK` or `FALLBACK`, run `python scripts/auto_apply.py mark-ready --role <id>`. On `ERROR`, run `python scripts/auto_apply.py mark-failed --role <id> --reason <reason>`.
 
-The orchestrator does NOT read JDs, snapshot CVs, or compile LaTeX. All that happens inside the sub-agent's isolated context.
+The orchestrator does NOT read JDs, snapshot CVs, edit documents, or compile LaTeX. All that happens inside the sub-agent's isolated context.
 
 ### Step 3 — Apply phase
 
@@ -298,8 +300,8 @@ The full Notion-aware retrospective can run weekly via a scheduled routine. The 
 ## Single-role mode (`/auto-apply <linkedin-url-or-page-id>`)
 
 Skip Step 1. Resolve the role:
-- If the URL is a LinkedIn job URL, ensure the role exists in Notion (run a single-URL search if not), then begin from Step 2 for that one ID.
-- If a Notion page ID is given, look up its LinkedIn URL and proceed from Step 2.
+- If the URL is a LinkedIn job URL, ensure the role exists in the tracker (run a single-URL search if not), then begin from Step 2 for that one ID.
+- If a tracker row ID is given (Notion page ID or local-... ID), look up its URL and proceed from Step 2.
 
 ## Failure modes and required behaviour
 
@@ -312,7 +314,7 @@ Skip Step 1. Resolve the role:
 | Walker apply returns `failed` with `linkedin-rate-limit` | Stop the entire run; print rate-limit message |
 | Walker apply returns `failed` with `modal-did-not-open` | `mark-failed`; continue (LinkedIn likely changed selectors — flag in summary) |
 | Edge-case sub-agent returns `RETRY_LATER` | `mark-escalated` with the reason; do NOT auto-retry in same run |
-| Edge-case sub-agent returns `HUMAN_REQUIRED` | `mark-escalated` with the reason; user reviews via Notion |
+| Edge-case sub-agent returns `HUMAN_REQUIRED` | `mark-escalated` with the reason; user reviews via the tracker |
 | Edge-case sub-agent times out / no recognisable last line | `mark-escalated` with `subagent-no-output`; continue |
 | One agent in a parallel batch fails | Process remaining batch members normally; do not abort the batch |
 | Greenhouse email-verify code expired between agent and main-session relay | Fetch the latest code from Gmail (there will be a newer one); enter it |
@@ -323,7 +325,7 @@ Skip Step 1. Resolve the role:
 - Do not call `playwright-cli` directly from the main session for form-walking — that belongs to walkers and sub-agents. The one exception is Greenhouse email-verify code relay: enter the security code into the sub-agent's still-open `apply-<id>` session using `playwright-cli -s=apply-<id> fill <ref> <char>`.
 - Do not invoke `/tailor-cv-light` directly from the main session — only the role-tailorer sub-agent does.
 - Do not read `applications/<id>/jd.txt` into the main session — never needed at orchestrator level.
-- Do not write to Notion directly via MCP — go through `auto_apply.py mark-*` so state transitions are validated.
+- Do not write to the tracker directly (Notion MCP or editing data/tracker.json) — go through `auto_apply.py mark-*` so state transitions are validated and both backends stay consistent.
 
 ## What this skill MAY do
 
@@ -348,7 +350,7 @@ Skip Step 1. Resolve the role:
 | `data/application_profile.json` | Canonical screening answers (read by `answer_screening.py`) |
 | `applications/<id>/` | Per-role folder (jd.txt, role-context.json, `<employer_filename_base> - <Company> <Title>.pdf` where `employer_filename_base` comes from `data/search_config.json` `cv.employer_filename_base`, submission-log.json) |
 
-## Notion state machine reference
+## Tracker state machine reference
 
 | Status | Meaning | Set by |
 |---|---|---|
@@ -358,13 +360,13 @@ Skip Step 1. Resolve the role:
 | `Escalated` | Edge-case agent said `HUMAN_REQUIRED` / `RETRY_LATER` | `auto_apply.py mark-escalated` |
 | `Failed` | Terminal walker error or `ERROR` from a sub-agent | `auto_apply.py mark-failed` |
 
-The full Notion Status field (created during onboarding) has these grouped options:
+The full status set (Notion Status field or local tracker statuses, created during onboarding) has these grouped options:
 
 - **to_do**: `ToReview`, `Consider`, `Apply`, `NeedsTailoring`, `ReadyToApply`, `Escalated`, `Failed`
 - **in_progress**: `AwaitingResponse`, `ResponseReceived`, `PhoneScreen`, `Test`, `CultureInterview`, `TechnicalInterview`, `FinalRound`, `Offer`
 - **complete**: `Expired`, `NoResponse`, `Rejected`, `Skip`, `Accepted`
 
-Auto-apply only writes the five rows above; downstream transitions (response received → interview stages → terminal) are owned by `/check-emails` or manual review. Note the field is now `type: "status"` in Notion (was `select`); `src/notion/client.py` and `scripts/notion_cli.py` use the right shape.
+Auto-apply only writes the five rows above; downstream transitions (response received → interview stages → terminal) are owned by `/check-emails` or manual review. In Notion the field is `type: "status"`; `scripts/notion_cli.py` and `scripts/local_tracker_cli.py` both validate against this set.
 
 ## Cost expectations (rough)
 

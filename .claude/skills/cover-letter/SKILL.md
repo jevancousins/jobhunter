@@ -109,7 +109,7 @@ Before selecting a primary story, read the last 5 cover letters in `cv/output/co
 
 **Story Pool (build at runtime):**
 
-Construct the candidate's story pool from `data/deep_experience.json` (project narratives, challenges, quantified results) and `data/star_stories.json` (pre-drafted STAR stories). Each entry becomes one candidate story: a one-line label plus its strongest quantified outcome. Do not use any story or metric that cannot be traced to those files or to `master_cv.json`.
+Construct the candidate's story pool from `data/deep_experience.json` (project narratives, challenges, quantified results) and `data/star_stories.json` (pre-drafted STAR stories). Both files are optional: when one or both are missing, build the pool from `master_cv.json` bullets instead, and ask the user two or three quick questions about their strongest relevant achievement to add depth (offer to save the answers into `deep_experience.json` for next time). Each entry becomes one candidate story: a one-line label plus its strongest quantified outcome. Do not use any story or metric that cannot be traced to those files, to `master_cv.json`, or to the user's own words in this session.
 
 ### Phase 4: User Interview (CRITICAL)
 

@@ -156,6 +156,59 @@ if not EMPLOYER_CV_BASENAME:
 EMPLOYER_CV_NAME = f"{EMPLOYER_CV_BASENAME}.pdf"
 INTELLIGENCE_PATH = ROOT / "data" / "apply-intelligence.json"
 
+# CV backend: how the candidate's CV is produced.
+#   latex - variants in cv/variants/*.tex, tailored per role (full pipeline)
+#   docx  - a master cv/master.docx, tailored copies edited per role
+#   pdf   - a fixed cv/master.pdf, used as-is for every application
+CV_BACKEND = (_CONFIG.get("cv") or {}).get("backend", "pdf")
+if CV_BACKEND not in ("latex", "docx", "pdf"):
+    raise SystemExit(
+        f"Invalid cv.backend {CV_BACKEND!r} in data/search_config.json "
+        "(expected 'latex', 'docx', or 'pdf')."
+    )
+
+
+def _master_cv_file() -> Path:
+    """The base CV file for the docx/pdf backends.
+
+    Prefers a pre-rendered PDF (cv/output/master.pdf, produced during
+    onboarding for docx users with LibreOffice/Word available) so walkers
+    upload a PDF; falls back to the docx itself, which ATS uploads accept.
+    """
+    candidates = [CV_OUTPUT_DIR / "master.pdf", ROOT / "cv" / "master.pdf"]
+    if CV_BACKEND == "docx":
+        candidates.append(ROOT / "cv" / "master.docx")
+    for cand in candidates:
+        if cand.exists():
+            return cand
+    raise SystemExit(
+        "No base CV found. Expected cv/master.pdf (pdf backend) or "
+        "cv/master.docx (docx backend). Run /onboard to set one up."
+    )
+
+
+def _select_variant_info(title: str, description: str = "") -> dict:
+    """Variant selection is a LaTeX-backend concept; other backends use the
+    single master CV."""
+    if CV_BACKEND == "latex":
+        return _sv.select_variant(title=title, description=description)
+    master = _master_cv_file()
+    return {
+        "variant": "master",
+        "pdf_path": str(master.relative_to(ROOT)),
+        "tex_path": None,
+        "max_years": None,
+        "reason": f"cv.backend={CV_BACKEND}: single master CV",
+    }
+
+
+def _cv_ext() -> str:
+    """File extension for role CVs: .pdf everywhere except a docx backend
+    with no pre-rendered master PDF."""
+    if CV_BACKEND == "latex":
+        return ".pdf"
+    return _master_cv_file().suffix
+
 # Daily cap on LinkedIn Apply submissions, from autonomy.max_daily_linkedin_applications.
 MAX_DAILY_LINKEDIN_APPLICATIONS = int(
     _CONFIG.get("autonomy", {}).get("max_daily_linkedin_applications", 25)
@@ -345,8 +398,26 @@ def pcli_eval(js: str, timeout: int = 60) -> Any:
 # in one place)
 # ---------------------------------------------------------------------------
 
+def _tracker_backend() -> str:
+    """Configured tracker backend: "notion" or "local" (default local)."""
+    backend = (_CONFIG.get("tracker") or {}).get("backend", "local")
+    if backend not in ("notion", "local"):
+        raise SystemExit(
+            f"Invalid tracker.backend {backend!r} in data/search_config.json "
+            "(expected 'notion' or 'local')."
+        )
+    return backend
+
+
 def notion_run(*args: str) -> str:
-    cmd = [sys.executable, str(ROOT / "scripts" / "notion_cli.py"), *args]
+    """Run a tracker command against the configured backend.
+
+    Both backends expose the identical CLI surface and JSON shapes:
+    scripts/notion_cli.py (Notion) and scripts/local_tracker_cli.py
+    (data/tracker.json + CSV export). The function name is historical.
+    """
+    script = "notion_cli.py" if _tracker_backend() == "notion" else "local_tracker_cli.py"
+    cmd = [sys.executable, str(ROOT / "scripts" / script), *args]
     res = None
     transient_markers = (
         "ConnectError",
@@ -463,23 +534,52 @@ def _company_name_matches(candidate: str, watchlist_name: str) -> bool:
 
 
 def load_watchlist_companies() -> list[dict]:
-    """Load company-watchlist rows from Notion, with a local cache fallback."""
-    try:
-        data = json.loads(notion_run("list-watchlist-companies"))
+    """Load the company watchlist.
+
+    data/watchlist.json is the canonical, user-grown list (built during
+    onboarding, extended over time). When the tracker backend is Notion and a
+    Company Watchlist database is also configured, its rows are merged in so
+    either surface can be used to add companies. A cache keeps watchlist
+    matching alive through tracker outages.
+    """
+    companies: list[dict] = []
+    seen: set[str] = set()
+
+    def _add(rows: list) -> None:
+        for row in rows:
+            name = (row.get("name") or "").strip() if isinstance(row, dict) else str(row).strip()
+            if name and not name.startswith("_") and name.lower() not in seen:
+                seen.add(name.lower())
+                companies.append(row if isinstance(row, dict) else {"name": name})
+
+    watchlist_path = ROOT / "data" / "watchlist.json"
+    if watchlist_path.exists():
+        try:
+            data = json.loads(watchlist_path.read_text())
+            _add(data.get("companies", data if isinstance(data, list) else []))
+        except Exception as e:
+            print(f"WARNING: could not parse data/watchlist.json: {e}", file=sys.stderr)
+
+    if _tracker_backend() == "notion":
+        try:
+            _add(json.loads(notion_run("list-watchlist-companies")))
+        except Exception as e:
+            print(f"WARNING: unable to load Notion watchlist: {e}", file=sys.stderr)
+
+    if companies:
         WATCHLIST_CACHE_PATH.write_text(json.dumps({
             "updated_at": dt.datetime.now().isoformat(),
-            "companies": data,
+            "companies": companies,
         }, indent=2))
-        return data
-    except Exception as e:
-        if WATCHLIST_CACHE_PATH.exists():
-            try:
-                cached = json.loads(WATCHLIST_CACHE_PATH.read_text())
-                return cached.get("companies", [])
-            except Exception:
-                pass
-        print(f"WARNING: unable to load watchlist companies: {e}", file=sys.stderr)
-        return []
+        return companies
+
+    if WATCHLIST_CACHE_PATH.exists():
+        try:
+            cached = json.loads(WATCHLIST_CACHE_PATH.read_text())
+            return cached.get("companies", [])
+        except Exception:
+            pass
+    return []
 
 
 def match_watchlist_company(company: str, watchlist: list[dict] | None = None) -> str | None:
@@ -1012,7 +1112,7 @@ def cmd_search(args) -> int:
 
             # variant
             try:
-                variant_info = _sv.select_variant(title=title, description=jd)
+                variant_info = _select_variant_info(title=title, description=jd)
             except Exception as e:
                 variant_info = {"variant": "general", "reason": f"select-failed: {e}"}
             variant = variant_info.get("variant") or "general"
@@ -1435,13 +1535,14 @@ def _employer_cv_filename(rc: dict | None = None) -> str:
     role = _safe_cv_filename_part(rc.get("title") or "", max_len=80)
     suffix = " ".join(part for part in (company, role) if part)
     if not suffix:
-        return EMPLOYER_CV_NAME
-    return f"{EMPLOYER_CV_BASENAME} - {suffix}.pdf"
+        return f"{EMPLOYER_CV_BASENAME}{_cv_ext()}"
+    return f"{EMPLOYER_CV_BASENAME} - {suffix}{_cv_ext()}"
 
 
 def _employer_cv_candidates(role_dir: Path, rc: dict | None = None) -> list[Path]:
     candidates = [role_dir / _employer_cv_filename(rc), role_dir / EMPLOYER_CV_NAME]
-    candidates.extend(sorted(role_dir.glob(f"{EMPLOYER_CV_BASENAME}*.pdf"), key=lambda p: p.stat().st_mtime, reverse=True))
+    for ext in {".pdf", _cv_ext()}:
+        candidates.extend(sorted(role_dir.glob(f"{EMPLOYER_CV_BASENAME}*{ext}"), key=lambda p: p.stat().st_mtime, reverse=True))
     out: list[Path] = []
     seen: set[Path] = set()
     for path in candidates:
@@ -1460,7 +1561,12 @@ def _ensure_employer_cv_file(rid: str, rc: dict | None = None) -> Path:
         if existing.exists():
             shutil.copyfile(existing, dest)
             return dest
-    for source in (role_dir / "cv.pdf", role_dir / "cv-template-fallback.pdf"):
+    for source in (
+        role_dir / f"cv{_cv_ext()}",
+        role_dir / "cv.pdf",
+        role_dir / f"cv-template-fallback{_cv_ext()}",
+        role_dir / "cv-template-fallback.pdf",
+    ):
         if source.exists():
             shutil.copyfile(source, dest)
             return dest
@@ -1489,6 +1595,8 @@ def cmd_mark_ready(args) -> int:
     cv_src = None
     if employer_cv.exists():
         cv_src = employer_cv
+    elif (role_dir / f"cv{_cv_ext()}").exists():
+        cv_src = role_dir / f"cv{_cv_ext()}"
     elif (role_dir / "cv.pdf").exists():
         cv_src = role_dir / "cv.pdf"
 
@@ -1501,7 +1609,9 @@ def cmd_mark_ready(args) -> int:
         )
         return 2
     if cv_src is None:
-        cv_src = role_dir / "cv-template-fallback.pdf"
+        cv_src = role_dir / f"cv-template-fallback{_cv_ext()}"
+        if not cv_src.exists() and (role_dir / "cv-template-fallback.pdf").exists():
+            cv_src = role_dir / "cv-template-fallback.pdf"
 
     # Rename to the employer-facing filename if not already there.
     if cv_src.resolve() != employer_cv.resolve():
@@ -1796,7 +1906,7 @@ def _hydrate_role_from_notion(rid: str, jd_override: str = "") -> tuple[dict, st
     requires_tailored_cv, watchlist_match, tailoring_reasons = _tailoring_reasons_for_company(company)
 
     try:
-        variant_info = _sv.select_variant(title=title, description=jd or notes)
+        variant_info = _select_variant_info(title=title, description=jd or notes)
     except Exception as e:
         variant_info = {"variant": "general", "reason": f"select-failed: {e}"}
 
@@ -1852,7 +1962,7 @@ def cmd_prepare(args) -> int:
             rc, _ = _ensure_tailoring_metadata(rc)
             rc["requirements"] = _parse_requirements(jd_override)
             try:
-                variant_info = _sv.select_variant(
+                variant_info = _select_variant_info(
                     title=rc.get("title") or "",
                     description=jd_override,
                 )
@@ -1875,7 +1985,7 @@ def cmd_prepare(args) -> int:
                     rc, _ = _ensure_tailoring_metadata(rc)
                     rc["requirements"] = _parse_requirements(notion_jd)
                     try:
-                        variant_info = _sv.select_variant(
+                        variant_info = _select_variant_info(
                             title=rc.get("title") or "",
                             description=notion_jd,
                         )
@@ -1924,19 +2034,26 @@ def cmd_prepare(args) -> int:
         }))
         return 3
 
-    variant = rc.get("variant") or "general"
-    template_pdf = ROOT / "cv" / "output" / f"{variant}.pdf"
-    if not template_pdf.exists():
-        template_pdf = ROOT / "cv" / "output" / "general.pdf"
-    fallback = role_dir / "cv-template-fallback.pdf"
+    if CV_BACKEND == "latex":
+        variant = rc.get("variant") or "general"
+        template_pdf = ROOT / "cv" / "output" / f"{variant}.pdf"
+        if not template_pdf.exists():
+            template_pdf = ROOT / "cv" / "output" / "general.pdf"
+    else:
+        # docx/pdf backends: the single master CV is the template. For the pdf
+        # backend it is also the final CV (no tailoring happens).
+        variant = "master"
+        template_pdf = _master_cv_file()
+    fallback = role_dir / f"cv-template-fallback{template_pdf.suffix}"
     shutil.copyfile(template_pdf, fallback)
     print(json.dumps({
         "role": rid,
+        "cv_backend": CV_BACKEND,
         "variant": variant,
         "template_pdf": str(template_pdf),
         "fallback_pdf": str(fallback),
         "tailored_pdf_target": str(role_dir / _employer_cv_filename(rc)),
-        "tailored_tex_target": str(role_dir / "cv.tex"),
+        "tailored_tex_target": str(role_dir / "cv.tex") if CV_BACKEND == "latex" else None,
         "jd_path": str(jd_path),
         "hydrated_from_notion": bool(rc.get("hydrated_from_notion")),
         "requires_tailored_cv": bool(rc.get("requires_tailored_cv")),
@@ -1993,7 +2110,7 @@ def cmd_apply(args) -> int:
                 (role_dir / "jd.txt").write_text(refreshed_jd)
                 rc["requirements"] = _parse_requirements(refreshed_jd)
                 try:
-                    variant_info = _sv.select_variant(
+                    variant_info = _select_variant_info(
                         title=rc.get("title") or "",
                         description=refreshed_jd,
                     )

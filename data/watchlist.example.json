@@ -1,0 +1,31 @@
+{
+  "_readme": [
+    "Copy to data/watchlist.json (the /onboard skill builds it with you).",
+    "Your company watchlist: employers you actively want to work for. Roles at",
+    "these companies are prioritised for full tailoring, and their career",
+    "boards can be checked directly (careers_url) beyond the LinkedIn crawl.",
+    "Grow it over time: just ask Claude to 'add <company> to my watchlist',",
+    "or edit this file by hand. Set check_daily to false to keep a company",
+    "on the list without checking its board every run.",
+    "Shared by both tracker backends; with the Notion backend, rows from a",
+    "Notion Company Watchlist database (if configured) are merged in too."
+  ],
+  "companies": [
+    {
+      "name": "Example Analytics Co",
+      "careers_url": "https://jobs.ashbyhq.com/example-analytics",
+      "priority": "High",
+      "locations": ["Toronto", "Remote"],
+      "check_daily": true,
+      "notes": "Series B, strong ops culture; two second-degree connections."
+    },
+    {
+      "name": "Sample Software Inc",
+      "careers_url": "https://boards.greenhouse.io/samplesoftware",
+      "priority": "Medium",
+      "locations": ["Toronto"],
+      "check_daily": false,
+      "notes": "Great product, hiring freeze rumoured; keep an eye on it."
+    }
+  ]
+}

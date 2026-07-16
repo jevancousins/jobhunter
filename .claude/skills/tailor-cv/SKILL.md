@@ -8,6 +8,10 @@ argument-hint: "[job-url or job-description]"
 
 Generate a role-specific CV by copying the closest variant template and making surgical modifications.
 
+## CV backend
+
+This skill's full flow assumes the `latex` backend (`cv.backend` in `data/search_config.json`). For `docx`, apply the same content decisions to a copy of `cv/master.docx` with python-docx (see the backend section in /tailor-cv-light) and skip the LaTeX-specific formatting and page-fill rules. For `pdf`, tailoring is not possible: tell the user their fixed CV will be used and offer to switch them to the docx backend if they want tailoring.
+
 ## Formatting Rules (MUST follow)
 
 **Bold (`\textbf{}` / `**...**`) is reserved for structural emphasis only.**

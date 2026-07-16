@@ -6,6 +6,9 @@ argument-hint: "[role-variant] [jd-path]"
 
 # Tailor CV (Full, JD-driven)
 
+> **CV backend:** Full tailoring requires the `latex` backend. For `docx` users, run /tailor-cv-light (which has a docx path) instead; for `pdf` users, tailoring is unavailable.
+
+
 This is the heavyweight, JD-driven tailoring methodology — an **optional advanced mode** alongside the cheaper `/tailor-cv-light`, which remains the default for the auto-apply pipeline.
 
 Historical design note: an earlier "full" methodology inherited too much variant scaffolding and didn't drive content from the JD; controlled comparisons found it matched Light on quality at 5-8x the cost. This methodology fixes that by making the JD the structural anchor.

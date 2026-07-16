@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: Guided first-run setup for JobHunter. Use when a new user says "set me up", "onboard me", "get started", "configure jobhunter", or when any pipeline command fails because data/search_config.json, data/master_cv.json or data/application_profile.json is missing. Interviews the user, generates their personal data files, sets up Notion, builds their first CV variant, and selects an autonomy level.
+description: Guided first-run setup for JobHunter. Use when a new user says "set me up", "onboard me", "get started", "configure jobhunter", or when any pipeline command fails because data/search_config.json, data/master_cv.json or data/application_profile.json is missing. Interviews the user, generates their personal data files, sets up their tracker (Notion or local), builds their CV setup and company watchlist, and selects an autonomy level.
 ---
 
 # JobHunter Onboarding
@@ -16,11 +16,10 @@ Onboarding is a conversation, not a form. Ask questions in small batches, confir
 | `data/master_cv.json` | Single source of truth for CV content and facts |
 | `data/job_goals.json` | Career goals, preferences, scoring weights |
 | `data/application_profile.json` | Identity and screening answers (chmod 600) |
-| `data/search_config.json` | Search targets, filters, autonomy level |
-| `cv/sections/header.tex` | Name and contact links for the LaTeX CV |
-| `cv/variants/*.tex` + `variants.json` + `seniority_caps.json` | The user's CV variants and selection rules |
-| `.env` | Notion credentials |
-| `data/notion_ids.json` | Notion database IDs discovered during setup |
+| `data/search_config.json` | Search targets, filters, tracker and CV backends, autonomy level |
+| `data/watchlist.json` | Target-company watchlist, grown over time |
+| CV files | Depends on backend: `cv/master.pdf` (pdf), `cv/master.docx` (docx), or `cv/sections/header.tex` + `cv/variants/*` (latex) |
+| `.env` + `data/notion_ids.json` | Notion credentials and database IDs (Notion tracker only) |
 
 Schema truth for every JSON file is its `.example.json` sibling in `data/`. Read the example before writing the real file and match its shape exactly.
 
@@ -35,9 +34,18 @@ npx playwright-cli --version 2>/dev/null   # required for search and applying
 pdflatex --version 2>/dev/null             # optional: LaTeX CV tailoring
 ```
 
-If `pdflatex` is missing, note that the user can still run in "bring your own PDF" mode (see Phase 5) and install TeX later (MacTeX on macOS, TeX Live elsewhere).
+`pdflatex` only matters if the user chooses the latex CV backend below; never suggest installing LaTeX to a non-technical user.
 
-Ask one framing question up front: "Roughly how much do you want to automate?" and hold the answer until Phase 6; it shapes how deep the earlier phases need to go.
+Then ask three framing questions up front; they shape everything that follows. Never push the user onto a tool they do not already use.
+
+1. **"Roughly how much do you want to automate?"** Hold the answer until Phase 6.
+2. **"Do you use Notion?"** Yes and happy to track there: tracker backend `notion`. Otherwise: `local` (zero setup; the pipeline is stored in `data/tracker.json` and every change is exported to `data/tracker.csv`, which opens in Excel, Numbers or Google Sheets). Do not make a non-Notion user create a Notion account.
+3. **"How do you maintain your CV today?"** Map the answer to `cv.backend`:
+   - "I have a finished PDF and just use that" → `pdf`. Zero dependencies; no tailoring, the same CV goes to every role.
+   - "Word / Google Docs" → `docx`. Export or save as .docx to `cv/master.docx`; the system tailors a copy per role. If LibreOffice or Word is available, also render `cv/output/master.pdf` so uploads are PDFs.
+   - "LaTeX" or a technical user who wants the strongest tailoring → `latex`. The full variant system.
+
+Record the tracker and CV answers in `search_config.json` under `tracker.backend` and `cv.backend` during Phase 3.
 
 ## Phase 1: Who you are (master_cv.json)
 
@@ -64,7 +72,7 @@ This file drives the pipeline. Work through it top to bottom using `data/search_
 3. **Locations**: for each target city or country, find the LinkedIn geo ID: run a LinkedIn Jobs search for that location in a browser and copy the `geoId=` parameter from the URL. Record `linkedin_geo_id`, `label`, `country`.
 4. **Queries**: 3 to 7 named search phrases covering the user's angles. Include language or scheme-specific angles where relevant (e.g. "french speaking", "V.I.E.", "bilingual"). Set `default_queries` and `default_locations`.
 5. **Filters**: title blacklist (seniority levels and role types to never consider), optional whitelist, industry dealbreakers, company blacklist (always include the current employer), contract types to skip, and the accepted-languages list.
-6. **Where roles get discovered**: LinkedIn search is the built-in discovery source. If the user wants specific job boards or ATS-hosted boards (Ashby, Greenhouse, Lever company pages, Welcome to the Jungle, Otta and similar), set up a company/board watchlist: collect the board URLs into `search.watchlist_urls` (optional key) and note that `/auto-apply <url>` handles any single posting ad hoc regardless of source. Applying already works across LinkedIn, Greenhouse, Workday, Lever, Ashby, SmartRecruiters, BambooHR, Teamtailor, Jobvite and WTTJ.
+6. **Company watchlist** (`data/watchlist.json`, see `data/watchlist.example.json`): spend a few minutes building an initial list of 10-20 target employers. Sources: ask the user directly, mine `job_goals.json` (target industries, role philosophy) and suggest well-matched companies, and check where their strongest competitors' alumni go. For each entry record `name`, `careers_url` (their Ashby/Greenhouse/Lever/careers board), `priority`, `check_daily`, `notes`. Explain it grows over time: "add <company> to my watchlist" in any future session appends to this file, and watchlist companies get priority treatment (full tailoring, board checks). This also covers discovery beyond LinkedIn: watchlist boards are checked directly, and `/auto-apply <url>` handles any single posting from any board ad hoc. Applying works across LinkedIn, Greenhouse, Workday, Lever, Ashby, SmartRecruiters, BambooHR, Teamtailor, Jobvite and WTTJ.
 
 ## Phase 4: Screening answers (application_profile.json)
 
@@ -78,9 +86,13 @@ Explain that `verified_form_answers` grows over time: whenever the pipeline answ
 
 ## Phase 5: CV build
 
-Two modes; ask which:
+Follow the `cv.backend` chosen in Phase 0:
 
-**LaTeX mode (recommended, enables tailoring):**
+**pdf (zero setup):** the user supplies a finished CV PDF; copy it to `cv/master.pdf`. Every application uses it as-is. Tailoring skills are unavailable; that is a legitimate trade-off, not a failure. Note in the wrap-up that switching to `docx` later enables tailoring.
+
+**docx (most users):** the user saves or exports their CV as .docx to `cv/master.docx` (Google Docs: File > Download > Microsoft Word). Verify the file opens with python-docx and its text matches `master_cv.json`. If LibreOffice (`soffice`) or Word is available, render `cv/output/master.pdf` once so applications upload a PDF; otherwise the .docx itself is uploaded, which ATSs accept. Tailoring edits a copy per role (profile paragraph, bullet selection) and never touches the master.
+
+**latex (strongest tailoring, technical users):**
 1. Create `cv/sections/header.tex` from `cv/sections/header.example.tex` with the user's details.
 2. Generate 1 to 3 variants into `cv/variants/` using `cv/templates/general.tex` as the structural base, populated from `master_cv.json`. Name variants after target role families (e.g. `bizops-strategy.tex`, `general.tex`).
 3. Create `cv/variants/variants.json` (title-pattern to variant rules; see `cv/templates/variants.example.json`) and `cv/variants/seniority_caps.json` (see `cv/templates/seniority_caps.example.json`). Set caps honestly: the cap is the maximum years of experience the user can credibly claim for that role family, and the filter uses it to skip roles that require more.
@@ -90,7 +102,7 @@ Two modes; ask which:
    python3 scripts/check_page_fill.py cv/output/<variant>.pdf
    ```
 
-**Bring-your-own-PDF mode:** the user supplies a finished CV PDF; copy it to `cv/output/general.pdf` and set `cv.default_variant` to `general`. Tailoring is unavailable, so autonomy is capped at `search` plus manual applying with that fixed PDF; note this in the wrap-up.
+Whatever the backend, seniority caps still matter for filtering: for pdf/docx users, record a single overall cap conversationally and store it in `job_goals.json` `experience_years` (the filter falls back to it when no variant caps exist).
 
 ## Phase 6: Autonomy level
 
@@ -102,17 +114,22 @@ Explain the three tiers and let the user choose; write to `search_config.json` `
 
 The level can be changed at any time by editing one line in `data/search_config.json`.
 
-## Phase 7: Notion setup
+## Phase 7: Tracker setup
 
-Notion is the pipeline's database and review UI (free personal plan is fine).
+Follow the `tracker.backend` chosen in Phase 0.
 
+**local (default, zero setup):** nothing to configure. Explain the two files: `data/tracker.json` is the store the pipeline reads and writes; `data/tracker.csv` is regenerated on every change and opens in Excel, Numbers or Google Sheets for review. Statuses move through the same state machine as the Notion backend (`ToReview` through to `Accepted`). Demonstrate with `python3 scripts/local_tracker_cli.py export`. The user can ask Claude for a pipeline summary at any time ("show me my pipeline") and Claude renders a table from the store.
+
+**notion (for users who already live in Notion):**
 1. User creates an integration at notion.so/my-integrations, and a parent page for JobHunter, then shares the page with the integration.
 2. Create a **Jobs Database** under that page with exactly these properties (create it for them via the Notion MCP if connected, otherwise give click-by-click instructions):
    - `Name` (title), `Company` (text), `URL` (url), `Location` (select), `Source` (select), `Score` (number), `Salary` (text), `LinkedIn ID` (text), `Applied Date` (date), `Notes` (text)
    - `Status` (status type) with groups: To-do: `ToReview`, `Consider`, `Apply`, `NeedsTailoring`, `ReadyToApply`, `Escalated`, `Failed`; In progress: `AwaitingResponse`, `ResponseReceived`, `PhoneScreen`, `Test`, `CultureInterview`, `TechnicalInterview`, `FinalRound`, `Offer`; Complete: `Expired`, `NoResponse`, `Rejected`, `Skip`, `Accepted`
    - The Notion API cannot create status-type properties, so if creating programmatically, create everything else, then have the user add `Status` by hand from the list above.
 3. Write `.env` from `.env.example` with `NOTION_API_KEY` and `NOTION_JOBS_DB_ID`.
-4. Verify: `python3 scripts/notion_cli.py list --status ToReview` should return an empty list, not an error. Record any additional database IDs in `data/notion_ids.json`.
+4. Verify: `python3 scripts/notion_cli.py list-by-status ToReview` should return an empty list, not an error. Record any additional database IDs in `data/notion_ids.json`.
+
+Either backend can be switched later by changing `tracker.backend`; the state machine is identical. (No automated migration exists yet; switching mid-search means re-creating active rows.)
 
 ## Phase 8: LinkedIn auth
 
@@ -136,7 +153,7 @@ Offer, do not push:
 ## Phase 10: Test run and wrap-up
 
 1. Run a deliberately small discovery: `/auto-apply --discover --max-roles 3`.
-2. Review the results in Notion with the user: are the roles plausible? Tune `filters` and `queries` from what they see; this loop is how the config gets good.
+2. Review the results with the user in their tracker (Notion, or the tracker.csv / an in-chat table for the local backend): are the roles plausible? Tune `filters` and `queries` from what they see; this loop is how the config gets good.
 3. Write a wrap-up note to `data/ONBOARDING_NOTES.md` (gitignored): chosen autonomy level, what was configured, what was deferred, and the exact commands for daily use.
 4. Tell the user the three commands that matter day to day: `/auto-apply --discover`, `/auto-apply <job-url>`, `/check-emails`, and that every preference lives in `data/search_config.json`.
 

@@ -1,17 +1,17 @@
 ---
 name: check-emails
 description: >
-  Check Gmail for job application responses and job alert emails, then update Notion and inform the user.
+  Check Gmail for job application responses and job alert emails, then update the job tracker (Notion or local) and inform the user.
   Use whenever the user says "check my emails", "any responses?", "check for job updates",
   "any rejections?", "any interview invites?", "check Gmail", or similar.
   Also trigger if the user mentions email in the context of job hunting or applications.
   This skill handles both application responses (rejections, interview invites, offers)
-  and job alert digest emails (LinkedIn, BNP Paribas, Indeed, etc.).
+  and job alert digest emails (LinkedIn, Indeed, company alerts, etc.).
 ---
 
 # Check Emails Skill
 
-Scan Gmail for job-related emails since the last check, categorize them, update the Notion Jobs Database, and present a clear summary to the user.
+Scan Gmail for job-related emails since the last check, categorize them, update the job tracker (read `tracker.backend` from `data/search_config.json`: the Notion Jobs Database, or the local store via `scripts/local_tracker_cli.py`), and present a clear summary to the user.
 
 ## Usage
 
@@ -174,9 +174,9 @@ Only extract roles that might pass basic pre-screening (skip obvious mismatches 
 
 ---
 
-## Step 5: Match Responses to Notion Entries
+## Step 5: Match Responses to Tracker Entries
 
-For each application response, try to match it to an existing entry in the Notion Jobs Database.
+For each application response, try to match it to an existing tracker entry (Notion backend: query the Jobs Database; local backend: `python3 scripts/local_tracker_cli.py list-by-status <status>` across the active statuses, or read `data/tracker.json`).
 
 ### Matching Strategy
 
@@ -196,9 +196,9 @@ Use fuzzy matching for company names since email senders often use abbreviated o
 
 ---
 
-## Step 6: Update Notion
+## Step 6: Update the tracker
 
-For matched entries, update using `notion-update-page`:
+For matched entries: Notion backend, update using the Notion MCP update-page tool; local backend, use `python3 scripts/local_tracker_cli.py update-status <id> <status>` and `append-notes <id> <text>`:
 
 ```json
 {
@@ -232,7 +232,7 @@ For matched entries, update using `notion-update-page`:
 
 ### Unmatched Responses
 
-For application responses that don't match any Notion entry, **do not create a new entry**. Instead, include them in the summary report for the user with the note: "No matching Notion entry found — you may have applied outside the tracked system."
+For application responses that don't match any tracker entry, **do not create a new entry**. Instead, include them in the summary report for the user with the note: "No matching tracker entry found — you may have applied outside the tracked system."
 
 ---
 
@@ -253,7 +253,7 @@ Checked emails since {last_check_date}.
 | BCG Platinion | AI Architect | Rejection | → Rejected | Feb 13 |
 
 ### Unmatched Responses
-- Email from {company}: "{key quote}" — no matching Notion entry found.
+- Email from {company}: "{key quote}" — no matching tracker entry found.
 
 ### Job Alerts
 Found {N} new roles in alert emails:

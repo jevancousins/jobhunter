@@ -6,6 +6,7 @@ Thanks for considering a contribution. This project automates a personal job sea
 
 - **Never commit personal data.** All personal files are gitignored (`data/*.json` real files, `cv/variants/`, `cv/sections/header.tex` and friends). If you add a new data file, add a gitignore entry and a tracked `.example` sibling in the same change. Pull requests containing real names, emails, employers, salary figures or Notion IDs will be closed.
 - **Config over code.** User-specific behaviour (locations, filters, right-to-work rules, autonomy) belongs in `data/search_config.json` keys, documented in `data/search_config.example.json`, never in Python literals or skill prose.
+- **Respect the backend abstractions.** The tracker backends (`scripts/notion_cli.py`, `scripts/local_tracker_cli.py`) share one CLI surface and output shape; a change to one must land in both. Skills must not assume Notion, LaTeX, or the optional evidence files: branch on `tracker.backend` / `cv.backend` and degrade gracefully when optional data is missing.
 - **British English, no em-dashes** in documentation and skill text.
 
 ## Adding an ATS walker

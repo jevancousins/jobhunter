@@ -6,6 +6,11 @@
     "career goals and scoring preferences live in job_goals.json."
   ],
 
+  "tracker": {
+    "_options": "local = zero-setup tracker in data/tracker.json with a data/tracker.csv view you can open in Excel/Numbers/Google Sheets. notion = a Notion Jobs Database (needs NOTION_API_KEY and NOTION_JOBS_DB_ID in .env).",
+    "backend": "local"
+  },
+
   "autonomy": {
     "_options": "search = discover and score roles only, human applies. tailor = also produce tailored CVs, human submits. full = end-to-end automated applications.",
     "level": "search",
@@ -66,7 +71,9 @@
   },
 
   "cv": {
-    "_comment": "Which CV variant to use when no rule matches, and the employer-facing filename. Variants live in cv/variants/ and are generated during onboarding.",
+    "_backend_options": "How your CV is produced. pdf = you supply a finished cv/master.pdf, used as-is for every application (no tailoring, zero dependencies). docx = you supply cv/master.docx and the system tailors a copy per role (needs python-docx; a PDF render of the master at cv/output/master.pdf is preferred for uploads when available). latex = the full variant system in cv/variants/ with per-role tailoring and page-fill checks (needs a LaTeX distribution).",
+    "backend": "pdf",
+    "_comment": "default_variant applies to the latex backend only: which variant to use when no rule matches. Variants live in cv/variants/ and are generated during onboarding.",
     "default_variant": "general",
     "employer_filename_base": "Alex Example CV",
     "_employer_filename_comment": "Applications upload the CV as '<employer_filename_base> - <Company> <Title>.pdf'."

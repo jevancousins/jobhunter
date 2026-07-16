@@ -30,6 +30,11 @@ data/screening-answers*.md
 data/*.docx
 data/job_descriptions/
 
+# --- Personal tracker and watchlist ---
+data/tracker.json
+data/tracker.csv
+data/watchlist.json
+
 # --- Runtime state and generated artefacts ---
 data/.linkedin-state.json
 data/.playwright-profile/
