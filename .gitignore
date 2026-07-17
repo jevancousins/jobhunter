@@ -38,6 +38,7 @@ data/watchlist.json
 # --- Runtime state and generated artefacts ---
 data/.linkedin-state.json
 data/.playwright-profile/
+/applications/
 data/applications/
 data/auto-apply-runs/
 data/apply-intelligence.json
