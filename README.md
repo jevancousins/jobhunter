@@ -1,6 +1,6 @@
 # JobHunter
 
-An open-source job-search automation system you run yourself: a Python harness driven from [Claude Code](https://claude.com/claude-code), with a job tracker you can review anywhere, and a small set of focused sub-agents for the parts that genuinely need an LLM. It takes a search from "what's out there?" to "submitted application" with as much or as little automation as you choose, using the tools you already have: no Notion account or LaTeX knowledge required.
+An open-source job-search automation system you run yourself: a Python harness driven by an AI coding assistant ([Claude Code](https://claude.com/claude-code), or OpenAI's Codex CLI with a ChatGPT subscription), with a job tracker you can review anywhere, and a small set of focused sub-agents for the parts that genuinely need an LLM. It takes a search from "what's out there?" to "submitted application" with as much or as little automation as you choose, using the tools you already have: no Notion account or LaTeX knowledge required.
 
 Built and battle-tested across a real multi-month job search (hundreds of applications across LinkedIn, Greenhouse, Workday, Lever, Ashby and more), then genericised so anyone can adapt it to their own search.
 
@@ -39,24 +39,26 @@ Most people should start at `search`, watch a week of results, tune their filter
 ## Requirements
 
 - Python 3.10+ and Node (for `playwright-cli`)
-- [Claude Code](https://claude.com/claude-code) with a subscription (a standard $20/month plan is enough; the pipeline is designed so the deterministic work costs nothing and LLM work runs in context-isolated sub-agents)
+- An agentic AI coding assistant with a standard subscription (roughly $20/month is enough; the deterministic work costs nothing and LLM work is kept lean):
+  - [Claude Code](https://claude.com/claude-code): primary, fully supported
+  - OpenAI Codex CLI with a ChatGPT subscription: supported via [AGENTS.md](AGENTS.md); see [docs/USING_WITH_CHATGPT.md](docs/USING_WITH_CHATGPT.md)
 - Optional: a free Notion account (only for the Notion tracker backend)
 - Optional: a LaTeX distribution (MacTeX / TeX Live), only for the latex CV backend
 
-No Anthropic API key is required: all LLM calls happen inside your Claude Code session and bill against your subscription. The Python orchestrator itself never calls an LLM.
+No API key is required: all LLM calls happen inside your assistant session and bill against its subscription. The Python orchestrator itself never calls an LLM, which is also what makes it provider-agnostic.
 
 ## Getting started
 
 ```bash
 git clone <this repo> && cd jobhunter
 pip install -r requirements.txt
-claude        # open a Claude Code session in the repo
+claude        # or `codex` for ChatGPT users; see docs/USING_WITH_CHATGPT.md
 ```
 
-Then, inside Claude Code:
+Then, inside the session:
 
 ```
-/onboard
+/onboard      # Claude Code; ChatGPT users just say "onboard me"
 ```
 
 Onboarding is a guided interview that builds your personal files (all gitignored, none of them ever committed): your CV data, goals, screening answers, search configuration, company watchlist, tracker and CV setup. It ends with a small test run. Budget 30 to 60 minutes for a thorough setup; see [docs/PERSONAS.md](docs/PERSONAS.md) for three worked example configurations.
@@ -76,9 +78,9 @@ Onboarding is a guided interview that builds your personal files (all gitignored
 ## Architecture
 
 ```
-Claude Code main session
+Assistant session (Claude Code or Codex CLI)
   │
-  └─ /auto-apply skill ── thin orchestrator
+  └─ /auto-apply playbook ── thin orchestrator
         │
         ├─ Bash: python scripts/auto_apply.py search ...
         │     deterministic: LinkedIn search, title/JD filter, dedup,
