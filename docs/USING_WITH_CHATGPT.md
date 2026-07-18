@@ -38,11 +38,9 @@ Codex CLI has no slash-commands for this project; just ask in plain language:
 
 ## Differences from Claude Code
 
-Feature parity is close but not identical; `AGENTS.md` tells the assistant how to adapt, and these are the visible effects:
+Feature parity is close. Codex CLI has native subagent support (parallel agents with their own context windows), so the batch-processing pattern the playbooks rely on works as designed; `AGENTS.md` tells the assistant to use it. Two setup notes:
 
-- **Smaller batches.** Claude Code isolates per-role work in sub-agents, which is what makes 50-role runs practical. Codex works inline, so keep discovery runs small (5 to 10 roles); several small runs beat one big one.
-- **No `/check-emails`.** That skill reads Gmail through a Claude connector. With Codex, update statuses conversationally when you hear back ("mark <company> as rejected").
-- **Notion tracker**: the local tracker (default) works fully; the Notion backend works through `scripts/notion_cli.py` but had less testing outside Claude Code. Non-Notion users lose nothing.
-- **Approval prompts**: Codex will ask before running commands, as Claude Code does. The same advice applies: stay at `search` autonomy until you trust what the pipeline surfaces, and read what it asks to run.
+- **Email monitoring** (`/check-emails` / "check my emails"): works once Gmail is connected to Codex, either through the ChatGPT apps connector for Gmail or a Gmail MCP server (Composio, Smithery, and Google Workspace MCP are common choices). Until it is connected, update statuses conversationally when you hear back ("mark <company> as rejected").
+- **Custom agent definitions**: the role definitions in `.claude/agents/` are plain markdown procedures and work as instructions to Codex subagents directly. If you want them as first-class Codex agents, they can be mirrored as TOML files under `.codex/agents/`; this is optional, not required.
 
 These playbooks were built and battle-tested under Claude Code; treat the first Codex sessions as a shakedown and report anything that behaves oddly as a GitHub issue.

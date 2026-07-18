@@ -26,9 +26,9 @@ Role-specific sub-agent definitions in `.claude/agents/` (role-tailorer, edge-ca
 
 The playbooks were written for Claude Code. When you lack its facilities, adapt as follows rather than failing:
 
-- **"Spawn the <name> sub-agent" / Agent tool**: do the sub-agent's job yourself, inline and sequentially, following its definition in `.claude/agents/<name>.md` including the final status-line contract. Process fewer roles per run to compensate for the lost context isolation: pass `--max-roles 5` (or less) to discovery, and prefer several small runs over one big one.
+- **"Spawn the <name> sub-agent" / Agent tool**: if you have a native subagent facility (Codex CLI does), use it: give the subagent the definition in `.claude/agents/<name>.md` as its instructions, including the final status-line contract, and read only that status line back. Only if you have no subagent facility, do the job inline and sequentially, with smaller discovery runs (`--max-roles 5` or less) to protect your context window.
 - **"Invoke the <name> skill" / Skill tool**: open `.claude/skills/<name>/SKILL.md` and follow it.
-- **MCP tools** (`mcp__...` names, Notion MCP, Gmail MCP): if you have no MCP support, use the CLI equivalents where they exist (`scripts/notion_cli.py`, `scripts/local_tracker_cli.py`, `scripts/fetch_greenhouse_code.py`); otherwise state that the step needs a Claude Code session and skip it gracefully. `/check-emails` is the main casualty: without Gmail access, the user updates statuses conversationally instead ("mark <company> as rejected").
+- **MCP and connector tools** (`mcp__...` names, Notion, Gmail): use whatever equivalent your environment provides (Codex reaches Gmail via the ChatGPT apps connector or a Gmail MCP server). Where a CLI equivalent exists, prefer it (`scripts/notion_cli.py`, `scripts/local_tracker_cli.py`, `scripts/fetch_greenhouse_code.py`). If a step's integration is genuinely unavailable in your environment, say so and skip it gracefully; for email monitoring the fallback is the user reporting outcomes conversationally ("mark <company> as rejected").
 - **playwright-cli sessions**: the Python scripts drive the browser themselves; you only need to run the commands the playbooks give you.
 
 ## Ground rules (identical for every agent)
